@@ -1,0 +1,104 @@
+{
+  "title": "bilgin1500",
+  "description": "b1500 is Bilgin Özkan,visual designer & front-end developer from Istanbul",
+  "sections": [
+    {
+      "slug": "intro",
+      "url": "/intro",
+      "name": "Intro",
+      "basics": "b1500 is Bilgin Özkan,visual designer & front-end developer from Istanbul",
+      "more": [
+        "who loves to get inspired by great architecture.",
+        "who has a focus on web design",
+        "think off the grid.",
+        "decode guidelines.",
+        "code",
+        "play role playing games",
+        "play board games",
+        "read comics",
+        "create alternate realities",
+        "get inspired by great architecture",
+        "enjoy good storytelling"
+      ]
+    },
+    {
+      "slug": "projects",
+      "url": "/projects",
+      "name": "Projects",
+      "list": [
+        {
+          "slug": "#",
+          "name": "SkytankingOvenon.com",
+          "desc": "Fueling the rockets",
+          "size": "small",
+          "svg": "1.svg",
+          "content": {
+            "desktop": "",
+            "mobile": "",
+            "gallery": "",
+            "about": ""
+          }
+        },
+        {
+          "slug": "#",
+          "name": "Rolio",
+          "desc": "A Theme for The Minimalist",
+          "size": "large",
+          "svg": "2.svg",
+          "content": {
+            "desktop": "",
+            "mobile": "",
+            "gallery": "",
+            "about": ""
+          }
+        },
+        {
+          "slug": "#",
+          "name": "Test.com",
+          "desc": "Something wicked",
+          "size": "medium"
+        },
+        {
+          "slug": "#",
+          "name": "Yesyes",
+          "desc": "This is a placeholder",
+          "size": "medium"
+        },
+        {
+          "slug": "#",
+          "name": "Thisisit.com",
+          "desc": "Fueling the rockets",
+          "size": "small"
+        },
+        {
+          "slug": "#",
+          "name": "Rolio",
+          "desc": "A Theme for The Minimalist",
+          "size": "large"
+        },
+        {
+          "slug": "#",
+          "name": "Test.com",
+          "desc": "Something wicked",
+          "size": "medium"
+        },
+        {
+          "slug": "#",
+          "name": "Yesyes",
+          "desc": "This is a placeholder",
+          "size": "medium"
+        }
+      ]
+    },
+    {
+      "slug": "about",
+      "url": "/about",
+      "name": "About"
+    },
+    {
+      "slug": "sketchbook",
+      "url": "/sketchbook",
+      "name": "Sketchbook"
+    }
+  ]
+}

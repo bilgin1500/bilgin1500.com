@@ -1,0 +1,40 @@
+@import "mixins/flex"
+
+#projects
+  margin 100px 0 1500px 0
+
+#project-items 
+  flex()
+  position relative
+  z-index 2
+
+  .project-item 
+    display block
+    border 2px solid #000
+    background-color #fff
+    z-index 2
+    margin 2% 2% 20% 2%
+    text-decoration none
+    &.small 
+      width 30%
+    &.medium 
+      width 40%
+    &.large 
+      width 60%
+    &:hover
+      background-color #eee
+
+    .project-visual 
+      box-sizing border-box
+      width 100%
+      padding 20px
+      min-height 100px
+      background-color #000
+
+    .project-desc 
+      padding 20px
+      color #000
+      h2
+      p
+        margin 0
+        word-break break-word

@@ -1,0 +1,11 @@
+<a href="{{=it.slug}}" class="project-item {{=it.size}}">
+  <div class="project-visual">
+    {{? it.svg }}
+      {{=it.svg}}
+    {{?}}
+  </div>
+  <div class="project-desc">
+    <h2>{{=it.name}}</h2>
+    <p>{{=it.desc}}</p>
+  </div>
+</a>

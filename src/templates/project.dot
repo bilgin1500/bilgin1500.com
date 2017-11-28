@@ -1,0 +1,15 @@
+<div id="{{=it.slug}}">
+  <div class="project-desc">
+    <h2>{{=it.name}}</h2>
+    <p>{{=it.desc}}</p>
+  </div>
+  <div class="project-showcase">
+    
+  </div>
+  <div class="project-nav">
+    <a href="#">Desktop</a>
+    <a href="#">Mobile</a>
+    <a href="#">Gallery</a>
+    <a href="#">About</a>
+  </div>
+</div>

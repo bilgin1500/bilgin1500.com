@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="182" height="133" viewBox="0 0 182 133">
+  <style type="text/css">
+    @keyframes slideInFromLeft {
+      0%, 50% {
+        transform: none;
+      }
+      25% {
+        transform: scale(0.2, 1);
+      }
+    }
+    .box-item {transform-origin: 0 0;}
+    .box-item.animation {animation: 1000ms ease-in-out infinite slideInFromLeft;}
+    .paused {animation-play-state: paused !important;}
+    .playing {animation-play-state: running !important;}
+  </style>
+  <path class="box-item animation paused blow" fill="#FFF" d="M0 31h182v94H0z"/>
+  <path class="box-item blow" fill="#E81355" d="M176 54h6v71h-6zM21 125h130v8H21z"/>
+  <path class="box-item blow" fill="#2121AA" d="M82 0h87v31H82z"/>
+</svg>
