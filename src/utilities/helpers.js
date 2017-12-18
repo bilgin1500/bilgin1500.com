@@ -1,24 +1,56 @@
-var svgNs = 'http://www.w3.org/2000/svg';
+import objectAssign from 'object-assign';
+import data from 'content/index';
+
+var $win = window;
+var $doc = document;
+
+var uppercase = function(string) {
+  return string.replace(string.charAt(0), string.charAt(0).toUpperCase());
+};
+
+var objectJoin = function(obj, glue, separator) {
+  if (glue == undefined) glue = '=';
+  if (separator == undefined) separator = ',';
+
+  return Object.getOwnPropertyNames(obj)
+    .map(function(k) {
+      return [k, obj[k]].join(glue);
+    })
+    .join(separator);
+};
+
+var log = function(log, options) {
+  if (data.settings.isLoggerActive) {
+    var defaultOptions = {
+      color: 'blue'
+    };
+    if (options) {
+      defaultOptions = objectAssign({}, defaultOptions, options);
+    }
+    options = objectJoin(defaultOptions, ':', ';');
+    console.log('%c' + log, options);
+  }
+};
 
 var docReady = function() {
   return new Promise(function(resolve) {
-    if (document.readyState === 'complete') {
+    if ($doc.readyState === 'complete') {
       resolve();
     } else {
       function onReady() {
         resolve();
-        document.removeEventListener('DOMContentLoaded', onReady, true);
-        window.removeEventListener('load', onReady, true);
+        $doc.removeEventListener('DOMContentLoaded', onReady, true);
+        $win.removeEventListener('load', onReady, true);
       }
-      document.addEventListener('DOMContentLoaded', onReady, true);
-      window.addEventListener('load', onReady, true);
+      $doc.addEventListener('DOMContentLoaded', onReady, true);
+      $win.addEventListener('load', onReady, true);
     }
   });
 };
 
-var createEl = function(el, attributes) {
-  var elType = el ? el : 'div';
-  var $el = document.createElement(elType);
+var createEl = function(type, attributes) {
+  type = type ? type : 'div';
+  var $el = $doc.createElement(type);
   for (var key in attributes) {
     if (attributes.hasOwnProperty(key)) {
       $el.setAttribute(key, attributes[key]);
@@ -27,87 +59,164 @@ var createEl = function(el, attributes) {
   return $el;
 };
 
-var createSVG = function(id, width, height) {
-  var $svg = document.createElementNS(svgNs, 'svg');
-  $svg.setAttribute('id', id);
-  if (width) $svg.setAttribute('width', width);
-  if (height) $svg.setAttribute('height', height);
-  if (width && height)
-    $svg.setAttribute('viewbox', '0 0 ' + width + ' ' + height);
-  $svg.setAttribute('version', '1.1');
-  return $svg;
+var createId = function() {
+  data.settings.idCounter++;
+  var uniqueId =
+    data.settings.idCounter +
+    (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+  return uniqueId;
 };
 
-var createLine = function(id, stroke, x1, x2, y1, y2) {
-  var $line = document.createElementNS(svgNs, 'line');
-  $line.setAttribute('id', id);
-  $line.setAttribute('stroke', stroke.color);
-  $line.setAttribute('stroke-width', stroke.width);
-  $line.setAttribute('stroke-linecap', stroke.linecap);
-  $line.setAttribute('x1', x1);
-  $line.setAttribute('y1', y1);
-  $line.setAttribute('x2', x2);
-  $line.setAttribute('y2', y2);
-  return $line;
+var getEl = function(el) {
+  var $el;
+  if (typeof el == 'object') {
+    $el = el;
+  } else {
+    $el = $doc.getElementById(el);
+  }
+  return $el;
 };
 
-var getElHeight = function(id) {
-  var $el = document.getElementById(id);
-  return $el.offsetHeight || $el.clientHeight;
+var getHeight = function(el) {
+  switch (el) {
+    case 'window':
+      return (
+        $win.innerHeight ||
+        $doc.documentElement.clientHeight ||
+        $doc.body.clientHeight
+      );
+      break;
+    case 'document':
+      var body = $doc.body,
+        html = $doc.documentElement;
+      return Math.max(
+        body.scrollHeight,
+        body.offsetHeight,
+        html.clientHeight,
+        html.scrollHeight,
+        html.offsetHeight
+      );
+      break;
+    default:
+      var $el = getEl(el);
+      if ($el instanceof SVGElement) {
+        return $el.getBoundingClientRect().height;
+      } else {
+        return $el.offsetHeight || $el.clientHeight;
+      }
+  }
 };
 
-var getWinHeight = function() {
-  return (
-    window.innerHeight ||
-    document.documentElement.clientHeight ||
-    document.body.clientHeight
-  );
-};
+var getWidth = function(el) {
+  switch (el) {
+    case 'window':
+      return (
+        $win.innerWidth ||
+        $doc.documentElement.clientWidth ||
+        $doc.body.clientWidth
+      );
+      break;
 
-var getWinWidth = function() {
-  return (
-    window.innerWidth ||
-    document.documentElement.clientWidth ||
-    document.body.clientWidth
-  );
+    default:
+      var $el = getEl(el);
+      if ($el instanceof SVGElement) {
+        return $el.getBoundingClientRect().width;
+      } else {
+        return $el.offsetWidth || $el.clientWidth;
+      }
+  }
 };
 
 var getScrollTop = function() {
-  return window.pageYOffset !== undefined
-    ? window.pageYOffset
-    : (document.documentElement || document.body.parentNode || document.body)
-        .scrollTop;
+  return $win.pageYOffset !== undefined
+    ? $win.pageYOffset
+    : ($doc.documentElement || $doc.body.parentNode || $doc.body).scrollTop;
 };
 
-var getDocHeight = function() {
-  var body = document.body,
-    html = document.documentElement;
-
-  return Math.max(
-    body.scrollHeight,
-    body.offsetHeight,
-    html.clientHeight,
-    html.scrollHeight,
-    html.offsetHeight
-  );
+var hasClass = function(el, className) {
+  if (el.classList) {
+    return el.classList.contains(className);
+  } else {
+    return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
+  }
 };
 
-function isScrolledIntoView(el) {
-  var elemTop = el.getBoundingClientRect().top;
-  var elemBottom = el.getBoundingClientRect().bottom;
-  var isVisible = elemTop >= 0 && elemBottom <= getWinHeight();
-  return isVisible;
-}
+var addClass = function(el, className) {
+  if (el.classList) el.classList.add(className);
+  else el.className += ' ' + className;
+};
+
+var removeClass = function(el, className) {
+  if (el.classList) el.classList.remove(className);
+  else
+    el.className = el.className.replace(
+      new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'),
+      ' '
+    );
+};
+
+var toggleClass = function(el, className) {
+  if (el.classList) {
+    el.classList.toggle(className);
+  } else {
+    var classes = el.className.split(' ');
+    var existingIndex = -1;
+    for (var i = classes.length; i--; ) {
+      if (classes[i] === className) existingIndex = i;
+    }
+
+    if (existingIndex >= 0) classes.splice(existingIndex, 1);
+    else classes.push(className);
+
+    el.className = classes.join(' ');
+  }
+};
+
+var clearInnerHTML = function(el) {
+  while (el.firstChild) {
+    el.removeChild(el.firstChild);
+  }
+};
+
+// Check for mime type support against a player instance
+// Credits: http://diveintohtml5.info/everything.html
+// Credits: https://github.com/sampotts/plyr/blob/master/src/js/plyr.js
+/*var supportMime = function(media, mimeType) {
+  switch (mimeType) {
+    case 'video/webm':
+      return !!(
+        media.canPlayType &&
+        media.canPlayType('video/webm; codecs="vp8, vorbis"').replace(/no/, '')
+      );
+    case 'video/mp4':
+      return !!(
+        media.canPlayType &&
+        media
+          .canPlayType('video/mp4; codecs="avc1.42E01E, mp4a.40.2"')
+          .replace(/no/, '')
+      );
+    case 'video/ogg':
+      return !!(
+        media.canPlayType &&
+        media.canPlayType('video/ogg; codecs="theora"').replace(/no/, '')
+      );
+  }
+  return false;
+};*/
 
 export {
+  log,
   docReady,
+  uppercase,
   createEl,
-  createSVG,
-  createLine,
-  getElHeight,
-  getWinHeight,
-  getWinWidth,
+  createId,
+  getEl,
+  getHeight,
+  getWidth,
   getScrollTop,
-  getDocHeight,
-  isScrolledIntoView
+  hasClass,
+  addClass,
+  removeClass,
+  toggleClass,
+  clearInnerHTML
 };

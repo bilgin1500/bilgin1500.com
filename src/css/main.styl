@@ -1,3 +1,6 @@
+@import "assets/fonts"
+@import "assets/colors"
+
 html
 body 
   height 100%
@@ -6,7 +9,7 @@ html
   color #222
   font-size 1em
   line-height 1.4
-  font-family 'MuseoSans-300', Helvetica, Arial
+  font-family museoSans
 
 body 
   background-color #fff
@@ -25,7 +28,7 @@ svg
   text-transform uppercase
   font-size 0.8125em
   box-shadow 2px 2px 0px 0px rgba(0, 0, 0, 0.75)
-  font-family 'MuseoSans-900', Helvetica, Arial
+  font-family museoSansB
   color #000
   text-decoration none
   letter-spacing 0.03em
@@ -33,13 +36,17 @@ svg
   outline 0
   cursor pointer
   &:hover 
-    background-color #edd814
-  &:active 
-    background-color #edd814
+    background-color yellow
+  &:active
+  &.active 
+    background-color yellow
     box-shadow none
     margin-top 2px
     margin-left 2px
   
+#app
+  margin-bottom 1000px
+
 #content-wrapper 
   width 75%
   max-width 960px
@@ -51,3 +58,4 @@ svg
   position fixed
   left 20px
   top 20px
+  z-index 101

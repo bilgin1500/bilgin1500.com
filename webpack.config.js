@@ -11,14 +11,16 @@ var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var pageData = require('./src/content/index.json');
+var pageData = require('./src/content/index');
 var outputFolder = 'dist';
+var publicPath = '/';
 
 module.exports = {
   entry: './app.js',
   output: {
     filename: 'app.js',
-    path: path.resolve(__dirname, outputFolder)
+    path: path.resolve(__dirname, outputFolder),
+    publicPath: publicPath
   },
   resolve: {
     extensions: ['.js', '.json', '.styl', '.dot'],
@@ -29,7 +31,20 @@ module.exports = {
       content: path.resolve(__dirname, 'src/content/'),
       css: path.resolve(__dirname, 'src/css/'),
       ScrollMagicGSAP:
-        'scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap'
+        'scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap',
+      ScrollMagicIndicators:
+        'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators',
+      GSAPScrollToPlugin: 'gsap/src/uncompressed/plugins/ScrollToPlugin.js'
+      /*DrawSVGPlugin: path.resolve(__dirname, 'src/vendors/DrawSVGPlugin.js'),
+      MorphSVGPlugin: path.resolve(__dirname, 'src/vendors/MorphSVGPlugin.js'),
+      Physics2DPlugin: path.resolve(
+        __dirname,
+        'src/vendors/Physics2DPlugin.js'
+      ),
+      PhysicsPropsPlugin: path.resolve(
+        __dirname,
+        'src/vendors/PhysicsPropsPlugin.js'
+      )*/
     }
   },
   module: {
@@ -69,6 +84,9 @@ module.exports = {
       },
       { test: /\.dot$/, loader: 'dot-loader' }
     ]
+  },
+  devServer: {
+    historyApiFallback: { index: publicPath }
   },
   plugins: [
     new HtmlWebpackPlugin({

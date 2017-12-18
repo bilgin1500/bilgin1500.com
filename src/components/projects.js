@@ -1,26 +1,17 @@
 import { TweenMax, TimelineMax } from 'gsap';
-import ScrollMagic from 'scrollmagic';
-import 'ScrollMagicGSAP';
-import { createEl, getWinHeight } from 'utilities/helpers';
-import pageData from 'content/index';
+import { winController, addScrollerScene } from 'utilities/scroller';
+import { createEl, getHeight, removeClass, addClass } from 'utilities/helpers';
 import projectThumbTemplate from 'templates/project-thumbnail';
-import projectTemplate from 'templates/project';
+import data from 'content/index';
 import 'css/projects';
-import { sectionLoader } from 'utilities/loaders';
-
-var projectWindowStatus = 'closed';
 
 var $wrapper = createEl('div', { id: 'projects' }),
   $items = createEl('div', { id: 'project-items' });
 
-var projectsController = new ScrollMagic.Controller({
-  container: $wrapper // This doesnt work!
-});
-
 /* Filter projects from all the sections in the db */
 
-var projectSection = pageData.sections.filter(function(section) {
-  return section.slug == 'projects';
+var projectSection = data.pages.filter(function(page) {
+  return page.slug == 'projects';
 });
 
 var CssAnim_defaultClass = 'paused',
@@ -46,33 +37,12 @@ var toggleSVGAnimations = function($projectItem) {
 
   for (var i = $animatedSVGelements.length - 1; i >= 0; i--) {
     if (status == 'playing') {
-      $animatedSVGelements[i].classList.remove(CssAnim_playingClass);
-      $animatedSVGelements[i].classList.add(CssAnim_defaultClass);
+      removeClass($animatedSVGelements[i], CssAnim_playingClass);
+      addClass($animatedSVGelements[i], CssAnim_defaultClass);
     } else {
-      $animatedSVGelements[i].classList.remove(CssAnim_defaultClass);
-      $animatedSVGelements[i].classList.add(CssAnim_playingClass);
+      removeClass($animatedSVGelements[i], CssAnim_defaultClass);
+      addClass($animatedSVGelements[i], CssAnim_playingClass);
     }
-  }
-};
-
-/*var $SVGelementsToBlow = $projectItem.querySelectorAll('.blow'),
-for (var i = $SVGelementsToBlow.length - 1; i >= 0; i--) {
-    $SVGelementsToBlow[i].classList.remove(CssAnim_animClass);
-  }*/
-
-var openProjectWindow = function() {
-  if (projectWindowStatus == 'closed') {
-    //projectsController.enabled(!projectsController.enabled()).update(true);
-    sectionLoader.enter();
-    projectWindowStatus = 'open';
-  }
-};
-
-var closeProjectWindow = function() {
-  if (projectWindowStatus == 'open') {
-    //projectsController.enabled(!projectsController.enabled()).update(true);
-    sectionLoader.leave();
-    projectWindowStatus = 'closed';
   }
 };
 
@@ -103,13 +73,13 @@ projectSection[0].list.forEach(function(projectData, i) {
     boxShadow: '10px ' + (boxShadowValues[i] + -20) + 'px 0 rgba(0,0,0,0.05)'
   });
 
-  projectData.scrollScene = new ScrollMagic.Scene({
+  addScrollerScene({
     triggerHook: 'onEnter',
     triggerElement: $projectItem,
-    duration: getWinHeight()
+    duration: getHeight('window') // todo: http://scrollmagic.io/docs/ScrollMagic.Scene.html#duration
   })
     .setTween(projectData.appearAnim)
-    .addTo(projectsController);
+    .addTo(winController);
 
   $projectItem.addEventListener('mouseenter', function() {
     toggleSVGAnimations($projectItem);
@@ -117,11 +87,6 @@ projectSection[0].list.forEach(function(projectData, i) {
 
   $projectItem.addEventListener('mouseleave', function() {
     toggleSVGAnimations($projectItem);
-  });
-
-  $projectItem.addEventListener('click', function(e) {
-    openProjectWindow();
-    e.preventDefault();
   });
 });
 

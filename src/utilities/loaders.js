@@ -4,7 +4,7 @@ import 'css/loaders';
 
 var noScrollClass = 'no-scroll';
 
-var toggleScroll = function() {
+var _toggleScroll = function() {
   document.body.classList.toggle(noScrollClass);
 };
 
@@ -33,22 +33,34 @@ var sectionLoader = (function() {
   var $loader,
     loaderId = 'section-loader';
 
-  function init() {
+  function _init() {
     if (!document.getElementById(loaderId)) {
       $loader = createEl('div', { id: loaderId });
       document.getElementById('app').appendChild($loader);
     }
   }
 
-  function enter() {
-    init();
-    toggleScroll();
-    TweenMax.to($loader, 0.75, { yPercent: -100, ease: Expo.easeInOut });
+  function enter(args) {
+    _init();
+    _toggleScroll();
+    TweenMax.to($loader, 0.5, {
+      yPercent: -100,
+      ease: Expo.easeInOut,
+      onStart: args.onStart,
+      onComplete: args.onComplete
+    });
+    return $loader;
   }
 
-  function leave() {
-    toggleScroll();
-    TweenMax.to($loader, 0.75, { yPercent: 100, ease: Expo.easeInOut });
+  function leave(args) {
+    _toggleScroll();
+    TweenMax.to($loader, 0.25, {
+      yPercent: 100,
+      ease: Expo.easeInOut,
+      onStart: args.onStart,
+      onComplete: args.onComplete
+    });
+    return $loader;
   }
 
   return {

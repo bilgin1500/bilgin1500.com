@@ -1,4 +1,4 @@
-<a href="{{=it.slug}}" class="project-item {{=it.size}}">
+<a href="/projects/{{=it.slug}}" id="project-thumb-{{=it.slug}}" class="project-item {{=it.size}}">
   <div class="project-visual">
     {{? it.svg }}
       {{=it.svg}}

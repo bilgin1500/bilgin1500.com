@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "./node_modules/.bin/webpack --progress --colors",
-    "start": "./node_modules/.bin/webpack-dev-server --hot --inline --open --watch"
+    "start": "./node_modules/.bin/webpack-dev-server --hot --inline --open --watch --history-api-fallback"
   },
   "author": "bilgin1500@gmail.com",
   "license": "ISC",
@@ -17,8 +17,11 @@
     "dot": "^1.1.2",
     "fontfaceobserver": "^2.0.13",
     "gsap": "^1.20.3",
+    "normalize-wheel": "^1.0.1",
     "normalize.css": "^7.0.0",
+    "object-assign": "^4.1.1",
     "page": "^1.7.1",
+    "save": "^2.3.2",
     "scrollmagic": "^2.0.5",
     "throttle-debounce": "^1.0.1"
   },
