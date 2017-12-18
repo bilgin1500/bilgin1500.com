@@ -76,7 +76,7 @@ projectSection[0].list.forEach(function(projectData, i) {
   addScrollerScene({
     triggerHook: 'onEnter',
     triggerElement: $projectItem,
-    duration: getHeight('window') // todo: http://scrollmagic.io/docs/ScrollMagic.Scene.html#duration
+    duration: getHeight('window')
   })
     .setTween(projectData.appearAnim)
     .addTo(winController);
