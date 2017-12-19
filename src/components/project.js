@@ -216,11 +216,17 @@ var project = {
     project.data.adjacent = {
       prev: {
         link: '/projects/' + projects[previousIndex].slug,
-        name: projects[previousIndex].name
+        name: projects[previousIndex].name,
+        icon: (function() {
+          return createIcon('chevronLeft').outerHTML;
+        })()
       },
       next: {
         link: '/projects/' + projects[nextIndex].slug,
-        name: projects[nextIndex].name
+        name: projects[nextIndex].name,
+        icon: (function() {
+          return createIcon('chevronRight').outerHTML;
+        })()
       }
     };
 

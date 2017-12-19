@@ -237,11 +237,6 @@ var setButtonWrapperTop = TweenMax.to($buttonWrapper, 0.1, {
   top: 5
 });
 
-var setProjectButton = TweenMax.to($buttons['projects'], 0.1, {
-  className: '+=active',
-  top: 0
-});
-
 var bottomLineToTopLine = TweenMax.to($bottomLine, 0.15, {
   y: -10,
   rotation: 180,
@@ -273,18 +268,12 @@ var bottomLineToRight = TweenMax.to($bottomLine, 0.15, {
   ease: 'Power4.easeOut'
 });
 
-var projectButtonReveal = TweenMax.to($buttons['projects'], 0.25, {
-  scale: 1,
-  right: 43,
-  ease: 'Power4.easeOut'
-});
-
 var triggerButtonReveal = TweenMax.to($trigger, 0.25, {
   className: '+=close-button',
   transformOrigin: '50% 50%',
   rotation: 360,
   y: '-=4',
-  x: '-=170',
+  x: '-=85',
   ease: 'Power4.easeOut'
 });
 
@@ -306,14 +295,12 @@ var menuProjectAnimation = new TimelineMax({
 })
   .add(setMenuPinPos)
   .add(setButtonWrapperTop)
-  .add(setProjectButton)
   .add(bottomLineToTopLine)
   .add(topLineRotate)
   .add(bottomLineRotate, '-=0.15')
   .add(topLineToRight)
   .add(bottomLineToRight, '-=0.15')
   .add(menuPinReveal2)
-  .add(projectButtonReveal, '-=0.25')
   .add(triggerButtonReveal, '-=0.25');
 
 // Responsive height

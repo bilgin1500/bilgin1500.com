@@ -7,7 +7,13 @@
   </div>
   <div class="project-nav"></div>
   <div class="projects-adjacent-nav">
-    <a href="{{=it.adjacent.prev.link}}" class="prev">{{=it.adjacent.prev.name}}</a>
-    <a href="{{=it.adjacent.next.link}}" class="next">{{=it.adjacent.next.name}}</a>
+    <a href="{{=it.adjacent.prev.link}}" class="prev">
+      {{=it.adjacent.prev.icon}}
+      <span>{{=it.adjacent.prev.name}}</span>
+    </a>
+    <a href="{{=it.adjacent.next.link}}" class="next">
+      {{=it.adjacent.next.icon}}
+      <span>{{=it.adjacent.next.name}}</span>
+    </a>
   </div>
 </div>
