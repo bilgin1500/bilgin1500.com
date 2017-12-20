@@ -12,7 +12,6 @@ import {
 } from 'utilities/helpers';
 import events from 'utilities/events';
 import router from 'utilities/router';
-import { sectionLoader } from 'utilities/loaders';
 import { createIcon } from 'utilities/svg';
 import projectTemplate from 'templates/project';
 import data from 'content/index';
@@ -169,11 +168,24 @@ var project = {
 
   // Project window setup and methods
   window: {
+    init() {
+      var windowID = 'project-window';
+      if (!$doc.getElementById(windowID)) {
+        this.$el = createEl('div', { id: windowID });
+        $doc.getElementById('app').appendChild(this.$el);
+      }
+      return this.$el;
+    },
     open: function(callbacks) {
       events.publish('project.window.open.onStart');
-      var $loader = sectionLoader.enter({
+      toggleClass($doc.body, 'no-scroll');
+      var $projectWindow = this.init();
+
+      TweenMax.to($projectWindow, 0.5, {
+        yPercent: -100,
+        ease: Expo.easeInOut,
         onComplete: function() {
-          $loader.insertAdjacentHTML(
+          $projectWindow.insertAdjacentHTML(
             'beforeend',
             projectTemplate(project.data)
           );
@@ -184,10 +196,15 @@ var project = {
     },
     close: function(callbacks) {
       events.publish('project.window.close.onStart');
-      var $loader = sectionLoader.leave({
+      toggleClass($doc.body, 'no-scroll');
+      var $projectWindow = this.$el;
+
+      TweenMax.to($projectWindow, 0.35, {
+        yPercent: 100,
+        ease: Expo.easeInOut,
         onComplete: function() {
           if (callbacks && callbacks.onComplete) callbacks.onComplete();
-          clearInnerHTML($loader);
+          clearInnerHTML($projectWindow);
           events.publish('project.window.close.onComplete');
         }
       });
