@@ -23,7 +23,6 @@ module.exports = {
         'play role playing games',
         'play board games',
         'read comics',
-        'create alternate realities',
         'get inspired by great architecture',
         'enjoy good storytelling'
       ]
@@ -37,11 +36,28 @@ module.exports = {
           name: 'SkytankingOvenon.com',
           desc: 'Fueling the rockets',
           size: 'small',
-          svg: '1.svg',
+          thumbnail: 'thumbnail.svg',
           sections: [
-            { desktop: '' },
-            { mobile: '' },
-            { gallery: '' },
+            {
+              desktop: {
+                type: 'video',
+                poster: 'video-poster.png',
+                sources: [{ mp4: 'video.mp4' }, { webm: 'video.webm' }]
+              }
+            },
+            {
+              mobile: {
+                type: 'video',
+                poster: 'video-poster.png',
+                sources: [{ mp4: 'video.mp4' }, { webm: 'video.webm' }]
+              }
+            },
+            {
+              gallery: {
+                type: 'gallery',
+                sources: ['1.jpg', '2.jpg']
+              }
+            },
             { info: '' }
           ]
         },
@@ -50,7 +66,7 @@ module.exports = {
           name: 'Rolio',
           desc: 'A Theme for The Minimalist',
           size: 'large',
-          svg: '2.svg',
+          thumbnail: 'thumbnail.svg',
           sections: [
             { desktop: '' },
             { mobile: '' },

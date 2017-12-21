@@ -6,7 +6,7 @@ import data from 'content/index';
 import 'css/projects';
 
 var $wrapper = createEl('div', { id: 'projects' }),
-  $items = createEl('div', { id: 'project-items' });
+  $items = createEl('div', { class: 'project-items' });
 
 /* Filter projects from all the sections in the db */
 
@@ -52,8 +52,11 @@ var yValues = [50, 150, 100, 50, 50, 100, 0, 150];
 var boxShadowValues = [100, 70, 50, 100, 70, 50, 100, 70, 50];
 
 projectSection[0].list.forEach(function(projectData, i) {
-  if (projectData.svg) {
-    projectData.svg = require('content/' + projectData.svg);
+  if (projectData.thumbnail) {
+    projectData.thumbnail = require('content/' +
+      projectData.slug +
+      '/' +
+      projectData.thumbnail);
   }
 
   $items.insertAdjacentHTML('beforeend', projectThumbTemplate(projectData));

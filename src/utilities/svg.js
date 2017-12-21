@@ -99,6 +99,14 @@ var createMask = function(attributes) {
   return $mask;
 };
 
+var createClipPath = function(attributes) {
+  var $clipPath = $doc.createElementNS(svgNs, 'clipPath');
+  setId($clipPath, attributes ? attributes.id : null);
+  if (attributes && attributes.class)
+    $clipPath.setAttribute('class', attributes.class);
+  return $clipPath;
+};
+
 // CORE ELEMENTS
 
 var createLine = function(attributes) {
@@ -192,6 +200,7 @@ export {
   createGroup,
   createDefs,
   createMask,
+  createClipPath,
   createLine,
   createPath,
   createCircle,

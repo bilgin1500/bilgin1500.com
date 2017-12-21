@@ -8,8 +8,16 @@ import {
   clearInnerHTML,
   toggleClass,
   removeClass,
-  addClass
+  addClass,
+  getHeight,
+  getWidth
 } from 'utilities/helpers';
+import {
+  createSVG,
+  createDefs,
+  createClipPath,
+  createCircle
+} from 'utilities/svg';
 import events from 'utilities/events';
 import router from 'utilities/router';
 import { createIcon } from 'utilities/svg';
@@ -25,6 +33,14 @@ var project = {
 
   // Setup and init subsections of the current project
   sections: {
+    // Reserved elements' cache
+    $navWrapper: null, // .project-nav
+    $showcaseWrapper: null, // .project-showcase
+    $showcaseList: [], // .project-showcase .desktop-wrapper, .project-showcase .mobile-wrapper
+
+    // Reserved methods
+    _revealSectionAnimation: null, // The clip path animation to reveal the sections
+
     // Change sections on wheel events
     _onWheel: debounce(500, true, function(e) {
       var normalized = normalizeWheel(e);
@@ -111,37 +127,79 @@ var project = {
       );
     },
 
-    // Change the section visually (slide, nav etc.)
-    change: function(args) {
-      project.sections._setCurrent(args);
-
-      // Change slide
-      project.sections.$slideWrapper = $doc.getElementsByClassName(
-        'project-showcase'
-      )[0];
-      project.sections.$slideWrapper.innerHTML =
-        '<h3>Section #' + project.sections.current.id + '</h3>';
-
-      // Change navigation focus
-      var navActiveClass = 'active';
-      var $allNavItems = project.sections.$navWrapper.getElementsByTagName('a');
-      for (var i = 0; i < $allNavItems.length; i++) {
-        removeClass($allNavItems[i], navActiveClass);
-      }
-      toggleClass($allNavItems[project.sections.current.id], navActiveClass);
-    },
-
     // Setup sub sections of the project
     init: function(currentSectionName) {
+      project.sections.$showcaseWrapper = $doc.getElementsByClassName(
+        'project-showcase'
+      )[0];
       project.sections.$navWrapper = $doc.getElementsByClassName(
         'project-nav'
       )[0];
 
+      // Create and append clip path element for section transitions
+      var $showcaseClipSVG = createSVG();
+      project.sections.$showcaseWrapper.appendChild($showcaseClipSVG);
+
+      var findSvgDiagonal = function() {
+        var svgWidth = getWidth($showcaseClipSVG) / 2;
+        var svgHeight = getHeight($showcaseClipSVG) / 2;
+        return Math.sqrt(svgWidth * svgWidth + svgHeight * svgHeight);
+      };
+
+      var findSvgCenter = function() {
+        return {
+          x: getWidth($showcaseClipSVG) / 2,
+          y: getHeight($showcaseClipSVG) / 2
+        };
+      };
+
+      var $showcaseDefs = createDefs();
+      var $showcaseClipPath = createClipPath();
+      var $showcaseClipItem = createCircle({
+        cx: findSvgCenter().x,
+        cy: findSvgCenter().y,
+        r: 0
+      });
+
+      $showcaseClipPath.appendChild($showcaseClipItem);
+      $showcaseDefs.appendChild($showcaseClipPath);
+      $showcaseClipSVG.appendChild($showcaseDefs);
+
+      // Transition effect
+      project.sections._revealSectionAnimation = TweenMax.to(
+        $showcaseClipItem,
+        0.5,
+        {
+          paused: true,
+          transformOrigin: '50% 50%',
+          ease: 'Power4.easeOut',
+          attr: { r: findSvgDiagonal() },
+          onStart: function() {},
+          onComplete: function() {}
+        }
+      );
+
+      // Parse all sections
       project.data.sections.forEach(function(section, curr) {
         var thisSectionName = project.sections._getNameFromId(curr);
 
+        // Create and append sections
+        project.sections.$showcaseList[curr] = createEl('div', {
+          class: 'section-' + thisSectionName,
+          style:
+            'clip-path:url(#' +
+            $showcaseClipPath.id +
+            ');-webkit-clip-path:url(#' +
+            $showcaseClipPath.id +
+            ')'
+        });
+
+        project.sections.$showcaseWrapper.appendChild(
+          project.sections.$showcaseList[curr]
+        );
+
+        // Create and append nav items
         var $navItem = createEl('a', {
-          class: 'nav-' + thisSectionName,
           href: '/projects/' + project.data.slug + '/' + thisSectionName
         });
 
@@ -153,9 +211,44 @@ var project = {
         project.sections.$navWrapper.appendChild($navItem);
       });
 
+      // Start
       project.sections.change({ name: currentSectionName });
-
       $doc.addEventListener('mousewheel', project.sections._onWheel);
+    },
+
+    // Change the section visually (slide, nav etc.)
+    change: function(args) {
+      project.sections._setCurrent(args);
+
+      // Make all slides invisible and current slide visible
+      var toggleSectionClasses = function() {
+        for (var i = 0; i < project.sections.$showcaseList.length; i++) {
+          removeClass(project.sections.$showcaseList[i], 'active');
+        }
+        toggleClass(
+          project.sections.$showcaseList[project.sections.current.id],
+          'active'
+        );
+      };
+
+      // Play section transition
+      if (project.sections._revealSectionAnimation.progress() == 1) {
+        project.sections._revealSectionAnimation.reverse();
+        setTimeout(function() {
+          toggleSectionClasses();
+          project.sections._revealSectionAnimation.play();
+        }, 500);
+      } else {
+        toggleSectionClasses();
+        project.sections._revealSectionAnimation.play();
+      }
+
+      // Change navigation focus
+      var $allNavItems = project.sections.$navWrapper.getElementsByTagName('a');
+      for (var i = 0; i < $allNavItems.length; i++) {
+        removeClass($allNavItems[i], 'active');
+      }
+      toggleClass($allNavItems[project.sections.current.id], 'active');
     },
 
     destroy: function() {
@@ -168,7 +261,7 @@ var project = {
 
   // Project window setup and methods
   window: {
-    init() {
+    _init() {
       var windowID = 'project-window';
       if (!$doc.getElementById(windowID)) {
         this.$el = createEl('div', { id: windowID });
@@ -179,7 +272,7 @@ var project = {
     open: function(callbacks) {
       events.publish('project.window.open.onStart');
       toggleClass($doc.body, 'no-scroll');
-      var $projectWindow = this.init();
+      var $projectWindow = this._init();
 
       TweenMax.to($projectWindow, 0.5, {
         yPercent: -100,

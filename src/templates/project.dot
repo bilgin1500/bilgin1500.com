@@ -3,8 +3,7 @@
     <h2>{{=it.name}}</h2>
     <p>{{=it.desc}}</p>
   </div>
-  <div class="project-showcase">
-  </div>
+  <div class="project-showcase"></div>
   <div class="project-nav"></div>
   <div class="projects-adjacent-nav">
     <a href="{{=it.adjacent.prev.link}}" class="prev">

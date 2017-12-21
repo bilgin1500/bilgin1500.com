@@ -82,7 +82,14 @@ module.exports = {
           use: ['css-loader', 'stylus-loader']
         })
       },
-      { test: /\.dot$/, loader: 'dot-loader' }
+      {
+        test: /\.dot$/,
+        loader: 'dot-loader'
+      },
+      {
+        test: /\.(webm|mp4)$/,
+        loader: 'file-loader'
+      }
     ]
   },
   devServer: {

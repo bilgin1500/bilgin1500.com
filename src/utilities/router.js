@@ -72,9 +72,15 @@ var router = {
       );
 
       if (project.isOpen) {
+        // Same project
         if (project.data.slug == ctx.params.project) {
-          log('Same project called, just change the section');
-          project.sections.change({ name: sectionName });
+          // Different section
+          if (project.sections.current.name != sectionName) {
+            log('Same project called, just change the section');
+            project.sections.change({ name: sectionName });
+          }
+
+          // Different project
         } else {
           log('Different project called, change the project');
           project.close({
