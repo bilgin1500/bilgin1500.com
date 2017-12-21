@@ -16,7 +16,8 @@ import {
   createSVG,
   createDefs,
   createClipPath,
-  createCircle
+  createCircle,
+  createPolygon
 } from 'utilities/svg';
 import events from 'utilities/events';
 import router from 'utilities/router';
@@ -41,11 +42,17 @@ var project = {
     // Reserved methods
     _revealSectionAnimation: null, // The clip path animation to reveal the sections
 
-    // Change sections on wheel events
-    _onWheel: debounce(500, true, function(e) {
-      var normalized = normalizeWheel(e);
-      var wheelDistanceThreshold = 1;
+    /**
+     * Change sections on wheel events
+     * @param  {object} e onWheel event
+     */
+    _onWheel: debounce(1000, true, function(e) {
+      console.log('onWheel');
 
+      // Normalization of the wheel event (delta)
+      var normalized = normalizeWheel(e);
+
+      // Find the adjacent section according to the scroll direction
       var changeSectionToTheDirection = function(direction) {
         var gotoId = project.sections._findAdjacentId(direction);
         router.engine(
@@ -57,9 +64,10 @@ var project = {
         project.sections.change({ id: gotoId });
       };
 
-      if (normalized.pixelY < -wheelDistanceThreshold) {
+      // Down is next / Up is previous
+      if (normalized.pixelY < 0) {
         changeSectionToTheDirection('previous');
-      } else if (normalized.pixelY > wheelDistanceThreshold) {
+      } else if (normalized.pixelY > 0) {
         changeSectionToTheDirection('next');
       }
     }),
@@ -168,7 +176,7 @@ var project = {
       // Transition effect
       project.sections._revealSectionAnimation = TweenMax.to(
         $showcaseClipItem,
-        0.5,
+        0.35,
         {
           paused: true,
           transformOrigin: '50% 50%',
@@ -216,45 +224,88 @@ var project = {
       $doc.addEventListener('mousewheel', project.sections._onWheel);
     },
 
-    // Change the section visually (slide, nav etc.)
+    /**
+     * Change the section visually (slide, nav etc.)
+     * @param  {object} args An arguments object. Holds the id and name of the section to be changed
+     */
     change: function(args) {
-      project.sections._setCurrent(args);
+      var revealAnim = project.sections._revealSectionAnimation;
 
-      // Make all slides invisible and current slide visible
-      var toggleSectionClasses = function() {
-        for (var i = 0; i < project.sections.$showcaseList.length; i++) {
-          removeClass(project.sections.$showcaseList[i], 'active');
-        }
-        toggleClass(
-          project.sections.$showcaseList[project.sections.current.id],
-          'active'
+      // If transition isn't active we can proceed
+      if (!revealAnim.isActive()) {
+        // First save the current section info
+        project.sections._setCurrent(args);
+
+        // Cache the necessary elements
+        var $allNavItems = project.sections.$navWrapper.getElementsByTagName(
+          'a'
         );
-      };
+        var $allSections = project.sections.$showcaseList;
 
-      // Play section transition
-      if (project.sections._revealSectionAnimation.progress() == 1) {
-        project.sections._revealSectionAnimation.reverse();
-        setTimeout(function() {
+        // Disable the nav links so that they can not be triggered
+        // while we're playing the transition
+        var disableNavLinks = function() {
+          for (var i = 0; i < $allNavItems.length; i++) {
+            var href = $allNavItems[i].href;
+            $allNavItems[i].setAttribute('rel', href);
+            $allNavItems[i].href = 'javascript:;';
+          }
+        };
+
+        var enableNavLinks = function() {
+          for (var i = 0; i < $allNavItems.length; i++) {
+            var href = $allNavItems[i].getAttribute('rel');
+            $allNavItems[i].removeAttribute('rel');
+            $allNavItems[i].href = href;
+          }
+        };
+
+        // Make all nav items inactive and current nav item active
+        var toggleNavClasses = function() {
+          for (var i = 0; i < $allNavItems.length; i++) {
+            removeClass($allNavItems[i], 'active');
+          }
+          toggleClass($allNavItems[project.sections.current.id], 'active');
+        };
+
+        // Make all slides inactive and current slide active
+        var toggleSectionClasses = function() {
+          for (var i = 0; i < $allSections.length; i++) {
+            removeClass($allSections[i], 'active');
+          }
+          toggleClass($allSections[project.sections.current.id], 'active');
+        };
+
+        // Toggle classes and then play section transition animation
+        var changeSection = function() {
           toggleSectionClasses();
-          project.sections._revealSectionAnimation.play();
-        }, 500);
-      } else {
-        toggleSectionClasses();
-        project.sections._revealSectionAnimation.play();
-      }
+          revealAnim.play();
+          TweenMax.delayedCall(revealAnim.totalDuration(), function() {
+            enableNavLinks();
+          });
+        };
 
-      // Change navigation focus
-      var $allNavItems = project.sections.$navWrapper.getElementsByTagName('a');
-      for (var i = 0; i < $allNavItems.length; i++) {
-        removeClass($allNavItems[i], 'active');
+        disableNavLinks();
+
+        // Animation has already played. We should firest reverse it
+        if (revealAnim.progress() == 1) {
+          toggleNavClasses();
+          revealAnim.reverse();
+          setTimeout(function() {
+            changeSection();
+          }, revealAnim.totalDuration() * 1000);
+          // Animation has never played yet
+        } else {
+          toggleNavClasses();
+          changeSection();
+        }
       }
-      toggleClass($allNavItems[project.sections.current.id], 'active');
     },
 
     destroy: function() {
       project.sections.current = {};
       clearInnerHTML(project.sections.$navWrapper);
-      clearInnerHTML(project.sections.$slideWrapper);
+      clearInnerHTML(project.sections.$showcaseWrapper);
       $doc.removeEventListener('mousewheel', project.sections._onWheel);
     }
   },

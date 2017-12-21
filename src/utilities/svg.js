@@ -155,6 +155,20 @@ var createCircle = function(attributes) {
   return $circle;
 };
 
+var createPolygon = function(attributes) {
+  var $polygon = $doc.createElementNS(svgNs, 'polygon');
+  setId($polygon, attributes ? attributes.id : null);
+  $polygon.setAttribute('points', attributes.points);
+  if (attributes) {
+    if (attributes.mask)
+      $polygon.setAttribute('mask', 'url(#' + attributes.mask + ')');
+    if (attributes.class) $polygon.setAttribute('class', attributes.class);
+  }
+  setFill($polygon, attributes.fill);
+  setStroke($polygon, attributes.stroke);
+  return $polygon;
+};
+
 /**
  * Creates a svg icon from given path and circle data
  * @param  {string} iconName    Icon name from the content/icons.js
@@ -204,5 +218,6 @@ export {
   createLine,
   createPath,
   createCircle,
+  createPolygon,
   createIcon
 };
