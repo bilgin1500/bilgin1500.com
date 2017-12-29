@@ -63,6 +63,52 @@ export default {
       width: 28,
       height: 43
     },
+    keyboardNav: {
+      paths: [
+        {
+          d:
+            'M11.5 9.5c0 1.105-.895 2-2 2h-7c-1.105 0-2-.895-2-2v-7c0-1.105.895-2 2-2h7c1.105 0 2 .895 2 2v7z',
+          fill: 'default',
+          stroke: { width: 1 }
+        },
+        {
+          d: 'M5.561 9.1L3.487 7.025 5.612 4.9',
+          fill: 'default',
+          stroke: { width: 1 }
+        },
+        {
+          d:
+            'M24.5 2.5c0-1.105-.895-2-2-2h-7c-1.105 0-2 .895-2 2v7c0 1.105.895 2 2 2h7c1.105 0 2-.895 2-2v-7z',
+          fill: 'default',
+          stroke: { width: 1 }
+        },
+        {
+          d: 'M19.439 9.1l2.074-2.075L19.388 4.9',
+          fill: 'default',
+          stroke: { width: 1 }
+        }
+      ],
+      width: 25,
+      height: 12
+    },
+    mouseWheel: {
+      paths: [
+        {
+          d:
+            'M7.184 11.597c0 1.846-1.496 3.342-3.342 3.342S.5 13.443.5 11.597V8.032C.5 6.186 1.996 4.69 3.842 4.69s3.342 1.496 3.342 3.342v3.565z',
+          fill: 'default',
+          stroke: { width: 1 }
+        },
+        {
+          d:
+            'M3.842 7.816v1.998m-2.1-7.033L3.817.707l2.125 2.125m0 14.583L3.867 19.49l-2.125-2.125',
+          fill: 'default',
+          stroke: { width: 1 }
+        }
+      ],
+      width: 8,
+      height: 21
+    },
     desktop: {
       paths: [
         {

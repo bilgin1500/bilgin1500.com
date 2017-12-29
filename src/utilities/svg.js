@@ -171,14 +171,22 @@ var createPolygon = function(attributes) {
 
 /**
  * Creates a svg icon from given path and circle data
- * @param  {string} iconName    Icon name from the content/icons.js
- * @param  {object} attributes  SVG attributes for container element: id,width,height
- * @param  {string} container   Container for the icon: svg, group, defs or mask
- * @return {element}            <g> or <svg> element
+ * @param  {string} iconName             Icon name from the content/icons.js
+ * @param  {object} containerAttributes  SVG attributes for container element: id,width,height
+ * @param  {string} container            Container for the icon: svg, group, defs or mask
+ * @param  {object} childAttributes      Attributes for all child elements: stroke,fill
+ * @return {element}                     Container element (<g>,<svg>,etc)
  */
-var createIcon = function(iconName, attributes, container) {
+var createIcon = function(
+  iconName,
+  containerAttributes,
+  container,
+  childAttributes
+) {
   var iconData = icons.list[iconName];
-  container = typeof container !== 'undefined' ? container : 'svg';
+
+  container =
+    typeof container !== 'undefined' && container !== null ? container : 'svg';
   var $iconContainer;
   var createContainer = {
     svg: createSVG,
@@ -188,20 +196,25 @@ var createIcon = function(iconName, attributes, container) {
   };
 
   $iconContainer = createContainer[container](
-    objectAssign({ width: iconData.width, height: iconData.height }, attributes)
+    objectAssign(
+      { width: iconData.width, height: iconData.height },
+      containerAttributes
+    )
   );
 
   var i;
   if (typeof iconData.paths !== 'undefined') {
     for (i = 0; i < iconData.paths.length; i++) {
-      var $path = createPath(iconData.paths[i]);
+      var $path = createPath(objectAssign(iconData.paths[i], childAttributes));
       $iconContainer.appendChild($path);
     }
   }
 
   if (typeof iconData.circles !== 'undefined') {
     for (i = 0; i < iconData.circles.length; i++) {
-      var $circle = createCircle(iconData.circles[i]);
+      var $circle = createCircle(
+        objectAssign(iconData.circles[i], childAttributes)
+      );
       $iconContainer.appendChild($circle);
     }
   }

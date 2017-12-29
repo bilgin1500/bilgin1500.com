@@ -1,6 +1,11 @@
 import { TweenMax, TimelineMax } from 'gsap';
-import { winController, addScrollerScene } from 'utilities/scroller';
-import { createEl, getHeight, removeClass, addClass } from 'utilities/helpers';
+import {
+  createEl,
+  getHeight,
+  removeClass,
+  addClass,
+  momentum
+} from 'utilities/helpers';
 import projectThumbTemplate from 'templates/project-thumbnail';
 import data from 'content/index';
 import 'css/projects';
@@ -46,11 +51,8 @@ var toggleSVGAnimations = function($projectItem) {
   }
 };
 
-/* Iterate all the projects in the db */
-
-var yValues = [50, 150, 100, 50, 50, 100, 0, 150];
-var boxShadowValues = [100, 70, 50, 100, 70, 50, 100, 70, 50];
-
+// Iterate all the projects in the db,
+// append them to the DOM and init the parallax effect
 projectSection[0].list.forEach(function(projectData, i) {
   if (projectData.thumbnail) {
     projectData.thumbnail = require('content/' +
@@ -68,21 +70,7 @@ projectSection[0].list.forEach(function(projectData, i) {
     $projectH2 = $projectItem.querySelector('.project-desc h2'),
     $projectP = $projectItem.querySelector('.project-desc p');
 
-  $projectItem.style.boxShadow =
-    '10px ' + boxShadowValues[i] + 'px 0 rgba(0,0,0,0.05)';
-
-  projectData.appearAnim = new TweenMax.to($projectItem, 1, {
-    y: yValues[i],
-    boxShadow: '10px ' + (boxShadowValues[i] + -20) + 'px 0 rgba(0,0,0,0.05)'
-  });
-
-  addScrollerScene({
-    triggerHook: 'onEnter',
-    triggerElement: $projectItem,
-    duration: getHeight('window')
-  })
-    .setTween(projectData.appearAnim)
-    .addTo(winController);
+  momentum($projectItem, projectData.momentum);
 
   $projectItem.addEventListener('mouseenter', function() {
     toggleSVGAnimations($projectItem);

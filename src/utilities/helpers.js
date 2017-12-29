@@ -1,13 +1,27 @@
 import objectAssign from 'object-assign';
 import data from 'content/index';
 
+// Caching
 var $win = window;
 var $doc = document;
 
+/**
+ * Make a string's firs letter uppercase
+ * @param  {string} string The string to be uppercased
+ * @return {string}        The string after transformation
+ */
 var uppercase = function(string) {
   return string.replace(string.charAt(0), string.charAt(0).toUpperCase());
 };
 
+/**
+ * Functions like Array.prototype.join. 
+ * Convert an object to an array and joins it's content
+ * @param  {object} obj       The object to be joined
+ * @param  {string} glue      The string between object key and value pair
+ * @param  {string} separator The string between array nodes
+ * @return {string}           Joined object as string
+ */
 var objectJoin = function(obj, glue, separator) {
   if (glue == undefined) glue = '=';
   if (separator == undefined) separator = ',';
@@ -19,6 +33,11 @@ var objectJoin = function(obj, glue, separator) {
     .join(separator);
 };
 
+/**
+ * Logs the content to the browser's dev console
+ * @param  {string} log     Content to be logged
+ * @param  {object} options console.log options like color, font size etc.
+ */
 var log = function(log, options) {
   if (data.settings.isLoggerActive) {
     var defaultOptions = {
@@ -28,7 +47,7 @@ var log = function(log, options) {
       defaultOptions = objectAssign({}, defaultOptions, options);
     }
     options = objectJoin(defaultOptions, ':', ';');
-    console.log('%c' + log, options);
+    if ($win.console) console.log('%c' + log, options);
   }
 };
 
@@ -178,6 +197,25 @@ var clearInnerHTML = function(el) {
   }
 };
 
+var momentum = function(el, options) {
+  var speed = options && options.speed ? options.speed : 0.4;
+  var friction = options && options.friction ? options.friction : 0.08;
+  var currDeltaAttrName = 'data-current-delta';
+  var currentDelta = el.getAttribute(currDeltaAttrName) || 0;
+  var newDelta = 0 - getScrollTop() * speed;
+  var tweenDelta = currentDelta - (currentDelta - newDelta) * friction;
+
+  el.style.transform = 'translateY(' + tweenDelta + 'px) translateZ(0)';
+  el.style.webkitTransform = 'translateY(' + tweenDelta + 'px) translateZ(0)';
+  // TweenLite.to(el, 1, { transform: "translate3d(15em, 50vh, 0)" });
+
+  el.setAttribute(currDeltaAttrName, tweenDelta);
+
+  $win.requestAnimationFrame(function() {
+    momentum(el, options);
+  });
+};
+
 // Check for mime type support against a player instance
 // Credits: http://diveintohtml5.info/everything.html
 // Credits: https://github.com/sampotts/plyr/blob/master/src/js/plyr.js
@@ -218,5 +256,6 @@ export {
   addClass,
   removeClass,
   toggleClass,
-  clearInnerHTML
+  clearInnerHTML,
+  momentum
 };

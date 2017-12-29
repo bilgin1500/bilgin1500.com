@@ -34,7 +34,7 @@ module.exports = {
         'scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap',
       ScrollMagicIndicators:
         'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators',
-      GSAPScrollToPlugin: 'gsap/src/uncompressed/plugins/ScrollToPlugin.js'
+      GSAPScrollToPlugin: 'gsap/src/uncompressed/plugins/ScrollToPlugin.js',
       /*DrawSVGPlugin: path.resolve(__dirname, 'src/vendors/DrawSVGPlugin.js'),
       MorphSVGPlugin: path.resolve(__dirname, 'src/vendors/MorphSVGPlugin.js'),
       Physics2DPlugin: path.resolve(
@@ -44,7 +44,12 @@ module.exports = {
       PhysicsPropsPlugin: path.resolve(
         __dirname,
         'src/vendors/PhysicsPropsPlugin.js'
-      )*/
+      ),*/
+      ThrowPropsPlugin: path.resolve(
+        __dirname,
+        'src/vendors/ThrowPropsPlugin.js'
+      )
+      /*SplitText: path.resolve(__dirname, 'src/vendors/SplitText.js')*/
     }
   },
   module: {
@@ -54,7 +59,7 @@ module.exports = {
         loader: 'imports-loader?define=>false'
       },
       {
-        test: /\.(ico|png|jpg|gif|woff|woff2|eot|ttf|otf)$/,
+        test: /\.(ico|png|jpg|gif|woff|woff2|eot|ttf|otf|webm|mp4)$/,
         use: [
           {
             loader: 'file-loader',
@@ -85,10 +90,6 @@ module.exports = {
       {
         test: /\.dot$/,
         loader: 'dot-loader'
-      },
-      {
-        test: /\.(webm|mp4)$/,
-        loader: 'file-loader'
       }
     ]
   },

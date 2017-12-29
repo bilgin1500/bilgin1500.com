@@ -5,6 +5,7 @@ module.exports = {
     'b1500 is Bilgin Özkan,visual designer & front-end developer from Istanbul',
   settings: {
     isLoggerActive: false,
+    isPerformanceActive: false,
     idCounter: 0,
     titleSep: '|'
   },
@@ -37,28 +38,55 @@ module.exports = {
           desc: 'Fueling the rockets',
           size: 'small',
           thumbnail: 'thumbnail.svg',
+          momentum: { speed: 0.4 },
           sections: [
             {
-              desktop: {
+              name: 'Desktop',
+              slug: 'desktop',
+              icon: 'desktop',
+              content: {
                 type: 'video',
                 poster: 'video-poster.png',
-                sources: [{ mp4: 'video.mp4' }, { webm: 'video.webm' }]
+                width: 640,
+                height: 400,
+                sources: [
+                  { type: 'mp4', source: 'SampleVideo_720x480_2mb.mp4' },
+                  { type: 'webm', source: 'SampleVideo_720x480_2mb.webm' }
+                ]
               }
             },
             {
-              mobile: {
+              name: 'Mobile',
+              slug: 'mobile',
+              icon: 'mobile',
+              content: {
                 type: 'video',
                 poster: 'video-poster.png',
-                sources: [{ mp4: 'video.mp4' }, { webm: 'video.webm' }]
+                width: 320,
+                height: 240,
+                sources: [
+                  { type: 'mp4', source: 'video.mp4' },
+                  { type: 'webm', source: 'video.webm' }
+                ]
               }
             },
             {
-              gallery: {
+              name: 'Gallery',
+              slug: 'gallery',
+              icon: 'gallery',
+              content: {
                 type: 'gallery',
                 sources: ['1.jpg', '2.jpg']
               }
             },
-            { info: '' }
+            {
+              name: 'About',
+              slug: 'about',
+              icon: 'info',
+              content: {
+                type: 'info'
+              }
+            }
           ]
         },
         {
@@ -67,90 +95,59 @@ module.exports = {
           desc: 'A Theme for The Minimalist',
           size: 'large',
           thumbnail: 'thumbnail.svg',
-          sections: [
-            { desktop: '' },
-            { mobile: '' },
-            { gallery: '' },
-            { info: '' }
-          ]
+          momentum: { speed: 0.2 },
+          sections: []
         },
         {
           slug: 'test',
           name: 'Test.com',
           desc: 'Something wicked',
           size: 'medium',
-          sections: [
-            { desktop: '' },
-            { mobile: '' },
-            { gallery: '' },
-            { info: '' }
-          ]
+          momentum: { speed: 0.4 },
+          sections: []
         },
         {
           slug: 'yesyes',
           name: 'Yesyes',
           desc: 'This is a placeholder',
           size: 'medium',
-          sections: [
-            { desktop: '' },
-            { mobile: '' },
-            { gallery: '' },
-            { info: '' }
-          ]
+          momentum: { speed: 0.3 },
+          sections: []
         },
         {
           slug: 'this-is-it',
           name: 'Thisisit.com',
           desc: 'Fueling the rockets',
           size: 'small',
-          sections: [
-            { desktop: '' },
-            { mobile: '' },
-            { gallery: '' },
-            { info: '' }
-          ]
+          momentum: { speed: 0.5 },
+          sections: []
         },
         {
           slug: 'yep-it-is',
           name: 'Rolio',
           desc: 'A Theme for The Minimalist',
           size: 'large',
-          sections: [
-            { desktop: '' },
-            { mobile: '' },
-            { gallery: '' },
-            { info: '' }
-          ]
+          sections: []
         },
         {
           slug: 'what-a-day',
           name: 'Test.com',
           desc: 'Something wicked',
           size: 'medium',
-          sections: [
-            { desktop: '' },
-            { mobile: '' },
-            { gallery: '' },
-            { info: '' }
-          ]
+          sections: []
         },
         {
           slug: 'ultimate-project',
           name: 'Yesyes',
           desc: 'This is a placeholder',
           size: 'medium',
-          sections: [
-            { desktop: '' },
-            { mobile: '' },
-            { gallery: '' },
-            { info: '' }
-          ]
+          sections: []
         }
       ]
     },
     {
       slug: 'about',
-      name: 'About'
+      name: 'About me'
     },
     {
       slug: 'sketchbook',

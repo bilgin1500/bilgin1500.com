@@ -1,6 +1,7 @@
 import { TweenMax, TimelineMax } from 'gsap';
 import normalizeWheel from 'normalize-wheel';
-import debounce from 'throttle-debounce/throttle';
+import throttle from 'throttle-debounce/throttle';
+import debounce from 'throttle-debounce/debounce';
 import {
   log,
   uppercase,
@@ -12,19 +13,14 @@ import {
   getHeight,
   getWidth
 } from 'utilities/helpers';
-import {
-  createSVG,
-  createDefs,
-  createClipPath,
-  createCircle,
-  createPolygon
-} from 'utilities/svg';
 import events from 'utilities/events';
 import router from 'utilities/router';
 import { createIcon } from 'utilities/svg';
 import projectTemplate from 'templates/project';
 import data from 'content/index';
 
+// Caching
+var $win = window;
 var $doc = document;
 
 var project = {
@@ -34,109 +30,138 @@ var project = {
 
   // Setup and init subsections of the current project
   sections: {
-    // Reserved elements' cache
+    // Reserved
+    current: {
+      index: null, // Current section's index number. It is not set yet!
+      video: null // Current video element
+    },
     $navWrapper: null, // .project-nav
     $showcaseWrapper: null, // .project-showcase
     $showcaseList: [], // .project-showcase .desktop-wrapper, .project-showcase .mobile-wrapper
 
-    // Reserved methods
-    _revealSectionAnimation: null, // The clip path animation to reveal the sections
-
     /**
      * Change sections on wheel events
-     * @param  {object} e onWheel event
+     * @param  {object} e - onWheel event
      */
     _onWheel: debounce(1000, true, function(e) {
-      console.log('onWheel');
-
       // Normalization of the wheel event (delta)
       var normalized = normalizeWheel(e);
 
-      // Find the adjacent section according to the scroll direction
+      // Find the adjacent section index
+      function findAdjacentIndex(direction) {
+        if (direction == 'down') {
+          return project.sections.current.index == 0
+            ? project.data.sections.length - 1
+            : project.sections.current.index - 1;
+        } else if (direction == 'up') {
+          return project.sections.current.index ==
+          project.data.sections.length - 1
+            ? 0
+            : project.sections.current.index + 1;
+        }
+      }
+
+      // Update the url and change the section visually
       var changeSectionToTheDirection = function(direction) {
-        var gotoId = project.sections._findAdjacentId(direction);
+        var currentSection =
+          project.data.sections[findAdjacentIndex(direction)];
         router.engine(
-          '/projects/' +
-            project.data.slug +
-            '/' +
-            project.sections._getNameFromId(gotoId)
+          '/projects/' + project.data.slug + '/' + currentSection.slug
         );
-        project.sections.change({ id: gotoId });
+        project.sections.change(currentSection.slug);
       };
 
-      // Down is next / Up is previous
-      if (normalized.pixelY < 0) {
-        changeSectionToTheDirection('previous');
-      } else if (normalized.pixelY > 0) {
-        changeSectionToTheDirection('next');
+      // Up is next / down is previous
+      if (normalized.pixelY > 0) {
+        changeSectionToTheDirection('down');
+      } else if (normalized.pixelY < 0) {
+        changeSectionToTheDirection('up');
       }
     }),
 
-    // Find prev and next section id
-    _findAdjacentId: function(which) {
-      if (which == 'previous') {
-        return project.sections.current.id == 0
-          ? project.data.sections.length - 1
-          : project.sections.current.id - 1;
-      } else if (which == 'next') {
-        return project.sections.current.id == project.data.sections.length - 1
-          ? 0
-          : project.sections.current.id + 1;
+    /**
+     * Parses current section's content
+     * @param {object} content -  Section's content object
+     * @return {element} The content wrapped with section-inner-wrapper
+     */
+    _parsecontent: function(content) {
+      var $thisSectionContent;
+
+      switch (content.type) {
+        /*
+         * Create video section's content
+         * @see https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Media_events
+         * @param  {object} content   Video data (poster,width,height,sources)
+         */
+        case 'video':
+          var videoPoster = require('content/' +
+            project.data.slug +
+            '/' +
+            content.poster);
+
+          var $video = createEl('video', {
+            poster: videoPoster,
+            preload: 'none',
+            width: content.width,
+            height: content.height,
+            muted: true,
+            loop: true
+          });
+
+          for (var i = 0; i < content.sources.length; i++) {
+            var videoSource = require('content/' +
+              project.data.slug +
+              '/' +
+              content.sources[i].source);
+
+            $video.appendChild(
+              createEl('source', {
+                src: videoSource,
+                type: 'video/' + content.sources[i].type
+              })
+            );
+          }
+
+          $thisSectionContent = $video;
+          break;
+
+        /*
+         * Create gallery section's content
+         * @param  {object} content
+         */
+        case 'gallery':
+          var $wrapper = createEl('div');
+          $wrapper.innerHTML =
+            '<h2>Test</h2><p>Sed vel vestibulum felis, sodales venenatis enim. Quisque vehicula ex sem, et imperdiet massa tempor a. </p>';
+          $thisSectionContent = $wrapper;
+          break;
+
+        /*
+         * Create info section's content
+         * @param  {object} content
+         */
+        case 'info':
+          var $wrapper = createEl('div');
+          $wrapper.innerHTML =
+            '<h2>Info</h2><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at mauris ante. Phasellus sit amet venenatis orci. Vestibulum sit amet nunc scelerisque, aliquet orci eu, ultrices leo.</p>';
+          $thisSectionContent = $wrapper;
+          break;
       }
-    },
 
-    // Find section name from id
-    _getNameFromId: function(sectionId) {
-      return Object.keys(project.data.sections[sectionId])[0];
-    },
-
-    // Find section id from name
-    _getIdFromName: function(sectionName) {
-      return project.data.sections.findIndex(function(section) {
-        return Object.keys(section)[0] == sectionName;
+      var $sectionInnerWrapper = createEl('div', {
+        class: 'section-inner-wrapper'
       });
+
+      $sectionInnerWrapper.appendChild($thisSectionContent);
+
+      return $sectionInnerWrapper;
     },
 
-    // Set current section's name and id
-    _setCurrent: function(args) {
-      var setDefault = function() {
-        project.sections.current = {
-          id: 0,
-          name: (function() {
-            return project.sections._getNameFromId(0);
-          })()
-        };
-      };
-
-      if (args.name == undefined && args.id == undefined) {
-        setDefault();
-      } else {
-        if (args.name != undefined) {
-          var id = project.sections._getIdFromName(args.name);
-          if (id == -1) {
-            setDefault();
-            return;
-          }
-          project.sections.current = { id: id, name: args.name };
-        } else if (args.id != undefined) {
-          var name = project.sections._getNameFromId(args.id);
-          if (name == undefined || name == null || name == '') {
-            setDefault();
-            return;
-          }
-          project.sections.current = { id: args.id, name: name };
-        }
-      }
-      log(
-        'Current sections changed. Id: ' +
-          project.sections.current.id +
-          ', name: ' +
-          project.sections.current.name
-      );
-    },
-
-    // Setup sub sections of the project
-    init: function(currentSectionName) {
+    /**
+     * Setup sections and the slider mechanism of the project
+     * @param  {string} slug - The default section slug to be opened
+     */
+    init: function(slug) {
       project.sections.$showcaseWrapper = $doc.getElementsByClassName(
         'project-showcase'
       )[0];
@@ -144,175 +169,176 @@ var project = {
         'project-nav'
       )[0];
 
-      // Create and append clip path element for section transitions
-      var $showcaseClipSVG = createSVG();
-      project.sections.$showcaseWrapper.appendChild($showcaseClipSVG);
-
-      var findSvgDiagonal = function() {
-        var svgWidth = getWidth($showcaseClipSVG) / 2;
-        var svgHeight = getHeight($showcaseClipSVG) / 2;
-        return Math.sqrt(svgWidth * svgWidth + svgHeight * svgHeight);
-      };
-
-      var findSvgCenter = function() {
-        return {
-          x: getWidth($showcaseClipSVG) / 2,
-          y: getHeight($showcaseClipSVG) / 2
-        };
-      };
-
-      var $showcaseDefs = createDefs();
-      var $showcaseClipPath = createClipPath();
-      var $showcaseClipItem = createCircle({
-        cx: findSvgCenter().x,
-        cy: findSvgCenter().y,
-        r: 0
-      });
-
-      $showcaseClipPath.appendChild($showcaseClipItem);
-      $showcaseDefs.appendChild($showcaseClipPath);
-      $showcaseClipSVG.appendChild($showcaseDefs);
-
-      // Transition effect
-      project.sections._revealSectionAnimation = TweenMax.to(
-        $showcaseClipItem,
-        0.35,
-        {
-          paused: true,
-          transformOrigin: '50% 50%',
-          ease: 'Power4.easeOut',
-          attr: { r: findSvgDiagonal() },
-          onStart: function() {},
-          onComplete: function() {}
-        }
-      );
-
       // Parse all sections
       project.data.sections.forEach(function(section, curr) {
-        var thisSectionName = project.sections._getNameFromId(curr);
-
-        // Create and append sections
+        // Create section wrapper
         project.sections.$showcaseList[curr] = createEl('div', {
-          class: 'section-' + thisSectionName,
-          style:
-            'clip-path:url(#' +
-            $showcaseClipPath.id +
-            ');-webkit-clip-path:url(#' +
-            $showcaseClipPath.id +
-            ')'
+          class: 'section section-' + section.slug
         });
 
+        // Create and append section inner wrapper and content
+        project.sections.$showcaseList[curr].appendChild(
+          project.sections._parsecontent(section.content)
+        );
+
+        // Append section wrapper to the showcase wrapper
         project.sections.$showcaseWrapper.appendChild(
           project.sections.$showcaseList[curr]
         );
 
-        // Create and append nav items
+        // Create nav item for this section
         var $navItem = createEl('a', {
-          href: '/projects/' + project.data.slug + '/' + thisSectionName
+          href: '/projects/' + project.data.slug + '/' + section.slug
         });
 
         var $navItemText = createEl('span');
-        $navItemText.innerHTML = uppercase(thisSectionName);
+        $navItemText.innerHTML = section.name;
 
-        $navItem.appendChild(createIcon(thisSectionName));
+        // Append nav item
+        $navItem.appendChild(createIcon(section.icon));
         $navItem.appendChild($navItemText);
         project.sections.$navWrapper.appendChild($navItem);
       });
 
       // Start
-      project.sections.change({ name: currentSectionName });
+      project.sections.change(slug);
       $doc.addEventListener('mousewheel', project.sections._onWheel);
     },
 
     /**
      * Change the section visually (slide, nav etc.)
-     * @param  {object} args An arguments object. Holds the id and name of the section to be changed
+     * @param  {object} slug -  The slug of the section to be changed
      */
-    change: function(args) {
-      var revealAnim = project.sections._revealSectionAnimation;
-
-      // If transition isn't active we can proceed
-      if (!revealAnim.isActive()) {
-        // First save the current section info
-        project.sections._setCurrent(args);
-
-        // Cache the necessary elements
-        var $allNavItems = project.sections.$navWrapper.getElementsByTagName(
-          'a'
-        );
-        var $allSections = project.sections.$showcaseList;
-
-        // Disable the nav links so that they can not be triggered
-        // while we're playing the transition
-        var disableNavLinks = function() {
-          for (var i = 0; i < $allNavItems.length; i++) {
-            var href = $allNavItems[i].href;
-            $allNavItems[i].setAttribute('rel', href);
-            $allNavItems[i].href = 'javascript:;';
-          }
-        };
-
-        var enableNavLinks = function() {
-          for (var i = 0; i < $allNavItems.length; i++) {
-            var href = $allNavItems[i].getAttribute('rel');
-            $allNavItems[i].removeAttribute('rel');
-            $allNavItems[i].href = href;
-          }
-        };
-
-        // Make all nav items inactive and current nav item active
-        var toggleNavClasses = function() {
-          for (var i = 0; i < $allNavItems.length; i++) {
-            removeClass($allNavItems[i], 'active');
-          }
-          toggleClass($allNavItems[project.sections.current.id], 'active');
-        };
-
-        // Make all slides inactive and current slide active
-        var toggleSectionClasses = function() {
-          for (var i = 0; i < $allSections.length; i++) {
-            removeClass($allSections[i], 'active');
-          }
-          toggleClass($allSections[project.sections.current.id], 'active');
-        };
-
-        // Toggle classes and then play section transition animation
-        var changeSection = function() {
-          toggleSectionClasses();
-          revealAnim.play();
-          TweenMax.delayedCall(revealAnim.totalDuration(), function() {
-            enableNavLinks();
-          });
-        };
-
-        disableNavLinks();
-
-        // Animation has already played. We should firest reverse it
-        if (revealAnim.progress() == 1) {
-          toggleNavClasses();
-          revealAnim.reverse();
-          setTimeout(function() {
-            changeSection();
-          }, revealAnim.totalDuration() * 1000);
-          // Animation has never played yet
-        } else {
-          toggleNavClasses();
-          changeSection();
-        }
+    change: function(slug) {
+      // Performance check for slide changes
+      if (data.settings.isPerformanceActive) {
+        var changeBeginTime = performance.now();
       }
+
+      // Cache the necessary elements
+      var $allSections = project.sections.$showcaseList;
+      var $currentSection = $allSections[project.sections.current.index];
+      var $allNavItems = project.sections.$navWrapper.getElementsByTagName('a');
+      var $currentNavItem = $allNavItems[project.sections.current.index];
+      var $currentVideo = project.sections.current.video;
+
+      // Now save the current section index globally
+      // ! This is the only place we set the current section data
+      project.sections.current.index = project.data.sections.findIndex(function(
+        section
+      ) {
+        return section.slug == slug;
+      });
+
+      // Cache the other necessary elements
+      var $thisNavItem = $allNavItems[project.sections.current.index];
+      var $thisSection = $allSections[project.sections.current.index];
+
+      // Is there a video in this section?
+      var $video = $thisSection.querySelector('video');
+
+      if ($video) {
+        project.sections.current.video = $video;
+      } else {
+        project.sections.current.video = null;
+      }
+
+      // Cache the video
+      var $thisVideo = project.sections.current.video;
+
+      // Disable the nav links so that they can not be triggered
+      // while we're playing the transition
+      var disableNavLinks = function() {
+        for (var i = 0; i < $allNavItems.length; i++) {
+          var href = $allNavItems[i].href;
+          $allNavItems[i].setAttribute('rel', href);
+          $allNavItems[i].href = 'javascript:;';
+        }
+      };
+
+      var enableNavLinks = function() {
+        for (var i = 0; i < $allNavItems.length; i++) {
+          var href = $allNavItems[i].getAttribute('rel');
+          $allNavItems[i].removeAttribute('rel');
+          $allNavItems[i].href = href;
+        }
+      };
+
+      // Section tweenings
+      if ($currentSection) {
+        TweenMax.to($currentSection, 0.25, { yPercent: -100 });
+      }
+
+      TweenMax.fromTo(
+        $thisSection,
+        0.25,
+        { yPercent: 100 },
+        {
+          yPercent: 0,
+          onStart: function() {
+            // Disable nav links
+            disableNavLinks();
+
+            // Pause current video
+            if ($currentVideo) {
+              $currentVideo.pause();
+            }
+
+            // Toggle classes
+            if ($currentNavItem) removeClass($currentNavItem, 'active');
+            addClass($thisNavItem, 'active');
+            addClass($thisSection, 'active');
+          },
+          onComplete: function() {
+            // Toggle classes
+            if ($currentSection) removeClass($currentSection, 'active');
+
+            // Enable nav links
+            enableNavLinks();
+
+            // Play this video
+            if ($thisVideo) {
+              $thisVideo.play();
+            }
+
+            // Log the perf
+            if (data.settings.isPerformanceActive) {
+              var changeEndTime = performance.now();
+              log(
+                '[PERF] Slide change has ended in ' +
+                  Math.round(changeEndTime - changeBeginTime) +
+                  ' milliseconds. (Transition time excluded.)',
+                { color: 'green' }
+              );
+            }
+          }
+        }
+      );
     },
 
+    /**
+     * Reset everything
+     */
     destroy: function() {
-      project.sections.current = {};
       clearInnerHTML(project.sections.$navWrapper);
       clearInnerHTML(project.sections.$showcaseWrapper);
+      project.data = {};
+      project.sections.$navWrapper = null;
+      project.sections.$showcaseWrapper = null;
+      project.sections.$showcaseList = [];
       $doc.removeEventListener('mousewheel', project.sections._onWheel);
     }
   },
 
-  // Project window setup and methods
+  /**
+   * Project window setup and methods
+   */
   window: {
-    _init() {
+    /**
+     * Create project window and append it to the dom
+     * @return {element} Project window element
+     */
+    _init: function() {
       var windowID = 'project-window';
       if (!$doc.getElementById(windowID)) {
         this.$el = createEl('div', { id: windowID });
@@ -320,6 +346,11 @@ var project = {
       }
       return this.$el;
     },
+
+    /**
+     * Opens project window and inserts project HTML 
+     * @param  {object} callbacks onStart and onComplete callbacks
+     */
     open: function(callbacks) {
       events.publish('project.window.open.onStart');
       toggleClass($doc.body, 'no-scroll');
@@ -338,6 +369,11 @@ var project = {
         }
       });
     },
+
+    /**
+     * Closes project window and cleans the inner HTML 
+     * @param  {object} callbacks onStart and onComplete callbacks
+     */
     close: function(callbacks) {
       events.publish('project.window.close.onStart');
       toggleClass($doc.body, 'no-scroll');
@@ -355,8 +391,12 @@ var project = {
     }
   },
 
-  // Initialize and open current project
-  open: function(projectSlug, currentSectionName) {
+  /**
+   * Initializes and opens current project
+   * @param  {string} projectSlug - The slug of the project to be opened
+   * @param  {string} sectionSlug -  The slug of the section to be opened
+   */
+  open: function(projectSlug, sectionSlug) {
     var projects = data.pages.filter(function(page) {
       return page.slug == 'projects';
     })[0].list;
@@ -391,14 +431,31 @@ var project = {
       }
     };
 
+    project.data.keyboardNavIcon = (function() {
+      return createIcon('keyboardNav', null, null, {
+        stroke: { width: 1, color: '#ccc' }
+      }).outerHTML;
+    })();
+
+    project.data.mouseWheelIcon = (function() {
+      return createIcon('mouseWheel', null, null, {
+        stroke: { width: 1, color: '#ccc' }
+      }).outerHTML;
+    })();
+
+    project.data.year = new Date().getFullYear();
+
     project.window.open({
       onComplete: function() {
-        project.sections.init(currentSectionName);
+        project.sections.init(sectionSlug);
       }
     });
   },
 
-  // Destroys current project
+  /**
+   * Destroys current project and closes project window
+   * @param  {object} callbacks onComplete callback
+   */
   close: function(callbacks) {
     if (project.isOpen) {
       project.isOpen = false;

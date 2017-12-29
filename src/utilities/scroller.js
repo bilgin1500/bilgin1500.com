@@ -8,4 +8,11 @@ var addScrollerScene = function(args) {
   return new ScrollMagic.Scene(args);
 };
 
+/*addScrollerScene({
+    triggerHook: 'onEnter',
+    triggerElement: $projectItem
+  })
+    .setTween(projectData.appearAnim)
+    .addTo(winController);*/
+
 export { winController, addScrollerScene };

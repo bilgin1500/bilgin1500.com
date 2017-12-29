@@ -210,11 +210,11 @@ var menuAnimation = new TimelineMax({
   onComplete: function() {
     if (!menuEverRevealed) menuEverRevealed = true;
     data.settings.menuStatus = 'open';
-    log('Menu has opened');
+    log('[IX] Menu has opened');
   },
   onReverseComplete: function() {
     data.settings.menuStatus = 'closed';
-    log('Menu has closed');
+    log('[IX] Menu has closed');
   }
 })
   .add(topLineToTop)
@@ -346,14 +346,14 @@ menu.toggle = function(e) {
 };
 
 menu.hover = function() {
-  log('Menu hovered', { color: 'red' });
+  log('[IX] Menu hovered');
   if (hasClass($trigger, 'close-button')) {
     closeMenuIconAnimation.play(0);
   }
 };
 
 menu.unhover = function() {
-  log('Menu unhovered', { color: 'red' });
+  log('[IX] Menu unhovered');
   if (hasClass($trigger, 'close-button')) {
     closeMenuIconAnimation.reverse(0);
   }
@@ -365,7 +365,7 @@ menu.autoClose.start = function() {
     data.settings.menuStatus == 'open' &&
     menu.autoClose.timer == null
   ) {
-    log('Menu autoClose has started');
+    log('[IX] Menu autoClose has started');
     menu.autoClose.timer = setTimeout(function() {
       menu.autoClose.end();
       menu.close();
@@ -377,7 +377,7 @@ menu.autoClose.end = function() {
   if (menu.autoClose.active && menu.autoClose.timer !== null) {
     clearTimeout(menu.autoClose.timer);
     menu.autoClose.timer = null;
-    log('Menu autoClose has been ended');
+    log('[IX] Menu autoClose has been ended');
   }
 };
 
@@ -395,7 +395,7 @@ menu.project = {
       menuProjectAnimation.play();
     }
     data.settings.menuStatus == 'project';
-    log('Menu is on project mode');
+    log('[IX] Menu is on project mode');
   },
   close: function() {
     $trigger.setAttribute('href', '');
@@ -405,7 +405,7 @@ menu.project = {
     });
     menuProjectAnimation.reverse();
     data.settings.menuStatus == 'closed';
-    log('Menu project mode has closed');
+    log('[IX] Menu project mode has closed');
   }
 };
 
