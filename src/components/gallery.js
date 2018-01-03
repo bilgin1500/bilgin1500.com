@@ -100,19 +100,22 @@ Gallery.prototype = {
       edgeResistance: 0.75,
       dragResistance: 0,
       bounds: $gallery,
-      onDrag: function() {
+      /*onPress: function(e) {
+        e.stopPropagation();
+      },*/
+      onDrag: function(e) {
         swipeDirection = this.getDirection();
       },
       onDragEnd: function() {
         if (!_this.isNavLocked) {
-          // Lock the navigation
-          _this.isNavLocked = true;
           // Log the swipe
           log('[IX] Slide swiped to the ' + swipeDirection);
-          // Change the slide
+          // Change the slide & lock the navigation
           if (swipeDirection == 'left') {
+            _this.isNavLocked = true;
             _this.next();
           } else if (swipeDirection == 'right') {
+            _this.isNavLocked = true;
             _this.previous();
           }
         }
@@ -254,10 +257,30 @@ Gallery.prototype = {
     var $nextSlide = $allSlides[nextIndex];
     var $nextBullet = $allBullets[nextIndex];
 
+    // Set xPercents
+    var xPercentCurr, xPercentNext;
+    if (currentIndex == 0 && nextIndex == _this.slidesLength - 1) {
+      // Loop from beginning
+      xPercentCurr = 200;
+      xPercentNext = -200;
+    } else if (currentIndex == _this.slidesLength - 1 && nextIndex == 0) {
+      // Loop from end
+      xPercentCurr = -200;
+      xPercentNext = 200;
+    } else if (currentIndex > nextIndex) {
+      // Going backwards
+      xPercentCurr = 200;
+      xPercentNext = -200;
+    } else if (currentIndex < nextIndex) {
+      // Going forward
+      xPercentCurr = -200;
+      xPercentNext = 200;
+    }
+
     // If this isn't the first time we should slide out the current slide
     if (!firstTime) {
       TweenMax.to($currSlide, 1, {
-        xPercent: currentIndex > nextIndex ? 200 : -200,
+        xPercent: xPercentCurr,
         ease: Power4.easeOut,
         onStart: function() {
           removeClass($currBullet, 'active');
@@ -279,7 +302,7 @@ Gallery.prototype = {
     TweenMax.fromTo(
       $nextSlide,
       nextSlideInDur,
-      { xPercent: currentIndex > nextIndex ? -200 : 200 },
+      { xPercent: xPercentNext },
       {
         xPercent: 0,
         ease: Power4.easeOut,

@@ -103,20 +103,21 @@ var Project = {
           zIndexBoost: false,
           edgeResistance: 0.75,
           dragResistance: 0,
+          minimumMovement: 100,
           bounds: $showcaseWrapper,
           onDrag: function() {
             swipeDirection = this.getDirection();
           },
           onDragEnd: function() {
             if (!_this.isNavLocked) {
-              // Lock the navigation
-              _this.isNavLocked = true;
               // Log the swipe
               log('[IX] Section swiped to the ' + swipeDirection);
-              // Change the section
+              // Change the section & lock the navigation
               if (swipeDirection == 'down') {
+                _this.isNavLocked = true;
                 _this.sections.previous.call(_this);
               } else if (swipeDirection == 'up') {
+                _this.isNavLocked = true;
                 _this.sections.next.call(_this);
               }
             }
@@ -157,10 +158,10 @@ var Project = {
         // Change the section or exit
         if (e.key == 'ArrowDown') {
           this.isNavLocked = true;
-          this.sections.previous.call(this);
+          this.sections.next.call(this);
         } else if (e.key == 'ArrowUp') {
           this.isNavLocked = true;
-          this.sections.next.call(this);
+          this.sections.previous.call(this);
         } else if (e.key == 'Escape') {
           router.engine('/projects');
         }
@@ -272,10 +273,33 @@ var Project = {
       // Disable nav links
       disableNavLinks();
 
+      // Set yPercents
+      var yPercentCurr, yPercentNext;
+      if (currentIndex == 0 && nextIndex == _this.data.sections.length - 1) {
+        // Loop from beginning
+        yPercentCurr = 100;
+        yPercentNext = -100;
+      } else if (
+        currentIndex == _this.data.sections.length - 1 &&
+        nextIndex == 0
+      ) {
+        // Loop from end
+        yPercentCurr = -100;
+        yPercentNext = 100;
+      } else if (currentIndex > nextIndex) {
+        // Going backwards
+        yPercentCurr = 100;
+        yPercentNext = -100;
+      } else if (currentIndex < nextIndex) {
+        // Going forward
+        yPercentCurr = -100;
+        yPercentNext = 100;
+      }
+
       // Section tweenings
       if (currentSection) {
         TweenMax.to(currentSection.$wrapper, 1.5, {
-          yPercent: currentIndex > nextIndex ? 100 : -100,
+          yPercent: yPercentCurr,
           ease: Power4.easeOut,
           onStart: function() {
             // Make nav item inactive
@@ -302,7 +326,7 @@ var Project = {
       TweenMax.fromTo(
         nextSection.$wrapper,
         0.75,
-        { yPercent: currentIndex > nextIndex ? -100 : 100 },
+        { yPercent: yPercentNext },
         {
           yPercent: 0,
           ease: Power4.easeOut,

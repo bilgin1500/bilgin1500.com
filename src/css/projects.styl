@@ -109,31 +109,37 @@
             
           .gallery
             position relative
-            figure
-              display none
-              position absolute
-              left 0
-              top 0
-              width 100%
-              margin 0
-              &.active
-                display block
             
-              img
-                display block
+            .slides
+              position relative
+              z-index 1
+
+              figure
+                display none
+                position absolute
+                left 0
+                top 0
                 width 100%
-                height auto
-                
-              figcaption
-                margin-top 10px
-                font-size 11px
-                color #333;
-                text-align center
+                margin 0
+                &.active
+                  display block
+              
+                img
+                  display block
+                  width 100%
+                  height auto
+                  
+                figcaption
+                  margin-top 10px
+                  font-size 11px
+                  color #333;
+                  text-align center
                 
             .bullets
               text-align center
               margin 20px auto 0 auto
-              z-index 1
+              position relative
+              z-index 2
               @media screen and (min-width: tablet)
                 margin-top 10px
               
