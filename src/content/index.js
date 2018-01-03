@@ -44,8 +44,8 @@ module.exports = {
               name: 'Desktop',
               slug: 'desktop',
               icon: 'desktop',
+              type: 'video',
               content: {
-                type: 'video',
                 poster: 'video-poster.png',
                 width: 640,
                 height: 400,
@@ -59,8 +59,8 @@ module.exports = {
               name: 'Mobile',
               slug: 'mobile',
               icon: 'mobile',
+              type: 'video',
               content: {
-                type: 'video',
                 poster: 'video-poster.png',
                 width: 320,
                 height: 240,
@@ -74,18 +74,34 @@ module.exports = {
               name: 'Gallery',
               slug: 'gallery',
               icon: 'gallery',
+              type: 'gallery',
               content: {
-                type: 'gallery',
-                sources: ['1.jpg', '2.jpg']
+                sources: [
+                  {
+                    source: '1.jpg',
+                    caption:
+                      'Here I try to accomplish the best design learnings',
+                    alt: 'What an alternative text'
+                  },
+                  {
+                    source: '2.png'
+                  },
+                  {
+                    source: '1.jpg',
+                    caption: 'Yes yes yes'
+                  },
+                  {
+                    source: '2.png'
+                  }
+                ]
               }
             },
             {
               name: 'About',
               slug: 'about',
               icon: 'info',
-              content: {
-                type: 'info'
-              }
+              type: 'info',
+              content: {}
             }
           ]
         },
@@ -96,7 +112,64 @@ module.exports = {
           size: 'large',
           thumbnail: 'thumbnail.svg',
           momentum: { speed: 0.2 },
-          sections: []
+          sections: [
+            {
+              name: 'Desktop',
+              slug: 'desktop',
+              icon: 'desktop',
+              type: 'video',
+              content: {
+                poster: 'video-poster.png',
+                width: 640,
+                height: 400,
+                sources: [
+                  { type: 'mp4', source: 'SampleVideo_720x480_2mb.mp4' },
+                  { type: 'webm', source: 'SampleVideo_720x480_2mb.webm' }
+                ]
+              }
+            },
+            {
+              name: 'Mobile',
+              slug: 'mobile',
+              icon: 'mobile',
+              type: 'video',
+              content: {
+                poster: 'video-poster.png',
+                width: 320,
+                height: 240,
+                sources: [
+                  { type: 'mp4', source: 'video.mp4' },
+                  { type: 'webm', source: 'video.webm' }
+                ]
+              }
+            },
+            {
+              name: 'Gallery',
+              slug: 'gallery',
+              icon: 'gallery',
+              type: 'gallery',
+              content: {
+                sources: [
+                  {
+                    source: '1.jpg',
+                    caption:
+                      'Here I try to accomplish the best design learnings',
+                    alt: 'What an alternative text',
+                    width: 300,
+                    height: 100
+                  },
+                  { source: '2.png' }
+                ]
+              }
+            },
+            {
+              name: 'About',
+              slug: 'about',
+              icon: 'info',
+              type: 'info',
+              content: {}
+            }
+          ]
         },
         {
           slug: 'test',

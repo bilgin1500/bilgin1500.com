@@ -3,3 +3,4 @@
 TODO
 1- project.js#79 http://scrollmagic.io/docs/ScrollMagic.Scene.html#duration
 2- project.js#findSvgCenter & findSvgDiagonal make it responsive
+3- addScrollerScene meselesinden tamamen kurtulup konuyu vanilla js 'ye yaslayalım'

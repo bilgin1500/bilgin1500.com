@@ -1,9 +1,8 @@
 import objectAssign from 'object-assign';
 import icons from 'content/icons';
-import { createId } from 'utilities/helpers';
+import { $doc, createId } from 'utilities/helpers';
 
 var svgNs = 'http://www.w3.org/2000/svg';
-var $doc = document;
 
 // SET ATTRIBUTES
 

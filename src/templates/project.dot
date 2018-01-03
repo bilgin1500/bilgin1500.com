@@ -2,7 +2,7 @@
   <div class="project-showcase-wrapper">
     <div class="project-desc">
       <h2>{{=it.name}}</h2>
-      <p>{{=it.desc}}</p>
+      <h3>{{=it.desc}}</h3>
     </div>
     <div class="project-showcase"></div>
     <div class="project-nav"></div>
@@ -18,7 +18,7 @@
     </a>
   </div>
   <div class="project-footer">
-    <p>You can use your {{=it.mouseWheelIcon}} wheel and {{=it.keyboardNavIcon}} keyboard to navigate.</p>
+    <p>You can use your {{=it.keyboardNavIcon}} keyboard to navigate.</p>
     <p>&copy{{=it.year}}, Bilgin Özkan.</p>
   </div>
 </div>

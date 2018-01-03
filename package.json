@@ -17,11 +17,9 @@
     "dot": "^1.1.2",
     "fontfaceobserver": "^2.0.13",
     "gsap": "^1.20.3",
-    "normalize-wheel": "^1.0.1",
     "normalize.css": "^7.0.0",
     "object-assign": "^4.1.1",
     "page": "^1.7.1",
-    "save": "^2.3.2",
     "scrollmagic": "^2.0.5",
     "throttle-debounce": "^1.0.1"
   },
@@ -36,6 +34,7 @@
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
     "svg-inline-loader": "^0.8.0",
+    "uglifyjs-webpack-plugin": "^1.1.5",
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.9.4"
   }

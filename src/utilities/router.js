@@ -1,11 +1,9 @@
 import page from 'page';
 import { TweenMax } from 'gsap';
 import 'GSAPScrollToPlugin';
-import project from 'components/project';
-import { log, uppercase, getEl } from 'utilities/helpers';
+import Project from 'components/project';
+import { $win, $doc, log, uppercase, getEl } from 'utilities/helpers';
 import data from 'content/index';
-
-var projectThumbPreId = 'project-thumb-';
 
 var router = {
   // Which client-side router to use
@@ -13,20 +11,18 @@ var router = {
 
   /**
    * Scroll like a spa
-   * @param  {[type]} args [description]
-   * @return {[type]}      [description]
    */
   _scrollTo: function(args) {
     var to = args && args.to ? '#' + args.to : 0;
 
-    if (project.isOpen) {
+    if (Project.isOpen) {
       if (args != undefined) {
-        to = '#' + projectThumbPreId + project.data.slug;
+        to = '#project-thumb-' + Project.data.slug;
       }
-      project.close();
+      Project.close();
     }
 
-    TweenMax.to(window, 0.5, {
+    TweenMax.to($win, 0.5, {
       scrollTo: to,
       onStart: args && args.onstart,
       onComplete: args && args.onComplete
@@ -34,21 +30,18 @@ var router = {
   },
 
   /**
-   * [_changeTitle description]
-   * @param  {[type]} title [description]
-   * @return {[type]}       [description]
+   * Changes the document title
    */
   _changeTitle: function(title) {
     var preTitle = '';
     if (title) {
       preTitle = title + ' ' + data.settings.titleSep + ' ';
     }
-    document.title = preTitle + data.title;
+    $doc.title = preTitle + data.title;
   },
 
   /**
    * Setup and start routing
-   * @return {[type]} [description]
    */
   init: function() {
     /*
@@ -59,8 +52,9 @@ var router = {
       router._scrollTo();
     };
 
-    /*
-    Route all projects and their sections
+    /**
+     * Route all projects and their sections
+     * @param  {object} ctx Url parameters: project/section/sectionSlideNo
      */
     var routeProject = function(ctx) {
       // Filter pages and projects to find current project
@@ -80,6 +74,9 @@ var router = {
       // If no section is called via url then the section is
       // the first section of the current project
       var sectionSlug = ctx.params.section || thisProject.sections[0].slug;
+      // The same with the section number. If no page number is specified
+      // then the page is the first page: 0
+      var sectionSlideNo = ctx.params.sectionSlideNo || 1;
 
       // Get the current section object
       var thisSection = thisProject.sections.filter(function(section) {
@@ -96,27 +93,31 @@ var router = {
       );
 
       // Setup the routing logic
-      if (project.isOpen) {
+      if (Project.isOpen) {
         // Same project
-        if (project.data.slug == thisProject.slug) {
-          // Different section
-          if (
-            project.data.sections[project.sections.current.index].slug !=
-            thisSection.slug
-          ) {
-            log('[ROUTE] Same project called, just change the section');
-            project.sections.change(thisSection.slug);
-          }
+        if (Project.data.slug == thisProject.slug) {
+          log(
+            "[ROUTE] Same project called, just change the section or section's slide"
+          );
+          Project.sections.change.call(
+            Project,
+            thisSection.slug,
+            sectionSlideNo
+          );
 
           // Different project
         } else {
           log('[ROUTE] Different project called, change the project');
-          project.close({
+          Project.close({
             onComplete: function() {
               router._scrollTo({
-                to: projectThumbPreId + thisProject.slug,
+                to: 'project-thumb-' + thisProject.slug,
                 onComplete: function() {
-                  project.open(thisProject.slug, thisSection.slug);
+                  Project.open(
+                    thisProject.slug,
+                    thisSection.slug,
+                    sectionSlideNo
+                  );
                 }
               });
             }
@@ -124,7 +125,7 @@ var router = {
         }
       } else {
         log('[ROUTE] Project window is closed, open it');
-        project.open(thisProject.slug, thisSection.slug);
+        Project.open(thisProject.slug, thisSection.slug, sectionSlideNo);
       }
     };
 
@@ -160,7 +161,10 @@ var router = {
      */
     router.engine('/', routeHome);
     router.engine('/:page', routePages);
-    router.engine('/projects/:project/:section?', routeProject);
+    router.engine(
+      '/projects/:project/:section?/:sectionSlideNo?',
+      routeProject
+    );
     router.engine();
   }
 };

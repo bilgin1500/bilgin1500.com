@@ -1,11 +1,14 @@
 import { TweenMax, TimelineMax } from 'gsap';
 import throttle from 'throttle-debounce/throttle';
 import {
+  $win,
+  $doc,
   log,
   createEl,
   getHeight,
-  getWidth,
-  hasClass
+  hasClass,
+  addClass,
+  removeClass
 } from 'utilities/helpers';
 import {
   createSVG,
@@ -16,11 +19,10 @@ import {
   createMask
 } from 'utilities/svg';
 import events from 'utilities/events';
-import { winController, addScrollerScene } from 'utilities/scroller';
 import data from 'content/index';
 import 'css/menu';
 
-var $wrapper = createEl('div', { id: 'menu' });
+var $menu = createEl('div', { id: 'menu' });
 
 // Settings
 
@@ -73,7 +75,7 @@ var $menuSVG = createSVG();
 $menuSVG.appendChild($topLine);
 $menuSVG.appendChild($mainLine);
 $menuSVG.appendChild($bottomLine);
-$wrapper.appendChild($menuSVG);
+$menu.appendChild($menuSVG);
 
 // Create & insert buttons
 
@@ -90,7 +92,7 @@ data.pages.forEach(function(page) {
   $buttonWrapper.appendChild($buttons[page.slug]);
 });
 
-$wrapper.appendChild($buttonWrapper);
+$menu.appendChild($buttonWrapper);
 
 // Create trigger and X icon
 
@@ -103,7 +105,7 @@ var closeMenuIconAnimation = TweenMax.to($closeMenuIcon, 0.25, {
 });
 
 $trigger.appendChild($closeMenuIcon);
-$wrapper.appendChild($trigger);
+$menu.appendChild($trigger);
 
 // Create menu pin
 
@@ -142,10 +144,10 @@ var menuPinYAnimGenerator = function() {
 };
 
 var menuPinYAnimSceneUpdate = function() {
-  if (menuPinYAnimScene.enabled()) {
+  /*if (menuPinYAnimScene.enabled()) {
     menuPinYAnimScene.removeTween().setTween(menuPinYAnimGenerator());
     menuPinYAnimScene.update();
-  }
+  }*/
 };
 
 $menuPinMask.appendChild($menuPinMaskCircle);
@@ -207,6 +209,9 @@ var menuEverRevealed = false;
 
 var menuAnimation = new TimelineMax({
   paused: true,
+  onStart: function() {
+    addClass($menu, 'opened');
+  },
   onComplete: function() {
     if (!menuEverRevealed) menuEverRevealed = true;
     data.settings.menuStatus = 'open';
@@ -215,6 +220,7 @@ var menuAnimation = new TimelineMax({
   onReverseComplete: function() {
     data.settings.menuStatus = 'closed';
     log('[IX] Menu has closed');
+    removeClass($menu, 'opened');
   }
 })
   .add(topLineToTop)
@@ -286,11 +292,11 @@ var menuPinReveal2 = TweenMax.to(
 var menuProjectAnimation = new TimelineMax({
   paused: true,
   onStart: function() {
-    menuPinYAnimScene.enabled(false);
+    //menuPinYAnimScene.enabled(false);
   },
   onReverseComplete: function() {
-    menuPinYAnimScene.enabled(true);
-    menuPinYAnimScene.update();
+    //menuPinYAnimScene.enabled(true);
+    //menuPinYAnimScene.update();
   }
 })
   .add(setMenuPinPos)
@@ -411,12 +417,12 @@ menu.project = {
 
 // Bind events
 
-window.addEventListener('resize', makeMenuRespAgain);
+$win.addEventListener('resize', makeMenuRespAgain);
 $trigger.addEventListener('click', menu.toggle);
 $trigger.addEventListener('mouseenter', menu.hover);
 $trigger.addEventListener('mouseleave', menu.unhover);
-$wrapper.addEventListener('mouseenter', menu.autoClose.end);
-$wrapper.addEventListener('mouseleave', menu.autoClose.start);
+$menu.addEventListener('mouseenter', menu.autoClose.end);
+$menu.addEventListener('mouseleave', menu.autoClose.start);
 events.subscribe('project.window.close.onStart', menu.project.close);
 events.subscribe('project.window.open.onStart', menu.project.open);
 
@@ -426,19 +432,19 @@ events.subscribe('page.ready', function() {
   // Place the buttons according to the pages' heights
 
   for (var i = 0; i < data.pages.length; i++) {
-    var el = document.getElementById(data.pages[i].slug);
+    var el = $doc.getElementById(data.pages[i].slug);
     var elTopo = el.getBoundingClientRect().top;
     var perc = 100 / (getHeight('content-wrapper') / elTopo);
     perc = perc < 0 ? 0 : perc;
     $buttons[data.pages[i].slug].setAttribute('style', 'top:' + perc + '%');
   }
 
-  menuPinYAnimScene = addScrollerScene({
+  /*menuPinYAnimScene = addScrollerScene({
     duration: getHeight('content-wrapper'),
     triggerHook: 'onEnter'
   })
     .setTween(menuPinYAnimGenerator())
-    .addTo(winController);
+    .addTo(winController);*/
 });
 
-export default $wrapper;
+export default $menu;

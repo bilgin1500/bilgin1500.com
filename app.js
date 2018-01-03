@@ -2,12 +2,19 @@ import FontFaceObserver from 'fontfaceobserver';
 import { docReady, createEl } from 'utilities/helpers';
 import { createIcon } from 'utilities/svg';
 import events from 'utilities/events';
+import { log } from 'utilities/helpers';
 import router from 'utilities/router';
 import $menu from 'components/menu';
 import data from 'content/index';
 import 'normalize.css';
 import 'css/main';
 
+// Performance check for slide changes
+if (data.settings.isPerformanceActive) {
+  var pageLoadBeginTime = performance.now();
+}
+
+// Observe the font loads
 var fontMuseoSans300 = new FontFaceObserver('MuseoSans-300'),
   fontMuseoSans300I = new FontFaceObserver('MuseoSans-300Italic'),
   fontMuseoSans900 = new FontFaceObserver('MuseoSans-900'),
@@ -39,4 +46,15 @@ Promise.all([
 
   router.init();
   events.publish('page.ready');
+
+  // Log the perf
+  if (data.settings.isPerformanceActive) {
+    var pageLoadEndTime = performance.now();
+    log(
+      '[PERF] Page is ready in ' +
+        Math.round(pageLoadEndTime - pageLoadBeginTime) +
+        ' milliseconds.',
+      { color: 'green' }
+    );
+  }
 });

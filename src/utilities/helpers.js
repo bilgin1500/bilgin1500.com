@@ -243,6 +243,8 @@ var momentum = function(el, options) {
 };*/
 
 export {
+  $win,
+  $doc,
   log,
   docReady,
   uppercase,

@@ -12,19 +12,21 @@
 
     .project-item 
       display block
+      width 100%
       border 2px solid #000
       background-color #fff
       z-index 2
       margin 2% 2% 20% 2%
       text-decoration none
-      &.small 
-        width 30%
-      &.medium 
-        width 40%
-      &.large 
-        width 60%
-      &:hover
-        background-color #eee
+      @media screen and (min-width: tablet)
+        &.small 
+          width 30%
+        &.medium 
+          width 40%
+        &.large 
+          width 60%
+        &:hover
+          background-color #eee
 
       .project-visual 
         box-sizing border-box
@@ -59,22 +61,31 @@
       absoluteFullWidth()
       top 100px
       text-align center
+      z-index 2
       
       h2
         font-family museoB
-        font-size 29px
-        line-height 31px
+        font-size 23px
+        line-height 1.1em
         margin 0
         
-      p
+        @media screen and (min-width: tablet)
+          font-size 29px
+        
+      h3
         font-family museo
-        font-size 23px
-        line-height 25px
+        font-weight normal
+        font-size 19px
+        line-height 1.1em
         margin-top 10px
         margin-bottom 0
+        
+        @media screen and (min-width: tablet)
+          font-size 23px
   
     .project-showcase
       absoluteFull()
+      z-index 1
         
       .section
         absoluteFull()
@@ -85,8 +96,8 @@
         .section-inner-wrapper
           position absolute
           width 80%
-          left 50%
           top 50%
+          left 50%
           transform translate(-50%,-50%)
           
           @media screen and (min-width: tablet)
@@ -95,11 +106,68 @@
           video
             width 100%
             height auto
+            
+          .gallery
+            position relative
+            figure
+              display none
+              position absolute
+              left 0
+              top 0
+              width 100%
+              margin 0
+              &.active
+                display block
+            
+              img
+                display block
+                width 100%
+                height auto
+                
+              figcaption
+                margin-top 10px
+                font-size 11px
+                color #333;
+                text-align center
+                
+            .bullets
+              text-align center
+              margin 20px auto 0 auto
+              z-index 1
+              @media screen and (min-width: tablet)
+                margin-top 10px
+              
+              a
+                display inline-block
+                box-sizing border-box
+                vertical-align middle
+                width 12px
+                height 12px
+                background-color #eee
+                border-radius 50%
+                margin-right 15px
+                border 3px solid transparent
+                transition background-color 250ms, border 250ms;
+                @media screen and (min-width: tablet)
+                  margin-right 5px
+                &:last-child
+                  margin-right 0
+                &:hover
+                  background-color #000
+                &.active
+                  background-color transparent
+                  border 3px solid #000
+                  width 17px
+                  height 17px
+                  &:hover
+                    background-color transparent
+                
 
     .project-nav
       absoluteFullWidth()
-      bottom 10%
+      bottom 15%
       text-align center
+      z-index 2
       
       a
         display inline-block
@@ -144,6 +212,7 @@
     position fixed
     top 33px
     right 85px
+    z-index 100
     
     a
       display inline-block
