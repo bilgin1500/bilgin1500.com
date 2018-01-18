@@ -5,6 +5,20 @@ import data from 'content/index';
 var $win = window;
 var $doc = document;
 
+/*
+  Is a given variable undefined?
+ */
+var isUndefined = function(obj) {
+  return obj === void 0;
+};
+
+/*
+  Is a given variable null?
+ */
+var isNull = function(obj) {
+  return obj === null;
+};
+
 /**
  * Make a string's firs letter uppercase
  * @param  {string} string The string to be uppercased
@@ -245,6 +259,8 @@ var momentum = function(el, options) {
 export {
   $win,
   $doc,
+  isUndefined,
+  isNull,
   log,
   docReady,
   uppercase,

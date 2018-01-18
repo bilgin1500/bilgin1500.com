@@ -1,6 +1,6 @@
 import FontFaceObserver from 'fontfaceobserver';
 import { docReady, createEl } from 'utilities/helpers';
-import { createIcon } from 'utilities/svg';
+import { SVGIcon } from 'utilities/svg';
 import events from 'utilities/events';
 import { log } from 'utilities/helpers';
 import router from 'utilities/router';
@@ -9,7 +9,7 @@ import data from 'content/index';
 import 'normalize.css';
 import 'css/main';
 
-// Performance check for slide changes
+// Preload time
 if (data.settings.isPerformanceActive) {
   var pageLoadBeginTime = performance.now();
 }
@@ -29,7 +29,7 @@ Promise.all([
   fontMuseo300.load(),
   fontMuseo700.load()
 ]).then(function() {
-  var $logo = createIcon('logo', { id: 'logo' });
+  var $logo = new SVGIcon('logo', { id: 'logo' });
   var $logoWrapper = createEl('a', { id: 'logo-wrapper', href: '/' });
   var $wrapper = createEl('div', { id: 'content-wrapper' });
   var $app = document.getElementById('app');

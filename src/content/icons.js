@@ -4,48 +4,21 @@ export default {
   settings: {
     fill: '#fff',
     stroke: {
-      color: '#000',
-      width: 4,
-      linecap: 'round',
-      linejoin: 'round',
-      miterlimit: 10
+      stroke: '#000',
+      'stroke-width': 4,
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round',
+      'stroke-miterlimit': 10
     }
   },
   list: {
-    logo: {
-      paths: [
-        {
-          d:
-            'M11 23v23m9-36v14M30 2v65m9-57v12m10-6v37m18-22v8M2 31v8m57 0v7m0-23v8M30.047 19L2 35l28 17 37-17z',
-          stroke: 'default',
-          fill: '#fff'
-        },
-        {
-          d: 'M39 49v11M20 47v13',
-          stroke: 'default',
-          fill: 'default'
-        }
-      ],
-      circles: [
-        { cx: 21, cy: 35, r: 5, fill: yellow, stroke: { width: 2 } },
-        {
-          cx: 39,
-          cy: 35,
-          r: 6,
-          fill: '#000',
-          stroke: { width: 2, color: yellow }
-        }
-      ],
-      width: 69,
-      height: 69
-    },
     chevronLeft: {
       paths: [
         {
           d:
             'M18.904 41.094L2.465 24.653c-1.953-1.953-1.953-5.119 0-7.071L19.047 1l7.071 7.071-13.047 13.047 12.904 12.905-7.071 7.071z',
           fill: '#fff',
-          stroke: { width: 3 }
+          stroke: { 'stroke-width': 3 }
         }
       ],
       width: 28,
@@ -57,68 +30,22 @@ export default {
           d:
             'M8.214 41.094l16.439-16.44c1.953-1.953 1.953-5.119 0-7.071L8.071 1 1 8.071l13.047 13.046L1.143 34.022l7.071 7.072z',
           fill: '#fff',
-          stroke: { width: 3 }
+          stroke: { 'stroke-width': 3 }
         }
       ],
       width: 28,
       height: 43
     },
-    keyboardNav: {
-      paths: [
-        {
-          d:
-            'M11.5 9.5c0 1.105-.895 2-2 2h-7c-1.105 0-2-.895-2-2v-7c0-1.105.895-2 2-2h7c1.105 0 2 .895 2 2v7z',
-          fill: 'default',
-          stroke: { width: 1 }
-        },
-        {
-          d: 'M5.561 9.1L3.487 7.025 5.612 4.9',
-          fill: 'default',
-          stroke: { width: 1 }
-        },
-        {
-          d:
-            'M24.5 2.5c0-1.105-.895-2-2-2h-7c-1.105 0-2 .895-2 2v7c0 1.105.895 2 2 2h7c1.105 0 2-.895 2-2v-7z',
-          fill: 'default',
-          stroke: { width: 1 }
-        },
-        {
-          d: 'M19.439 9.1l2.074-2.075L19.388 4.9',
-          fill: 'default',
-          stroke: { width: 1 }
-        }
-      ],
-      width: 25,
-      height: 12
-    },
-    mouseWheel: {
-      paths: [
-        {
-          d:
-            'M7.184 11.597c0 1.846-1.496 3.342-3.342 3.342S.5 13.443.5 11.597V8.032C.5 6.186 1.996 4.69 3.842 4.69s3.342 1.496 3.342 3.342v3.565z',
-          fill: 'default',
-          stroke: { width: 1 }
-        },
-        {
-          d:
-            'M3.842 7.816v1.998m-2.1-7.033L3.817.707l2.125 2.125m0 14.583L3.867 19.49l-2.125-2.125',
-          fill: 'default',
-          stroke: { width: 1 }
-        }
-      ],
-      width: 8,
-      height: 21
-    },
     desktop: {
       paths: [
         {
           d: 'M1 1h49v32H1z',
-          stroke: { width: 2 },
+          stroke: { 'stroke-width': 2 },
           fill: '#fff'
         },
         {
           d: 'M1 10h49v23H1z',
-          stroke: { width: 2 },
+          stroke: { 'stroke-width': 2 },
           fill: '#fff',
           class: 'hovered-svg-element'
         }
@@ -146,48 +73,21 @@ export default {
       width: 51,
       height: 34
     },
-    mobile: {
-      paths: [
-        {
-          d:
-            'M20 31c0 1.105-.895 2-2 2H3c-1.105 0-2-.895-2-2V3c0-1.105.895-2 2-2h15c1.105 0 2 .895 2 2v28z',
-          stroke: { width: 2 },
-          fill: '#fff'
-        },
-        {
-          d:
-            'M17 23c0 .552-.448 1-1 1H5c-.552 0-1-.448-1-1V7c0-.552.448-1 1-1h11c.552 0 1 .448 1 1v16z',
-          stroke: { width: 2 },
-          fill: '#fff',
-          class: 'hovered-svg-element'
-        }
-      ],
-      circles: [
-        {
-          cx: 10.5,
-          cy: 28.5,
-          r: 2,
-          fill: '#000'
-        }
-      ],
-      width: 21,
-      height: 34
-    },
     gallery: {
       paths: [
         {
           d: 'M11 1h27v18H11z',
-          stroke: { width: 2 },
+          stroke: { 'stroke-width': 2 },
           fill: '#fff'
         },
         {
           d: 'M6 6h27v18H6z',
-          stroke: { width: 2 },
+          stroke: { 'stroke-width': 2 },
           fill: '#fff'
         },
         {
           d: 'M1 11h27v18H1z',
-          stroke: { width: 2 },
+          stroke: { 'stroke-width': 2 },
           fill: '#fff',
           class: 'hovered-svg-element'
         },
@@ -205,14 +105,14 @@ export default {
         {
           d:
             'M25 31c0 1.105-.895 2-2 2H3c-1.105 0-2-.895-2-2V3c0-1.105.895-2 2-2h20c1.105 0 2 .895 2 2v28z',
-          stroke: { width: 2 },
+          stroke: { 'stroke-width': 2 },
           fill: '#fff',
           class: 'hovered-svg-element'
         },
         {
           d:
             'M17 27c0 1.105-.895 2-2 2h-4c-1.105 0-2-.895-2-2v-9c0-1.105.895-2 2-2h4c1.105 0 2 .895 2 2v9z',
-          stroke: { width: 2 },
+          stroke: { 'stroke-width': 2 },
           fill: '#fff'
         }
       ],
@@ -221,12 +121,112 @@ export default {
           cx: 13,
           cy: 9,
           r: 4,
-          stroke: { width: 2 },
+          stroke: { 'stroke-width': 2 },
           fill: '#fff'
         }
       ],
       width: 26,
       height: 34
+    },
+    keyboardNav: {
+      paths: [
+        {
+          d:
+            'M11.5 9.5c0 1.105-.895 2-2 2h-7c-1.105 0-2-.895-2-2v-7c0-1.105.895-2 2-2h7c1.105 0 2 .895 2 2v7z',
+          fill: 'default',
+          stroke: { 'stroke-width': 1 }
+        },
+        {
+          d: 'M5.561 9.1L3.487 7.025 5.612 4.9',
+          fill: 'default',
+          stroke: { 'stroke-width': 1 }
+        },
+        {
+          d:
+            'M24.5 2.5c0-1.105-.895-2-2-2h-7c-1.105 0-2 .895-2 2v7c0 1.105.895 2 2 2h7c1.105 0 2-.895 2-2v-7z',
+          fill: 'default',
+          stroke: { 'stroke-width': 1 }
+        },
+        {
+          d: 'M19.439 9.1l2.074-2.075L19.388 4.9',
+          fill: 'default',
+          stroke: { 'stroke-width': 1 }
+        }
+      ],
+      width: 25,
+      height: 12
+    },
+    logo: {
+      paths: [
+        {
+          d:
+            'M11 23v23m9-36v14M30 2v65m9-57v12m10-6v37m18-22v8M2 31v8m57 0v7m0-23v8M30.047 19L2 35l28 17 37-17z',
+          stroke: 'default',
+          fill: '#fff'
+        },
+        {
+          d: 'M39 49v11M20 47v13',
+          stroke: 'default',
+          fill: 'default'
+        }
+      ],
+      circles: [
+        { cx: 21, cy: 35, r: 5, fill: yellow, stroke: { 'stroke-width': 2 } },
+        {
+          cx: 39,
+          cy: 35,
+          r: 6,
+          fill: '#000',
+          stroke: { 'stroke-width': 2, stroke: yellow }
+        }
+      ],
+      width: 69,
+      height: 69
+    },
+    mobile: {
+      paths: [
+        {
+          d:
+            'M20 31c0 1.105-.895 2-2 2H3c-1.105 0-2-.895-2-2V3c0-1.105.895-2 2-2h15c1.105 0 2 .895 2 2v28z',
+          stroke: { 'stroke-width': 2 },
+          fill: '#fff'
+        },
+        {
+          d:
+            'M17 23c0 .552-.448 1-1 1H5c-.552 0-1-.448-1-1V7c0-.552.448-1 1-1h11c.552 0 1 .448 1 1v16z',
+          stroke: { 'stroke-width': 2 },
+          fill: '#fff',
+          class: 'hovered-svg-element'
+        }
+      ],
+      circles: [
+        {
+          cx: 10.5,
+          cy: 28.5,
+          r: 2,
+          fill: '#000'
+        }
+      ],
+      width: 21,
+      height: 34
+    },
+    mouseWheel: {
+      paths: [
+        {
+          d:
+            'M7.184 11.597c0 1.846-1.496 3.342-3.342 3.342S.5 13.443.5 11.597V8.032C.5 6.186 1.996 4.69 3.842 4.69s3.342 1.496 3.342 3.342v3.565z',
+          fill: 'default',
+          stroke: { 'stroke-width': 1 }
+        },
+        {
+          d:
+            'M3.842 7.816v1.998m-2.1-7.033L3.817.707l2.125 2.125m0 14.583L3.867 19.49l-2.125-2.125',
+          fill: 'default',
+          stroke: { 'stroke-width': 1 }
+        }
+      ],
+      width: 8,
+      height: 21
     },
     pin: {
       paths: [
@@ -267,7 +267,7 @@ export default {
           d:
             'M36.152 8.69L28.463 1l-9.887 9.887L8.69 1 1 8.69l9.887 9.886L1 28.463l7.69 7.689 9.886-9.886 9.887 9.886 7.689-7.689-9.886-9.887z',
           stroke: {
-            width: 3
+            'stroke-width': 3
           },
           fill: 'default'
         }

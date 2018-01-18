@@ -1,217 +1,146 @@
 import objectAssign from 'object-assign';
 import icons from 'content/icons';
+import { isUndefined, isNull } from 'utilities/helpers';
 import { $doc, createId } from 'utilities/helpers';
 
-var svgNs = 'http://www.w3.org/2000/svg';
+/**
+ * Creates SVG elements
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Element
+ * 
+ * @param {string} type - SVG element type
+ * @param {object} attributes - All the available attributes 
+ * at https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute
+ *
+ * @return {SVGElement}
+ */
+function SVGElement(type, attributes) {
+  // First create the element
+  this.element = $doc.createElementNS('http://www.w3.org/2000/svg', type);
 
-// SET ATTRIBUTES
+  // Default attributes value
+  attributes = !isUndefined(attributes) ? attributes : {};
 
-var setId = function($el, id) {
-  id = id ? id : createId();
-  $el.setAttribute('id', id);
-};
+  // First set the ID. This is a must. If non is given we'll create a unique ID for this element
+  attributes.id = !isUndefined(attributes.id) ? attributes.id : createId();
 
-var setStroke = function($el, stroke) {
-  switch (typeof stroke) {
-    case 'undefined':
-      return;
-    case 'object':
-      stroke = objectAssign({}, icons.settings.stroke, stroke);
-      break;
-    case 'string':
-      if (stroke == 'default') stroke = icons.settings.stroke;
-      break;
+  // If this is a SVG element there are some attributes we need to set
+  if (type == 'svg') {
+    // Version
+    attributes.version = !isUndefined(attributes.version)
+      ? attributes.version
+      : '1.1';
+
+    // Viewbox
+    if (
+      !isUndefined(attributes.width) &&
+      !isUndefined(attributes.height) &&
+      isUndefined(attributes.viewbox)
+    )
+      attributes.viewbox = '0 0 ' + attributes.width + ' ' + attributes.height;
   }
-  if (stroke.color) $el.setAttribute('stroke', stroke.color);
-  if (stroke.width) $el.setAttribute('stroke-width', stroke.width);
-  if (stroke.linecap) $el.setAttribute('stroke-linecap', stroke.linecap);
-  if (stroke.linejoin) $el.setAttribute('stroke-linejoin', stroke.linejoin);
-  if (stroke.miterlimit)
-    $el.setAttribute('stroke-miterlimit', stroke.miterlimit);
-};
 
-var setFill = function($el, fill) {
-  switch (typeof fill) {
-    case 'undefined' || 'object':
-      return;
-    case 'string':
-      if (fill == 'default') {
-        fill = icons.settings.fill;
-      } else {
-        fill = fill;
+  // Mask attribute is a reference to other element
+  if (!isUndefined(attributes.mask)) {
+    attributes.mask = 'url(#' + attributes.mask + ')';
+  }
+
+  // Now set all the attributes
+  this.setAttributes(attributes);
+
+  return this.element;
+}
+
+/**
+ * Set multiple attributes at once
+ * @param {object} attributes - attribute names and values
+ */
+SVGElement.prototype.setAttributes = function(attributes) {
+  for (var attr in attributes) {
+    if (attributes.hasOwnProperty(attr)) {
+      var val = attributes[attr];
+
+      // Proceed only if the value is defined
+      if (typeof val !== 'undefined' && val != null) {
+        // There are some exceptions: Some attributes like fill and stroke have default values
+        switch (attr) {
+          case 'fill':
+            if (typeof val !== 'string') return;
+            if (val == 'default') {
+              this.element.setAttribute('fill', icons.settings.fill);
+            } else {
+              this.element.setAttribute('fill', val);
+            }
+            break;
+
+          // Another exception is that stroke attributes can be given as
+          // stroke objects like stroke: {stroke-width:'',stroke-linecap:''}
+          case 'stroke':
+            if (typeof val == 'object') {
+              val = objectAssign({}, icons.settings.stroke, val);
+            } else if (typeof val == 'string' && val == 'default') {
+              val = icons.settings.stroke;
+            }
+
+            for (var strokeAttr in val) {
+              if (val.hasOwnProperty(strokeAttr)) {
+                this.element.setAttribute(strokeAttr, val[strokeAttr]);
+              }
+            }
+
+            break;
+
+          default:
+            this.element.setAttribute(attr, val);
+        }
       }
-      break;
+    }
   }
-  $el.setAttribute('fill', fill);
-};
-
-// CONTAINER ELEMENTS
-
-var createSVG = function(attributes) {
-  var $svg = $doc.createElementNS(svgNs, 'svg');
-  $svg.setAttribute('version', '1.1');
-  setId($svg, attributes ? attributes.id : null);
-  if (attributes) {
-    if (attributes.class) $svg.setAttribute('class', attributes.class);
-    if (attributes.width) $svg.setAttribute('width', attributes.width);
-    if (attributes.height) $svg.setAttribute('height', attributes.height);
-    if (attributes.width && attributes.height)
-      $svg.setAttribute(
-        'viewbox',
-        '0 0 ' + attributes.width + ' ' + attributes.height
-      );
-  }
-  return $svg;
-};
-
-var createGroup = function(attributes) {
-  var $group = $doc.createElementNS(svgNs, 'g');
-  setId($group, attributes ? attributes.id : null);
-  if (attributes) {
-    if (attributes.mask)
-      $group.setAttribute('mask', 'url(#' + attributes.mask + ')');
-    if (attributes.class) $group.setAttribute('class', attributes.class);
-  }
-  return $group;
-};
-
-var createDefs = function(attributes) {
-  var $defs = $doc.createElementNS(svgNs, 'defs');
-  setId($defs, attributes ? attributes.id : null);
-  if (attributes && attributes.class)
-    $defs.setAttribute('class', attributes.class);
-  return $defs;
-};
-
-var createMask = function(attributes) {
-  var $mask = $doc.createElementNS(svgNs, 'mask');
-  setId($mask, attributes ? attributes.id : null);
-  if (attributes) {
-    if (attributes.class) $mask.setAttribute('class', attributes.class);
-    if (attributes.maskUnits)
-      $mask.setAttribute('maskUnits', attributes.maskUnits);
-    if (attributes.x) $mask.setAttribute('x', attributes.x);
-    if (attributes.y) $mask.setAttribute('y', attributes.y);
-    if (attributes.width) $mask.setAttribute('width', attributes.width);
-    if (attributes.height) $mask.setAttribute('height', attributes.height);
-  }
-  return $mask;
-};
-
-var createClipPath = function(attributes) {
-  var $clipPath = $doc.createElementNS(svgNs, 'clipPath');
-  setId($clipPath, attributes ? attributes.id : null);
-  if (attributes && attributes.class)
-    $clipPath.setAttribute('class', attributes.class);
-  return $clipPath;
-};
-
-// CORE ELEMENTS
-
-var createLine = function(attributes) {
-  var $line = $doc.createElementNS(svgNs, 'line');
-  setId($line, attributes ? attributes.id : null);
-  $line.setAttribute('x1', attributes.x1);
-  $line.setAttribute('y1', attributes.y1);
-  $line.setAttribute('x2', attributes.x2);
-  $line.setAttribute('y2', attributes.y2);
-  if (attributes) {
-    if (attributes.mask)
-      $line.setAttribute('mask', 'url(#' + attributes.mask + ')');
-    if (attributes.class) $line.setAttribute('class', attributes.class);
-  }
-  setStroke($line, attributes.stroke);
-  return $line;
-};
-
-var createPath = function(attributes) {
-  var $path = $doc.createElementNS(svgNs, 'path');
-  setId($path, attributes ? attributes.id : null);
-  $path.setAttribute('d', attributes.d);
-  if (attributes) {
-    if (attributes.mask)
-      $path.setAttribute('mask', 'url(#' + attributes.mask + ')');
-    if (attributes.class) $path.setAttribute('class', attributes.class);
-  }
-  setFill($path, attributes.fill);
-  setStroke($path, attributes.stroke);
-  return $path;
-};
-
-var createCircle = function(attributes) {
-  var $circle = $doc.createElementNS(svgNs, 'circle');
-  setId($circle, attributes ? attributes.id : null);
-  $circle.setAttribute('cx', attributes.cx);
-  $circle.setAttribute('cy', attributes.cy);
-  $circle.setAttribute('r', attributes.r);
-  if (attributes) {
-    if (attributes.mask)
-      $circle.setAttribute('mask', 'url(#' + attributes.mask + ')');
-    if (attributes.class) $circle.setAttribute('class', attributes.class);
-  }
-  setFill($circle, attributes.fill);
-  setStroke($circle, attributes.stroke);
-  return $circle;
-};
-
-var createPolygon = function(attributes) {
-  var $polygon = $doc.createElementNS(svgNs, 'polygon');
-  setId($polygon, attributes ? attributes.id : null);
-  $polygon.setAttribute('points', attributes.points);
-  if (attributes) {
-    if (attributes.mask)
-      $polygon.setAttribute('mask', 'url(#' + attributes.mask + ')');
-    if (attributes.class) $polygon.setAttribute('class', attributes.class);
-  }
-  setFill($polygon, attributes.fill);
-  setStroke($polygon, attributes.stroke);
-  return $polygon;
 };
 
 /**
  * Creates a svg icon from given path and circle data
- * @param  {string} iconName             Icon name from the content/icons.js
- * @param  {object} containerAttributes  SVG attributes for container element: id,width,height
- * @param  {string} container            Container for the icon: svg, group, defs or mask
- * @param  {object} childAttributes      Attributes for all child elements: stroke,fill
- * @return {element}                     Container element (<g>,<svg>,etc)
+ * 
+ * @param  {string} iconName - Icon name from the iconList
+ * @param  {object} containerAttributes - SVG attributes for container element: id,width,height
+ * @param  {string} container - Container for the icon: svg, g, defs or mask
+ * @param  {object} childAttributes - Attributes for all child elements: stroke,fill
+ * @param  {array} iconList - The list containing the icons (defaults to icons.list from icons.js)
+ * @return {element} - Icon's shapes wrapped by the container element (<g>,<svg>,etc)
  */
-var createIcon = function(
+function SVGIcon(
   iconName,
   containerAttributes,
   container,
-  childAttributes
+  childAttributes,
+  iconList
 ) {
-  var iconData = icons.list[iconName];
+  iconList = isUndefined(iconList) || isNull(iconList) ? icons.list : iconList;
 
-  container =
-    typeof container !== 'undefined' && container !== null ? container : 'svg';
-  var $iconContainer;
-  var createContainer = {
-    svg: createSVG,
-    group: createGroup,
-    defs: createDefs,
-    mask: createMask
-  };
+  var iconData = iconList[iconName];
 
-  $iconContainer = createContainer[container](
+  container = isUndefined(container) || isNull(container) ? 'svg' : container;
+  var $iconContainer = new SVGElement(
+    container,
     objectAssign(
       { width: iconData.width, height: iconData.height },
       containerAttributes
     )
   );
 
-  var i;
-  if (typeof iconData.paths !== 'undefined') {
-    for (i = 0; i < iconData.paths.length; i++) {
-      var $path = createPath(objectAssign(iconData.paths[i], childAttributes));
+  if (!isUndefined(iconData.paths)) {
+    for (var i = 0; i < iconData.paths.length; i++) {
+      var $path = new SVGElement(
+        'path',
+        objectAssign(iconData.paths[i], childAttributes)
+      );
       $iconContainer.appendChild($path);
     }
   }
 
-  if (typeof iconData.circles !== 'undefined') {
-    for (i = 0; i < iconData.circles.length; i++) {
-      var $circle = createCircle(
+  if (!isUndefined(iconData.circles)) {
+    for (var i = 0; i < iconData.circles.length; i++) {
+      var $circle = new SVGElement(
+        'circle',
         objectAssign(iconData.circles[i], childAttributes)
       );
       $iconContainer.appendChild($circle);
@@ -219,17 +148,6 @@ var createIcon = function(
   }
 
   return $iconContainer;
-};
+}
 
-export {
-  createSVG,
-  createGroup,
-  createDefs,
-  createMask,
-  createClipPath,
-  createLine,
-  createPath,
-  createCircle,
-  createPolygon,
-  createIcon
-};
+export { SVGElement, SVGIcon };

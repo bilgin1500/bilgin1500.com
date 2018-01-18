@@ -7,7 +7,7 @@ module.exports = {
     isLoggerActive: false,
     isPerformanceActive: false,
     idCounter: 0,
-    titleSep: '|'
+    titleSep: '‹ — :'
   },
   pages: [
     {
@@ -36,15 +36,18 @@ module.exports = {
           slug: 'skytankingovenon',
           name: 'SkytankingOvenon.com',
           desc: 'Fueling the rockets',
+          url: 'http://skytankingovenon.com',
           size: 'small',
           thumbnail: 'thumbnail.svg',
           momentum: { speed: 0.4 },
+          background: [],
           sections: [
             {
               name: 'Desktop',
               slug: 'desktop',
               icon: 'desktop',
               type: 'video',
+              frame: 'browser',
               content: {
                 poster: 'video-poster.png',
                 width: 640,
@@ -60,6 +63,7 @@ module.exports = {
               slug: 'mobile',
               icon: 'mobile',
               type: 'video',
+              frame: 'phone',
               content: {
                 poster: 'video-poster.png',
                 width: 320,

@@ -1,0 +1,208 @@
+@import "assets/fonts"
+@import "assets/colors"
+@import "mixins/layout"
+
+#project-window
+  display block
+  position fixed
+  z-index 99
+  width 100%
+  height 100%
+  top 100%
+  left 0
+  background-color #fff
+  border-top 4px solid #000
+  
+  .project-wrapper
+    absoluteFull()
+  
+    .project-desc
+      absoluteFullWidth()
+      top 120px
+      text-align center
+      z-index 2
+      @media screen and (min-width: tablet)
+        top 40px
+      
+      h2
+        font-family museoB
+        font-size 23px
+        line-height 1.1em
+        margin 0
+        
+        @media screen and (min-width: tablet)
+          font-size 29px
+        
+      h3
+        display inline-block
+        font-family museo
+        font-weight normal
+        font-size 19px
+        line-height 1.6em
+        margin-top 5px
+        padding-left 2px
+        padding-right 2px
+        background linear-gradient(transparent 50%,yellow 50%, yellow 100%)
+        
+        @media screen and (min-width: tablet)
+          font-size 23px
+
+    .project-showcase
+      absoluteFull()
+      z-index 1
+        
+      .section
+        absoluteFull()
+        display none
+        &.active
+          display block
+        
+        .section-inner-wrapper
+          position absolute
+          width 80%
+          top 50%
+          left 50%
+          transform translate(-50%,-50%)
+          
+          @media screen and (min-width: tablet)
+            width 50%
+          
+          video
+            display block
+            width 100%
+            height auto
+            
+          .gallery
+            position relative
+            
+            .slides
+              position relative
+              z-index 1
+
+              figure
+                display none
+                position absolute
+                left 0
+                top 0
+                width 100%
+                margin 0
+                &.active
+                  display block
+              
+                img
+                  display block
+                  width 100%
+                  height auto
+                  
+                figcaption
+                  margin-top 10px
+                  font-size 11px
+                  color #333;
+                  text-align center
+                
+            .bullets
+              text-align center
+              margin 20px auto 0 auto
+              position relative
+              z-index 2
+              @media screen and (min-width: tablet)
+                margin-top 10px
+              
+              a
+                display inline-block
+                box-sizing border-box
+                vertical-align middle
+                width 12px
+                height 12px
+                background-color #eee
+                border-radius 50%
+                margin-right 15px
+                border 3px solid transparent
+                transition background-color 250ms, border 250ms;
+                @media screen and (min-width: tablet)
+                  margin-right 5px
+                &:last-child
+                  margin-right 0
+                &:hover
+                  background-color #000
+                &.active
+                  background-color transparent
+                  border 3px solid #000
+                  width 17px
+                  height 17px
+                  &:hover
+                    background-color transparent
+                  
+    .project-nav
+      absoluteFullWidth()
+      bottom 75px
+      text-align center
+      z-index 2
+      @media screen and (min-width: tablet)
+        right 0
+        left auto
+        bottomn auto
+        top 50%
+        transform translateY(-50%)
+        width 120px
+      
+      a
+        display inline-block
+        color #000
+        text-decoration none
+        font-size 13px
+        font-family museoSans
+        transition opacity 250ms
+        margin-right 20px
+        @media screen and (min-width: tablet)
+          display block
+          margin-right 0
+          margin-bottom 20px
+        &:last-child
+          margin-bottom 0
+          margin-right 0
+        &.active
+        &:hover
+          .hovered-svg-element
+            fill yellow
+        
+        .hovered-svg-element
+          transition fill 150ms
+        
+        span
+        svg
+          display block
+          text-align center
+          margin 0 auto
+        
+        span
+          margin-top 10px
+          
+    .projects-adjacent-nav
+      position fixed
+      top 33px
+      right 85px
+      z-index 100
+      
+      a
+        display inline-block
+        &.prev
+          margin-right 50px
+        
+        span
+          display none
+          
+    .project-footer
+      absoluteFullWidth()
+      bottom 25px
+      
+      p
+        color #ccc
+        font-size 10px
+        line-height 17px
+        text-align center
+        margin 0
+        
+        svg
+          display inline-block
+          vertical-align middle

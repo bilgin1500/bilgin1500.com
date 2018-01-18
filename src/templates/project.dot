@@ -1,12 +1,10 @@
 <div id="project-{{=it.slug}}" class="project-wrapper">
-  <div class="project-showcase-wrapper">
-    <div class="project-desc">
+  <div class="project-desc">
       <h2>{{=it.name}}</h2>
       <h3>{{=it.desc}}</h3>
     </div>
-    <div class="project-showcase"></div>
-    <div class="project-nav"></div>
-  </div>
+  <div class="project-showcase"></div>
+  <div class="project-nav"></div>
   <div class="projects-adjacent-nav">
     <a href="{{=it.adjacent.prev.link}}" class="prev">
       {{=it.adjacent.prev.icon}}

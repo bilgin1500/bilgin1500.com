@@ -4,3 +4,7 @@ TODO
 1- project.js#79 http://scrollmagic.io/docs/ScrollMagic.Scene.html#duration
 2- project.js#findSvgCenter & findSvgDiagonal make it responsive
 3- addScrollerScene meselesinden tamamen kurtulup konuyu vanilla js 'ye yaslayalım'
+4- project.js içerisinde Draggable'i her section için init etmek yerine tek seferde parent'te init etmek arasındaki fark?
+5- Projeler section menüsünü sağ tarafta yukarıdan aşağıya sıralayalım...
+6- post-process css prefixler için
+7- Kapsamlı dokumantasyon ile functionları anlatıp githuba koyalım

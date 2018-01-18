@@ -1,5 +1,6 @@
 import { TweenMax, TimelineMax } from 'gsap';
 import throttle from 'throttle-debounce/throttle';
+import { SVGElement, SVGIcon } from 'utilities/svg';
 import {
   $win,
   $doc,
@@ -10,14 +11,6 @@ import {
   addClass,
   removeClass
 } from 'utilities/helpers';
-import {
-  createSVG,
-  createLine,
-  createCircle,
-  createIcon,
-  createDefs,
-  createMask
-} from 'utilities/svg';
 import events from 'utilities/events';
 import data from 'content/index';
 import 'css/menu';
@@ -47,7 +40,7 @@ var getMenuHeight = function() {
 
 // Create menu svg items
 
-var $topLine = createLine({
+var $topLine = new SVGElement('line', {
   x1: 23,
   x2: 48,
   y1: 22,
@@ -55,7 +48,7 @@ var $topLine = createLine({
   stroke: 'default'
 });
 
-var $mainLine = createLine({
+var $mainLine = new SVGElement('line', {
   x1: menu.width - menu.hamburgerWidth / 2 - 2,
   x2: menu.width - menu.hamburgerWidth / 2 - 2,
   y1: -getMenuHeight() - 2,
@@ -63,7 +56,7 @@ var $mainLine = createLine({
   stroke: 'default'
 });
 
-var $bottomLine = createLine({
+var $bottomLine = new SVGElement('line', {
   x1: 23,
   x2: 48,
   y1: 22 + menu.hamburgerGap,
@@ -71,7 +64,7 @@ var $bottomLine = createLine({
   stroke: 'default'
 });
 
-var $menuSVG = createSVG();
+var $menuSVG = new SVGElement('svg');
 $menuSVG.appendChild($topLine);
 $menuSVG.appendChild($mainLine);
 $menuSVG.appendChild($bottomLine);
@@ -97,7 +90,7 @@ $menu.appendChild($buttonWrapper);
 // Create trigger and X icon
 
 var $trigger = createEl('a', { id: 'trigger', href: '' });
-var $closeMenuIcon = createIcon('x');
+var $closeMenuIcon = new SVGIcon('x');
 
 var closeMenuIconAnimation = TweenMax.to($closeMenuIcon, 0.25, {
   paused: true,
@@ -110,10 +103,10 @@ $menu.appendChild($trigger);
 // Create menu pin
 
 var menuPinGroupStartingY = 35; // Static value for top y positioning
-var $menuPinMask = createMask();
-var $menuPinDefs = createDefs();
-var $menuPinGroup = createIcon('pin', { mask: $menuPinMask.id }, 'group');
-var $menuPinMaskCircle = createCircle({
+var $menuPinMask = new SVGElement('mask');
+var $menuPinDefs = new SVGElement('defs');
+var $menuPinGroup = new SVGIcon('pin', { mask: $menuPinMask.id }, 'g');
+var $menuPinMaskCircle = new SVGElement('circle', {
   cx: 10,
   cy: 55,
   r: 20,

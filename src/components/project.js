@@ -10,16 +10,116 @@ import {
   clearInnerHTML,
   toggleClass,
   removeClass,
-  addClass
+  addClass,
+  getHeight
 } from 'utilities/helpers';
 import events from 'utilities/events';
 import router from 'utilities/router';
-import { createIcon } from 'utilities/svg';
+import { SVGIcon } from 'utilities/svg';
 import Gallery from 'components/gallery';
 import Video from 'components/video';
 import Info from 'components/info';
 import projectTemplate from 'templates/project';
 import data from 'content/index';
+import frames from 'content/frames';
+import 'css/frames';
+import 'css/project';
+
+/**
+ * Helper function:
+ * Creates a table/grid layout with rows and columns
+ * Useful for browser and phone framing
+ * 
+ * @param  {object} options
+ *         useRows: boolean / default:true
+ *         columns: number / default:3 for browser 5 for phone  
+ *         rows: number / default:3
+ *         type: browser,phone etc. / default:null
+ *         content: element / default:null
+ *         url: string / default:null
+ *         title: string / default:null
+ * @return {element} The wrapper element (.grid-wrapper)
+ */
+var createFrame = function(options) {
+  // Little private helper to check the default variables
+  var isOptionSet = function(key) {
+    return (
+      typeof options !== 'undefined' && typeof options[key] !== 'undefined'
+    );
+  };
+
+  // Defaults
+  var rows = isOptionSet('rows') ? options.rows : 3,
+    useRows = isOptionSet('useRows') ? options.useRows : true,
+    type = isOptionSet('type') ? options.type : null,
+    content = isOptionSet('content') ? options.content : null,
+    url = isOptionSet('url') ? options.url : null,
+    title = isOptionSet('title') ? options.title : null;
+
+  var defaultColumnNumber;
+  if (type == 'browser') {
+    defaultColumnNumber = 3;
+  } else if (type == 'phone') {
+    defaultColumnNumber = 5;
+  }
+
+  var columns = isOptionSet('columns') ? options.columns : defaultColumnNumber;
+
+  // Cache
+  var $cell = [],
+    $row = null,
+    $wrapper = createEl('div', { class: 'grid-wrapper' });
+
+  // Columns & rows and cells
+  for (var i = 0; i < columns * rows; i++) {
+    if (useRows && i % columns == 0) {
+      $row = createEl('div', { class: 'grid-row' });
+      $wrapper.appendChild($row);
+    }
+
+    // Create cell
+    $cell[i + 1] = createEl('div', { class: 'grid-cell-' + (i + 1) });
+
+    // Append frame border images as SVGs
+    if (typeof frames[type][i + 1] !== 'undefined') {
+      $cell[i + 1].appendChild(
+        new SVGIcon(i + 1, null, null, null, frames[type])
+      );
+    }
+
+    if (useRows) {
+      $row.appendChild($cell[i + 1]);
+    } else {
+      $wrapper.appendChild($cell[i + 1]);
+    }
+  }
+
+  // If this is a browser frame let's mimic the url bar
+  if (type == 'browser') {
+    var $textUrlBarWrapper = createEl('div', { class: 'url-bar-wrapper' }),
+      $textUrlBar = createEl('div', { class: 'url-bar' }),
+      $text = createEl('div', { class: 'text' }),
+      $tabBar = createEl('div', { class: 'tab-bar' }),
+      $tabText = createEl('div', { class: 'tab-text' });
+    $text.innerHTML = url;
+    $tabText.innerHTML = title;
+    $textUrlBar.appendChild($text);
+    $textUrlBarWrapper.appendChild($textUrlBar);
+    $tabBar.appendChild($tabText);
+    $cell[2].appendChild($textUrlBarWrapper);
+    $cell[2].appendChild($tabBar);
+  }
+
+  // Append the content to the center frame
+  if (content) {
+    var rowCenter = Math.ceil(rows / 2);
+    var columnCenter = Math.ceil(columns / 2);
+    var theCenter = (rowCenter - 1) * columns + columnCenter;
+    $cell[theCenter].appendChild(content);
+  }
+
+  return $wrapper;
+};
 
 /*
   The master project object.
@@ -59,9 +159,7 @@ var Project = {
       // Parse all sections
       _this.data.sections.forEach(function(section, curr) {
         // Create wrappers
-        var $sectionWrapper = createEl('div', {
-          class: 'section section-' + section.slug
-        });
+        var $sectionWrapper = createEl('div', { class: 'section' });
         var $sectionInnerWrapper = createEl('div', {
           class: 'section-inner-wrapper'
         });
@@ -88,8 +186,28 @@ var Project = {
             break;
         }
 
+        // Append the content to the grid frame if it's visually needed
+        // or append it to the inner-wrapper directly
+        if (section.frame) {
+          // Add frame name as a class
+          addClass($sectionWrapper, 'frame-' + section.frame);
+
+          // 9-box framing
+          var $frame = createFrame({
+            type: section.frame,
+            content: _this.sections.cache[curr].element,
+            url: _this.data.url,
+            title: _this.data.name
+          });
+
+          // Append the frames
+          $sectionInnerWrapper.appendChild($frame);
+        } else {
+          // Append the content without frames
+          $sectionInnerWrapper.appendChild(_this.sections.cache[curr].element);
+        }
+
         // Append section content and wrappers
-        $sectionInnerWrapper.appendChild(_this.sections.cache[curr].element);
         $sectionWrapper.appendChild($sectionInnerWrapper);
         $showcaseWrapper.appendChild($sectionWrapper);
 
@@ -103,7 +221,7 @@ var Project = {
           zIndexBoost: false,
           edgeResistance: 0.75,
           dragResistance: 0,
-          minimumMovement: 100,
+          minimumMovement: 25,
           bounds: $showcaseWrapper,
           onDrag: function() {
             swipeDirection = this.getDirection();
@@ -136,7 +254,7 @@ var Project = {
         $navItemText.innerHTML = section.name;
 
         // Append nav item
-        $navItem.appendChild(createIcon(section.icon));
+        $navItem.appendChild(new SVGIcon(section.icon));
         $navItem.appendChild($navItemText);
         $navWrapper.appendChild($navItem);
       });
@@ -296,10 +414,16 @@ var Project = {
         yPercentNext = 100;
       }
 
+      var sectionTransitionSec = 1,
+        sectionTransitionScale = 0.5,
+        sectionTransitionOpacity = 0.25;
+
       // Section tweenings
       if (currentSection) {
-        TweenMax.to(currentSection.$wrapper, 1.5, {
+        TweenMax.to(currentSection.$wrapper, sectionTransitionSec, {
           yPercent: yPercentCurr,
+          scale: sectionTransitionScale,
+          opacity: sectionTransitionOpacity,
           ease: Power4.easeOut,
           onStart: function() {
             // Make nav item inactive
@@ -325,10 +449,16 @@ var Project = {
 
       TweenMax.fromTo(
         nextSection.$wrapper,
-        0.75,
-        { yPercent: yPercentNext },
+        sectionTransitionSec / 2,
+        {
+          yPercent: yPercentNext,
+          scale: sectionTransitionScale,
+          opacity: sectionTransitionOpacity
+        },
         {
           yPercent: 0,
+          scale: 1,
+          opacity: 1,
           ease: Power4.easeOut,
           onStart: function() {
             // Toggle classes
@@ -502,27 +632,27 @@ var Project = {
         link: '/projects/' + projects[previousIndex].slug,
         name: projects[previousIndex].name,
         icon: (function() {
-          return createIcon('chevronLeft').outerHTML;
+          return new SVGIcon('chevronLeft').outerHTML;
         })()
       },
       next: {
         link: '/projects/' + projects[nextIndex].slug,
         name: projects[nextIndex].name,
         icon: (function() {
-          return createIcon('chevronRight').outerHTML;
+          return new SVGIcon('chevronRight').outerHTML;
         })()
       }
     };
 
     _this.data.keyboardNavIcon = (function() {
-      return createIcon('keyboardNav', null, null, {
-        stroke: { width: 1, color: '#ccc' }
+      return new SVGIcon('keyboardNav', null, null, {
+        stroke: { 'stroke-width': 1, stroke: '#ccc' }
       }).outerHTML;
     })();
 
     _this.data.mouseWheelIcon = (function() {
-      return createIcon('mouseWheel', null, null, {
-        stroke: { width: 1, color: '#ccc' }
+      return new SVGIcon('mouseWheel', null, null, {
+        stroke: { 'stroke-width': 1, stroke: '#ccc' }
       }).outerHTML;
     })();
 
