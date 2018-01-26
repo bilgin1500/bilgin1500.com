@@ -1,125 +1,27 @@
 import { TweenMax } from 'gsap';
 import Draggable from 'gsap/Draggable';
-import 'ThrowPropsPlugin';
 import throttle from 'throttle-debounce/throttle';
 import {
   $win,
   $doc,
   log,
+  isUndefined,
   createEl,
   clearInnerHTML,
   toggleClass,
   removeClass,
-  addClass,
-  getHeight
+  addClass
 } from 'utilities/helpers';
 import events from 'utilities/events';
 import router from 'utilities/router';
-import { SVGIcon } from 'utilities/svg';
+import frame from 'utilities/frame';
+import { SVGElement, SVGIcon } from 'utilities/svg';
 import Gallery from 'components/gallery';
 import Video from 'components/video';
 import Info from 'components/info';
 import projectTemplate from 'templates/project';
 import data from 'content/index';
-import frames from 'content/frames';
-import 'css/frames';
 import 'css/project';
-
-/**
- * Helper function:
- * Creates a table/grid layout with rows and columns
- * Useful for browser and phone framing
- * 
- * @param  {object} options
- *         useRows: boolean / default:true
- *         columns: number / default:3 for browser 5 for phone  
- *         rows: number / default:3
- *         type: browser,phone etc. / default:null
- *         content: element / default:null
- *         url: string / default:null
- *         title: string / default:null
- * @return {element} The wrapper element (.grid-wrapper)
- */
-var createFrame = function(options) {
-  // Little private helper to check the default variables
-  var isOptionSet = function(key) {
-    return (
-      typeof options !== 'undefined' && typeof options[key] !== 'undefined'
-    );
-  };
-
-  // Defaults
-  var rows = isOptionSet('rows') ? options.rows : 3,
-    useRows = isOptionSet('useRows') ? options.useRows : true,
-    type = isOptionSet('type') ? options.type : null,
-    content = isOptionSet('content') ? options.content : null,
-    url = isOptionSet('url') ? options.url : null,
-    title = isOptionSet('title') ? options.title : null;
-
-  var defaultColumnNumber;
-  if (type == 'browser') {
-    defaultColumnNumber = 3;
-  } else if (type == 'phone') {
-    defaultColumnNumber = 5;
-  }
-
-  var columns = isOptionSet('columns') ? options.columns : defaultColumnNumber;
-
-  // Cache
-  var $cell = [],
-    $row = null,
-    $wrapper = createEl('div', { class: 'grid-wrapper' });
-
-  // Columns & rows and cells
-  for (var i = 0; i < columns * rows; i++) {
-    if (useRows && i % columns == 0) {
-      $row = createEl('div', { class: 'grid-row' });
-      $wrapper.appendChild($row);
-    }
-
-    // Create cell
-    $cell[i + 1] = createEl('div', { class: 'grid-cell-' + (i + 1) });
-
-    // Append frame border images as SVGs
-    if (typeof frames[type][i + 1] !== 'undefined') {
-      $cell[i + 1].appendChild(
-        new SVGIcon(i + 1, null, null, null, frames[type])
-      );
-    }
-
-    if (useRows) {
-      $row.appendChild($cell[i + 1]);
-    } else {
-      $wrapper.appendChild($cell[i + 1]);
-    }
-  }
-
-  // If this is a browser frame let's mimic the url bar
-  if (type == 'browser') {
-    var $textUrlBarWrapper = createEl('div', { class: 'url-bar-wrapper' }),
-      $textUrlBar = createEl('div', { class: 'url-bar' }),
-      $text = createEl('div', { class: 'text' }),
-      $tabBar = createEl('div', { class: 'tab-bar' }),
-      $tabText = createEl('div', { class: 'tab-text' });
-    $text.innerHTML = url;
-    $tabText.innerHTML = title;
-    $textUrlBar.appendChild($text);
-    $textUrlBarWrapper.appendChild($textUrlBar);
-    $tabBar.appendChild($tabText);
-    $cell[2].appendChild($textUrlBarWrapper);
-    $cell[2].appendChild($tabBar);
-  }
-
-  // Append the content to the center frame
-  if (content) {
-    var rowCenter = Math.ceil(rows / 2);
-    var columnCenter = Math.ceil(columns / 2);
-    var theCenter = (rowCenter - 1) * columns + columnCenter;
-    $cell[theCenter].appendChild(content);
-  }
-
-  return $wrapper;
-};
 
 /*
   The master project object.
@@ -130,7 +32,7 @@ var createFrame = function(options) {
   open and close: Methods to control to build and destroy a project
  */
 var Project = {
-  // Current project data
+  // Current project & its section's data
   data: {},
 
   // To check if project window is open or close
@@ -144,58 +46,55 @@ var Project = {
     // Current section's index number. It is not set yet!
     currentIndex: null,
 
-    // Section cache [{type:gallery,...gallery properties and methods etc.}]
-    cache: [],
-
     /**
      * Setup sections and the slider mechanism of the project
      */
     _init: function() {
       var _this = this;
 
-      var $showcaseWrapper = $doc.getElementsByClassName('project-showcase')[0];
-      var $navWrapper = $doc.getElementsByClassName('project-nav')[0];
+      // Some element caching
+      var $projectShowcase = _this._window.$el.querySelector(
+        '.project-showcase'
+      );
+      var $projectNav = _this._window.$el.querySelector('.project-nav');
 
       // Parse all sections
-      _this.data.sections.forEach(function(section, curr) {
+      _this.data.sections.forEach(function(sectionData, curr) {
         // Create wrappers
-        var $sectionWrapper = createEl('div', { class: 'section' });
+        var $sectionWrapper = createEl('div', { class: 'project-section' });
         var $sectionInnerWrapper = createEl('div', {
           class: 'section-inner-wrapper'
         });
 
-        // Create new content's instance, append and parse it
+        // Create new content's instance, initialize and append it
         var instanceArgs = {
           projectSlug: _this.data.slug,
-          sectionSlug: section.slug,
-          content: section.content
+          sectionSlug: sectionData.slug,
+          content: sectionData.content
         };
 
-        switch (section.type) {
+        switch (sectionData.type) {
           case 'video':
-            _this.sections.cache[curr] = new Video(instanceArgs);
-            _this.sections.cache[curr].type = 'video';
+            sectionData._instance = new Video(instanceArgs);
             break;
           case 'gallery':
-            _this.sections.cache[curr] = new Gallery(instanceArgs);
-            _this.sections.cache[curr].type = 'gallery';
+            sectionData._instance = new Gallery(instanceArgs);
             break;
           case 'info':
-            _this.sections.cache[curr] = new Info(instanceArgs);
-            _this.sections.cache[curr].type = 'info';
+            sectionData._instance = new Info(instanceArgs);
             break;
         }
 
         // Append the content to the grid frame if it's visually needed
         // or append it to the inner-wrapper directly
-        if (section.frame) {
+        if (sectionData.frame) {
           // Add frame name as a class
-          addClass($sectionWrapper, 'frame-' + section.frame);
+          addClass($sectionWrapper, 'frame-' + sectionData.frame);
 
           // 9-box framing
-          var $frame = createFrame({
-            type: section.frame,
-            content: _this.sections.cache[curr].element,
+          var $frame = frame.create({
+            type: sectionData.frame,
+            content: sectionData._instance.element,
             url: _this.data.url,
             title: _this.data.name
           });
@@ -203,82 +102,110 @@ var Project = {
           // Append the frames
           $sectionInnerWrapper.appendChild($frame);
         } else {
+          // Add section's type as a frame name class
+          addClass($sectionWrapper, 'frame-' + sectionData.type);
           // Append the content without frames
-          $sectionInnerWrapper.appendChild(_this.sections.cache[curr].element);
+          $sectionInnerWrapper.appendChild(sectionData._instance.element);
         }
 
         // Append section content and wrappers
         $sectionWrapper.appendChild($sectionInnerWrapper);
-        $showcaseWrapper.appendChild($sectionWrapper);
+        $projectShowcase.appendChild($sectionWrapper);
 
         // Make the sections draggable and touch enabled via GSAP
-        var swipeDirection;
+        var dragSwipeDir,
+          dragStartY,
+          dragThreshold = 100,
+          dragBoundaries = 150;
 
-        Draggable.create($sectionWrapper, {
+        sectionData._draggable = Draggable.create($sectionWrapper, {
           type: 'y',
           lockAxis: true,
           throwProps: true,
           zIndexBoost: false,
           edgeResistance: 0.75,
           dragResistance: 0,
-          minimumMovement: 25,
-          bounds: $showcaseWrapper,
+          cursor: 'ns-resize',
+          bounds: {
+            minY: -dragBoundaries,
+            maxY: dragBoundaries
+          },
+          onPress: function() {
+            dragStartY = this.y;
+          },
           onDrag: function() {
-            swipeDirection = this.getDirection();
+            dragSwipeDir = this.getDirection();
           },
           onDragEnd: function() {
-            if (!_this.isNavLocked) {
-              // Log the swipe
-              log('[IX] Section swiped to the ' + swipeDirection);
-              // Change the section & lock the navigation
-              if (swipeDirection == 'down') {
-                _this.isNavLocked = true;
+            var thisDraggable = this;
+
+            // If not dragged properly we'll use this tween
+            // to reset target's position with motion
+            var resetDragToStartPos = TweenMax.to(thisDraggable.target, 0.5, {
+              paused: true,
+              y: dragStartY,
+              ease: Elastic.easeOut.config(1, 0.75)
+            });
+
+            // Check if the user is dragging good enough
+            // If he is, proceed with dragEnd effects.
+            if (
+              thisDraggable.endY > dragThreshold ||
+              thisDraggable.endY < -dragThreshold
+            ) {
+              // Down/Up: Change the section
+              // Left/Right: Nothing
+              if (dragSwipeDir == 'down') {
                 _this.sections.previous.call(_this);
-              } else if (swipeDirection == 'up') {
-                _this.isNavLocked = true;
+              } else if (dragSwipeDir == 'up') {
                 _this.sections.next.call(_this);
+              } else {
+                resetDragToStartPos.play();
               }
+
+              // Log the interaction
+              log('[IX] Section swiped to the ' + dragSwipeDir);
+            } else {
+              resetDragToStartPos.play();
             }
           }
-        });
+        })[0];
 
         // Cache wrappers
-        _this.sections.cache[curr].$wrapper = $sectionWrapper;
+        sectionData._wrapper = $sectionWrapper;
 
         // Create nav item for this section
         var $navItem = createEl('a', {
-          href: '/projects/' + _this.data.slug + '/' + section.slug
+          href: '/projects/' + _this.data.slug + '/' + sectionData.slug
         });
 
         var $navItemText = createEl('span');
-        $navItemText.innerHTML = section.name;
+        $navItemText.innerHTML = sectionData.name;
 
         // Append nav item
-        $navItem.appendChild(new SVGIcon(section.icon));
+        $navItem.appendChild(new SVGIcon(sectionData.icon));
         $navItem.appendChild($navItemText);
-        $navWrapper.appendChild($navItem);
+        $projectNav.appendChild($navItem);
       });
 
       // Add key down event with throttle
-      _this.sections._onKeyDownWithThrottle = throttle(
+      _this.sections._keyNavWithThrottle = throttle(
         300,
-        _this.sections._onKeyDown.bind(_this)
+        _this.sections._keyNav.bind(_this)
       );
-      $doc.addEventListener('keydown', _this.sections._onKeyDownWithThrottle);
+      $doc.addEventListener('keydown', _this.sections._keyNavWithThrottle);
     },
 
     /**
      * Key down/press events
      * @param  {object} e - event
      */
-    _onKeyDown: function(e) {
+    _keyNav: function(e) {
       if (!this.isNavLocked) {
         // Change the section or exit
         if (e.key == 'ArrowDown') {
-          this.isNavLocked = true;
           this.sections.next.call(this);
         } else if (e.key == 'ArrowUp') {
-          this.isNavLocked = true;
           this.sections.previous.call(this);
         } else if (e.key == 'Escape') {
           router.engine('/projects');
@@ -334,9 +261,9 @@ var Project = {
     /**
      * Change the section visually (slide, nav etc.)
      * @param  {object} slug -  The slug of the section to be changed
-     * @param  {number} slideNo - The section page to be changed
+     * @param  {number} slideNo - The instance page (gallery slide etc.) to be changed
      */
-    change: function(slug, slideNo) {
+    goTo: function(slug, slideNo) {
       var _this = this;
 
       // Performance check for slide changes
@@ -356,19 +283,23 @@ var Project = {
       var $allNavItems = $doc.querySelectorAll('.project-nav a');
       var $currentNavItem = $allNavItems[currentIndex];
       var $nextNavItem = $allNavItems[nextIndex];
-      var currentSection = _this.sections.cache[currentIndex];
-      var nextSection = _this.sections.cache[nextIndex];
+      var currentSection = _this.data.sections[currentIndex];
+      var nextSection = _this.data.sections[nextIndex];
       var $nextSection = nextSection.element;
 
       // Check if we are on the same section
       if (currentIndex == nextIndex) {
         // This behaves like gallery router
         if (nextSection.type == 'gallery') {
-          nextSection.goTo(slideNo);
+          nextSection._instance.goTo(slideNo);
         }
         // The rest is unnecessary
         return;
       }
+
+      // Lock the navigation to prevent further interaction
+      // while changing the sections
+      _this.isNavLocked = true;
 
       // Disable the nav links so that they can not be triggered
       // while we're playing the transition
@@ -392,99 +323,103 @@ var Project = {
       disableNavLinks();
 
       // Set yPercents
-      var yPercentCurr, yPercentNext;
+      var yPercentCurr,
+        yPercentNext,
+        percent = 100;
+
       if (currentIndex == 0 && nextIndex == _this.data.sections.length - 1) {
         // Loop from beginning
-        yPercentCurr = 100;
-        yPercentNext = -100;
+        yPercentCurr = percent;
+        yPercentNext = -percent;
       } else if (
         currentIndex == _this.data.sections.length - 1 &&
         nextIndex == 0
       ) {
         // Loop from end
-        yPercentCurr = -100;
-        yPercentNext = 100;
+        yPercentCurr = -percent;
+        yPercentNext = percent;
       } else if (currentIndex > nextIndex) {
         // Going backwards
-        yPercentCurr = 100;
-        yPercentNext = -100;
+        yPercentCurr = percent;
+        yPercentNext = -percent;
       } else if (currentIndex < nextIndex) {
         // Going forward
-        yPercentCurr = -100;
-        yPercentNext = 100;
+        yPercentCurr = -percent;
+        yPercentNext = percent;
       }
 
-      var sectionTransitionSec = 1,
-        sectionTransitionScale = 0.5,
-        sectionTransitionOpacity = 0.25;
+      var sectionTransitionSec = 0.5;
 
-      // Section tweenings
+      // When there's a previous ('current' in this context)
+      // section available first tween it out
       if (currentSection) {
-        TweenMax.to(currentSection.$wrapper, sectionTransitionSec, {
-          yPercent: yPercentCurr,
-          scale: sectionTransitionScale,
-          opacity: sectionTransitionOpacity,
+        var t1 = TweenMax.to(currentSection._wrapper, sectionTransitionSec, {
+          transform: 'translateY(' + yPercentCurr + 'vh)',
           ease: Power4.easeOut,
           onStart: function() {
             // Make nav item inactive
             removeClass($currentNavItem, 'active');
 
-            // When there's a previous section available
-            if (currentSection) {
-              // Pause current video
-              if (currentSection.type == 'video') {
-                currentSection.pause();
-                // Make the gallery inactive
-              } else if (currentSection.type == 'gallery') {
-                currentSection.isActive = false;
-              }
+            // Prevent further drag operations on this section while tweening
+            currentSection._draggable.disable();
+
+            // Pause current video
+            if (currentSection.type == 'video') {
+              currentSection._instance.pause();
+              // Make the gallery inactive
+            } else if (currentSection.type == 'gallery') {
+              currentSection._instance.isActive = false;
             }
           },
           onComplete: function() {
             // After anim. completedmMake the section inactive
-            removeClass(currentSection.$wrapper, 'active');
+            removeClass(currentSection._wrapper, 'active');
           }
         });
       }
 
       TweenMax.fromTo(
-        nextSection.$wrapper,
-        sectionTransitionSec / 2,
+        nextSection._wrapper,
+        sectionTransitionSec,
         {
-          yPercent: yPercentNext,
-          scale: sectionTransitionScale,
-          opacity: sectionTransitionOpacity
+          transform: 'translateY(' + yPercentNext + 'vh)'
         },
         {
-          yPercent: 0,
-          scale: 1,
-          opacity: 1,
+          transform: 'translateY(0)',
           ease: Power4.easeOut,
           onStart: function() {
             // Toggle classes
             addClass($nextNavItem, 'active');
-            addClass(nextSection.$wrapper, 'active');
+            addClass(nextSection._wrapper, 'active');
+
+            // Prevent drag operations on this section while tweening
+            nextSection._draggable.disable();
 
             // If next section is a gallery we should prepare the right
             // page before the animation begins
             if (nextSection.type == 'gallery') {
-              nextSection.isActive = true;
-              nextSection.goTo(slideNo);
+              nextSection._instance.goTo(slideNo, true);
             }
           },
           onComplete: function() {
             // If next section is a video we should play it
             // after the animation is completed
             if (nextSection.type == 'video') {
-              nextSection.play();
+              nextSection._instance.api.play();
             }
 
-            // Open the keyboard lock and enable nav links
+            // After the section appears it means we're active
+            if (nextSection.type == 'gallery') {
+              nextSection._instance.isActive = true;
+            }
+
+            // Open the keyboard lock,
+            // enable nav links and
+            // allow drag operations
             // after callstack cleaning
-            setTimeout(function() {
-              _this.isNavLocked = false;
-              enableNavLinks();
-            }, 10);
+            _this.isNavLocked = false;
+            nextSection._draggable.enable();
+            enableNavLinks();
 
             // Log the perf
             if (data.settings.isPerformanceActive) {
@@ -502,45 +437,30 @@ var Project = {
     },
 
     /**
-     * Reset and clear everything
+     * Reset section specific listeners, clear data etc.
      */
     destroy: function() {
-      var _this = this;
-
-      // Cache showcase and nav wrappers
-      var $showcaseWrapper = $doc.getElementsByClassName('project-showcase')[0];
-      var $navWrapper = $doc.getElementsByClassName('project-nav')[0];
-
       // Remove all gallery revent listeners one by one
-      _this.sections.cache.forEach(function(section) {
+      this.data.sections.forEach(function(section) {
         if (section.type == 'gallery') {
-          $win.removeEventListener('resize', section._fixHeightWithThrottle);
-          $doc.removeEventListener('keydown', section._onKeyDownWithThrottle);
+          $doc.removeEventListener(
+            'keydown',
+            section._instance._keyNavWithThrottle
+          );
         }
       });
 
       // Remove key events for section navigation
-      $doc.removeEventListener(
-        'keydown',
-        _this.sections._onKeyDownWithThrottle
-      );
-
-      // Clear HTML by removeElement()
-      clearInnerHTML($navWrapper);
-      clearInnerHTML($showcaseWrapper);
+      $doc.removeEventListener('keydown', this.sections._keyNavWithThrottle);
 
       // Reset data cache
-      _this.data = {};
-      _this.isNavLocked = false;
-      _this.sections.currentIndex = null;
-      _this.sections.cache = [];
+      this.sections.currentIndex = null;
     }
   },
 
   /**
    * Project window setup and methods
-   * This is for internal use
-   * used by Project.open and close
+   * Private method for project only
    */
   _window: {
     /**
@@ -557,46 +477,30 @@ var Project = {
     },
 
     /**
-     * Opens project window and inserts project HTML 
-     * @param  {object} callbacks onStart and onComplete callbacks
+     * Opens or closes project window
+     * @param  {string} act - Action type: open or close
+     * @param  {object} callbacks - onStart and onComplete callbacks
      */
-    open: function(callbacks) {
+    toggle: function(act, callbacks) {
       var _this = this;
-      var currentProject = events.publish('project.window.open.onStart');
+      var currentProject = events.publish('project.window.' + act + '.onStart');
       toggleClass($doc.body, 'no-scroll');
-      var $projectWindow = _this._window._init();
+      toggleClass($doc.body, 'project-window');
+      var $projectWindow = _this._init();
 
       TweenMax.to($projectWindow, 0.5, {
-        yPercent: -100,
+        yPercent: act == 'open' ? -100 : 100,
         ease: Expo.easeInOut,
+        onStart: function() {
+          if (!isUndefined(callbacks) && !isUndefined(callbacks.onStart)) {
+            callbacks.onStart.call(_this);
+          }
+        },
         onComplete: function() {
-          $projectWindow.insertAdjacentHTML(
-            'beforeend',
-            projectTemplate(_this.data)
-          );
-          if (callbacks && callbacks.onComplete) callbacks.onComplete();
-          events.publish('project.window.open.onComplete');
-        }
-      });
-    },
-
-    /**
-     * Closes project window and cleans the inner HTML 
-     * @param  {object} callbacks onStart and onComplete callbacks
-     */
-    close: function(callbacks) {
-      var _this = this;
-      events.publish('project.window.close.onStart');
-      toggleClass($doc.body, 'no-scroll');
-      var $projectWindow = _this._window.$el;
-
-      TweenMax.to($projectWindow, 0.35, {
-        yPercent: 100,
-        ease: Expo.easeInOut,
-        onComplete: function() {
-          if (callbacks && callbacks.onComplete) callbacks.onComplete();
-          clearInnerHTML($projectWindow);
-          events.publish('project.window.close.onComplete');
+          if (!isUndefined(callbacks) && !isUndefined(callbacks.onComplete)) {
+            callbacks.onComplete.call(_this);
+          }
+          events.publish('project.window.' + act + '.onComplete');
         }
       });
     }
@@ -644,46 +548,73 @@ var Project = {
       }
     };
 
-    _this.data.keyboardNavIcon = (function() {
-      return new SVGIcon('keyboardNav', null, null, {
-        stroke: { 'stroke-width': 1, stroke: '#ccc' }
-      }).outerHTML;
-    })();
-
-    _this.data.mouseWheelIcon = (function() {
-      return new SVGIcon('mouseWheel', null, null, {
-        stroke: { 'stroke-width': 1, stroke: '#ccc' }
-      }).outerHTML;
-    })();
-
     _this.data.year = new Date().getFullYear();
 
-    _this._window.open.apply(_this, [
-      {
-        onComplete: function() {
-          _this.sections._init.call(_this);
-          _this.sections.change.call(_this, sectionSlug, sectionslideNo);
-        }
+    _this._window.toggle('open', {
+      onStart: function() {
+        /* Merge project template with data and insert it */
+        this.$el.insertAdjacentHTML('beforeend', projectTemplate(_this.data));
+
+        /* Background SVG shapes floating all around like it's summer */
+        /*var $shapesWrapper = new SVGElement('svg', {
+            class: 'project-bg-shapes'
+          });
+
+          for (var i = 0; i < _this.data.shapes.length; i++) {
+            var $shape = new SVGElement(
+              _this.data.shapes[i].type,
+              _this.data.shapes[i].attributes
+            );
+
+            TweenMax.to($shape, 2, {
+              //transform: 'translate3d(100vw, 100vh, 0)',
+              x: '100vw',
+              y: '100vh',
+              repeat: -1,
+              yoyo: true
+            });
+
+            $shapesWrapper.appendChild($shape);
+          }
+
+          $projectWindow.appendChild($shapesWrapper);*/
+
+        // Create sections and insert them
+        _this.sections._init.call(_this);
+        _this.sections.goTo.call(_this, sectionSlug, sectionslideNo);
       }
-    ]);
+    });
   },
 
   /**
    * Destroys current project and closes project window
-   * @param  {object} callbacks onComplete callback
+   * @param  {object} callbacks - onComplete callback
    */
   close: function(callbacks) {
     var _this = this;
+
     if (_this.isOpen) {
-      _this._window.close.apply(_this, [
-        {
-          onComplete: function() {
-            _this.isOpen = false;
-            _this.sections.destroy.call(_this);
-            if (callbacks && callbacks.onComplete) callbacks.onComplete();
+      // Close the #projectWindow
+      _this._window.toggle('close', {
+        onComplete: function() {
+          // First destroy the sections
+          _this.sections.destroy.call(_this);
+
+          // Then clear the #projectWindow
+          // this refers to #projectWindow inside the _window.toggle
+          clearInnerHTML(this.$el);
+
+          // Clear data cache
+          _this.data = {};
+          _this.isOpen = false;
+          _this.isNavLocked = false;
+
+          // onComplete
+          if (!isUndefined(callbacks) && !isUndefined(callbacks.onComplete)) {
+            callbacks.onComplete.call(_this);
           }
         }
-      ]);
+      });
     }
   }
 };

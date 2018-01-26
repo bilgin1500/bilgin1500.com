@@ -1,8 +1,12 @@
 import { createEl } from 'utilities/helpers';
+import 'css/video';
 
 /*
  * Video constructor
- * @param  {object} args - Argument object with projectSlug, sectionSlug and content properties
+ * @param  {object} args - argument:
+ *                       projectSlug: current project's slug
+ *                       sectionSlug: current section's slug
+ *                       content: section's content property, usually an array
  * @return {element} - Wrapper element
  */
 function Video(args) {
@@ -25,7 +29,7 @@ Video.prototype = {
       args.content.poster);
 
     // Create <video> tag
-    var $wrapper = createEl('video', {
+    var $video = createEl('video', {
       poster: videoPoster,
       preload: 'none',
       width: args.content.width,
@@ -34,6 +38,10 @@ Video.prototype = {
       loop: true
     });
 
+    // Create a div wrapper
+    var $wrapper = createEl('div', { class: 'video-wrapper' });
+    $wrapper.appendChild($video);
+
     // Append the sources
     for (var i = 0; i < args.content.sources.length; i++) {
       var videoSource = require('content/' +
@@ -41,7 +49,7 @@ Video.prototype = {
         '/' +
         args.content.sources[i].source);
 
-      $wrapper.appendChild(
+      $video.appendChild(
         createEl('source', {
           src: videoSource,
           type: 'video/' + args.content.sources[i].type
@@ -49,17 +57,20 @@ Video.prototype = {
       );
     }
 
+    // HTML5 <video> API
+    this.api = $video;
+
     return $wrapper;
   },
 
   // Api wrapper for video's pause method
   pause: function() {
-    this.element.pause();
+    this.api.pause();
   },
 
   // Api wrapper for video's pause method
   play: function() {
-    this.element.play();
+    this.api.play();
   }
 };
 

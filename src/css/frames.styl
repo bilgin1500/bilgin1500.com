@@ -2,6 +2,8 @@
 @import "assets/colors"
 
 .grid-wrapper
+  margin 0 auto
+  max-width 400px
   .grid-row
     clear both
     > div
@@ -10,6 +12,23 @@
       width 33.333%
       box-sizing border-box
       overflow hidden
+
+.frame-gallery
+  &:before,
+  &:after
+    display block
+    content: '';
+    position absolute
+    left 0
+    height 100px
+    width 100%
+    z-index 2
+  &:before
+    top 0
+    background:linear-gradient(to bottom, #fff 4px, transparent);
+  &:after
+    bottom 0
+    background:linear-gradient(to top, #fff 4px, transparent);
 
 .frame-browser
   .grid-wrapper

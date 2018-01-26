@@ -1,6 +1,6 @@
 # bilgin1500.com
 
-TODO
+##TODO
 1- project.js#79 http://scrollmagic.io/docs/ScrollMagic.Scene.html#duration
 2- project.js#findSvgCenter & findSvgDiagonal make it responsive
 3- addScrollerScene meselesinden tamamen kurtulup konuyu vanilla js 'ye yaslayalım'
@@ -8,3 +8,33 @@ TODO
 5- Projeler section menüsünü sağ tarafta yukarıdan aşağıya sıralayalım...
 6- post-process css prefixler için
 7- Kapsamlı dokumantasyon ile functionları anlatıp githuba koyalım
+8- undefined ve null checkler için helper'larım var artık
+9- DOM isimli bir paket yapsak jQuery misali
+10- menu hover için https://greensock.com/get-started-js: "Overwriting other tweens" başlığı önemli
+- Fontobserver site yüklerken scroll ettiğimizde bozuluyor sanırım
+- Project window'dan çıktığımda mousewheel vb. tüm eventleri temizleyeyim.getEventListeners(document) ve getEventListeners(window) ile check edelim
+- arka planda momentumlarla birlikte tüm hesaplamalar çalışmakta project windowdayken onları durduralım!
+
+## GALLERY
+11- Gallery'de bir sonraki section'dan geri dönerken eğer galeriyi ileriki bir slide'da bırakmışsak animasyon ile ilk slide'a geri dönüyor. Bunu animasyonsuz yapalım.
+12- Gallery slide'ları ile section slide'ları çakışıyor, preventdefault'u kullanalım
+13- Gallery'deki alt buttonların arasına bir çizgi ve ok ile projenin gidişat yönünün anlatabilirim
+14- Proje sayfasındaki footer notlarında swipe/keyboard/hover vs açıklayalım.
+15- Gallery bullet'larında alt açıklamalrı hover edelim
+16- Gallery image'larında hover ile zoom yapalım
+17- gallery'de touch draglar başladığında yönlerin isimleri çıkabilir guide
+
+
+WHEN LOAD THROTTLING
+:8080/projects/skytankingovenon/gallery:1 Uncaught (in promise) DOMException: The play() request was interrupted by a call to pause(). https://goo.gl/LdLk22
+
+POLYFILLING
+https://github.com/kmewhort/pointer_events_polyfill
+
+BUY
+Server & domain
+Vimeo pro
+GSAP membership for throwsplugin
+
+EXTRAS
+Mousewheel support for everythnig with normalize-wheel

@@ -17,134 +17,85 @@
     absoluteFull()
   
     .project-desc
-      absoluteFullWidth()
-      top 120px
+      position relative
+      top 100px
+      height 65px
       text-align center
       z-index 2
+      pointer-events none
       @media screen and (min-width: tablet)
-        top 40px
+        top 0
+        height 20%
       
-      h2
-        font-family museoB
-        font-size 23px
-        line-height 1.1em
-        margin 0
-        
+      .inner-wrapper
+        absoluteFullWidth()
+        bottom 0      
         @media screen and (min-width: tablet)
-          font-size 29px
-        
-      h3
-        display inline-block
-        font-family museo
-        font-weight normal
-        font-size 19px
-        line-height 1.6em
-        margin-top 5px
-        padding-left 2px
-        padding-right 2px
-        background linear-gradient(transparent 50%,yellow 50%, yellow 100%)
-        
-        @media screen and (min-width: tablet)
+          top 50%
+          margin-top -36px
+      
+        h2
+          font-family museoB
           font-size 23px
+          line-height 1.1em
+          margin 0
+          @media screen and (min-width: tablet)
+            font-size 29px
+          
+        h3
+          display inline-block
+          font-family museo
+          font-weight normal
+          font-size 19px
+          line-height 1.6em
+          margin-top 5px
+          margin-bottom 0
+          padding-left 2px
+          padding-right 2px
+          background linear-gradient(transparent 50%,yellow 50%, yellow 100%)
+          @media screen and (min-width: tablet)
+            font-size 23px
 
     .project-showcase
       absoluteFull()
       z-index 1
         
-      .section
+      .project-section
         absoluteFull()
         display none
+        overflow hidden
         &.active
           display block
         
-        .section-inner-wrapper
-          position absolute
-          width 80%
-          top 50%
-          left 50%
-          transform translate(-50%,-50%)
-          
+        > .section-inner-wrapper
+          position relative
+          top calc(165px)
+          max-width 960px
+          height calc(90% - 230px)
+          width 90%
+          margin 0 auto
+          padding 20px
+          box-sizing border-box
           @media screen and (min-width: tablet)
-            width 50%
-          
-          video
-            display block
-            width 100%
-            height auto
+            top 20%
+            height 70%
+            width calc(100% - 240px)
             
-          .gallery
-            position relative
-            
-            .slides
-              position relative
-              z-index 1
-
-              figure
-                display none
-                position absolute
-                left 0
-                top 0
-                width 100%
-                margin 0
-                &.active
-                  display block
-              
-                img
-                  display block
-                  width 100%
-                  height auto
-                  
-                figcaption
-                  margin-top 10px
-                  font-size 11px
-                  color #333;
-                  text-align center
-                
-            .bullets
-              text-align center
-              margin 20px auto 0 auto
-              position relative
-              z-index 2
-              @media screen and (min-width: tablet)
-                margin-top 10px
-              
-              a
-                display inline-block
-                box-sizing border-box
-                vertical-align middle
-                width 12px
-                height 12px
-                background-color #eee
-                border-radius 50%
-                margin-right 15px
-                border 3px solid transparent
-                transition background-color 250ms, border 250ms;
-                @media screen and (min-width: tablet)
-                  margin-right 5px
-                &:last-child
-                  margin-right 0
-                &:hover
-                  background-color #000
-                &.active
-                  background-color transparent
-                  border 3px solid #000
-                  width 17px
-                  height 17px
-                  &:hover
-                    background-color transparent
-                  
     .project-nav
       absoluteFullWidth()
-      bottom 75px
+      bottom 10%
+      height 65px
       text-align center
       z-index 2
+      user-select none
       @media screen and (min-width: tablet)
-        right 0
-        left auto
-        bottomn auto
         top 50%
+        right 40px
+        bottom auto
+        left auto
+        height auto
+        width auto
         transform translateY(-50%)
-        width 120px
       
       a
         display inline-block
@@ -179,10 +130,13 @@
           margin-top 10px
           
     .projects-adjacent-nav
+      display none
       position fixed
       top 33px
-      right 85px
+      right 0
       z-index 100
+      /*@media screen and (min-width: tablet)
+        display block*/
       
       a
         display inline-block
@@ -194,15 +148,27 @@
           
     .project-footer
       absoluteFullWidth()
-      bottom 25px
+      bottom 0
+      height 10%
+      z-index 1
+      user-select none
+      pointer-events none
       
-      p
-        color #ccc
-        font-size 10px
-        line-height 17px
-        text-align center
-        margin 0
-        
-        svg
-          display inline-block
-          vertical-align middle
+      .inner-wrapper
+        absoluteFullWidth()
+        top 50%
+        margin-top -8px
+      
+        p
+          color #ccc
+          font-size 10px
+          line-height 17px
+          text-align center
+          margin 0
+          
+          svg
+            display inline-block
+            vertical-align middle
+
+  .project-bg-shapes
+    absoluteFull()

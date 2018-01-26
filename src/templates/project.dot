@@ -1,8 +1,10 @@
 <div id="project-{{=it.slug}}" class="project-wrapper">
   <div class="project-desc">
+    <div class="inner-wrapper">
       <h2>{{=it.name}}</h2>
       <h3>{{=it.desc}}</h3>
     </div>
+  </div>
   <div class="project-showcase"></div>
   <div class="project-nav"></div>
   <div class="projects-adjacent-nav">
@@ -16,7 +18,8 @@
     </a>
   </div>
   <div class="project-footer">
-    <p>You can use your {{=it.keyboardNavIcon}} keyboard to navigate.</p>
-    <p>&copy{{=it.year}}, Bilgin Özkan.</p>
+    <div class="inner-wrapper">
+      <p>&copy{{=it.year}}, BİLGİN ÖZKAN</p>
+    </div>
   </div>
 </div>

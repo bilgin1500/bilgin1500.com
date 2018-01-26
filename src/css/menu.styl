@@ -18,30 +18,37 @@ hideButtons()
     height 100%
     width 100%
 
-  #button-wrapper 
-    pointer-events none
-    position absolute
-    display block
-    overflow hidden
-    left -130px
-    right 0
-    top 45px
-    bottom 25px
-    z-index 1
+/*#line-wrapper
+  display none
+  @media screen and (min-width: tablet)
+    display block*/
 
-    .button 
-      hideButtons()
-      pointer-events auto
-      transform-origin 100% 50% 
+#button-wrapper 
+  pointer-events none
+  position absolute
+  display block
+  overflow hidden
+  left -130px
+  right 0
+  top 45px
+  bottom 25px
+  z-index 1
+
+  .button 
+    hideButtons()
+    pointer-events auto
+    transform-origin 100% 50% 
 
 #trigger 
   display block
   width 37px
   height 37px
   position absolute
+  top 6px
   right -4px
-  top 8px
   z-index 2
+  @media screen and (min-width: tablet)
+    /*right -4px*/
   &.close-button svg
     display block
   

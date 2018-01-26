@@ -99,11 +99,7 @@ var router = {
           log(
             "[ROUTE] Same project called, just change the section or section's slide"
           );
-          Project.sections.change.call(
-            Project,
-            thisSection.slug,
-            sectionSlideNo
-          );
+          Project.sections.goTo.call(Project, thisSection.slug, sectionSlideNo);
 
           // Different project
         } else {

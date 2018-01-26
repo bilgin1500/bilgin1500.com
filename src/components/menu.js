@@ -64,7 +64,7 @@ var $bottomLine = new SVGElement('line', {
   stroke: 'default'
 });
 
-var $menuSVG = new SVGElement('svg');
+var $menuSVG = new SVGElement('svg', { id: 'line-wrapper' });
 $menuSVG.appendChild($topLine);
 $menuSVG.appendChild($mainLine);
 $menuSVG.appendChild($bottomLine);
@@ -102,7 +102,7 @@ $menu.appendChild($trigger);
 
 // Create menu pin
 
-var menuPinGroupStartingY = 35; // Static value for top y positioning
+/*var menuPinGroupStartingY = 35; // Static value for top y positioning
 var $menuPinMask = new SVGElement('mask');
 var $menuPinDefs = new SVGElement('defs');
 var $menuPinGroup = new SVGIcon('pin', { mask: $menuPinMask.id }, 'g');
@@ -137,16 +137,16 @@ var menuPinYAnimGenerator = function() {
 };
 
 var menuPinYAnimSceneUpdate = function() {
-  /*if (menuPinYAnimScene.enabled()) {
+  if (menuPinYAnimScene.enabled()) {
     menuPinYAnimScene.removeTween().setTween(menuPinYAnimGenerator());
     menuPinYAnimScene.update();
-  }*/
+  }
 };
 
 $menuPinMask.appendChild($menuPinMaskCircle);
 $menuPinDefs.appendChild($menuPinMask);
 $menuPinGroup.appendChild($menuPinDefs);
-$menuSVG.appendChild($menuPinGroup);
+$menuSVG.appendChild($menuPinGroup);*/
 
 // Menu animation
 
@@ -192,11 +192,11 @@ var buttonsReveal = TweenMax.staggerTo(
   0.1
 );
 
-var menuPinReveal = TweenMax.to(
+/*var menuPinReveal = TweenMax.to(
   $menuPinMaskCircle,
   0.25,
   menuPinCircleRevealVars
-);
+);*/
 
 var menuEverRevealed = false;
 
@@ -221,16 +221,16 @@ var menuAnimation = new TimelineMax({
   .add(triggerToClose, '-=0.15')
   .add(bottomLineToBottom)
   .add(mainLineReveal, '-=0.25')
-  .add(buttonsReveal, '-=0.25')
-  .add(menuPinReveal, '-=0.5');
+  .add(buttonsReveal, '-=0.25');
+/*.add(menuPinReveal, '-=0.5');*/
 
 // Menu project animation
 
-var setMenuPinPos = TweenMax.to($menuPinGroup, 0.1, {
+/*var setMenuPinPos = TweenMax.to($menuPinGroup, 0.1, {
   rotation: -90,
   x: 13,
   y: 34
-});
+});*/
 
 var setButtonWrapperTop = TweenMax.to($buttonWrapper, 0.1, {
   top: 5
@@ -262,8 +262,9 @@ var topLineToRight = TweenMax.to($topLine, 0.15, {
 });
 
 var bottomLineToRight = TweenMax.to($bottomLine, 0.15, {
-  x: 12.5,
+  x: 0,
   y: -10,
+  rotation: 0,
   ease: 'Power4.easeOut'
 });
 
@@ -271,16 +272,16 @@ var triggerButtonReveal = TweenMax.to($trigger, 0.25, {
   className: '+=close-button',
   transformOrigin: '50% 50%',
   rotation: 360,
-  y: '-=4',
-  x: '-=85',
+  y: '-=2',
+  x: '-=20',
   ease: 'Power4.easeOut'
 });
 
-var menuPinReveal2 = TweenMax.to(
+/*var menuPinReveal2 = TweenMax.to(
   $menuPinMaskCircle,
   0.25,
   menuPinCircleRevealVars
-);
+);*/
 
 var menuProjectAnimation = new TimelineMax({
   paused: true,
@@ -292,14 +293,14 @@ var menuProjectAnimation = new TimelineMax({
     //menuPinYAnimScene.update();
   }
 })
-  .add(setMenuPinPos)
+  //.add(setMenuPinPos)
   .add(setButtonWrapperTop)
   .add(bottomLineToTopLine)
   .add(topLineRotate)
   .add(bottomLineRotate, '-=0.15')
   .add(topLineToRight)
   .add(bottomLineToRight, '-=0.15')
-  .add(menuPinReveal2)
+  //.add(menuPinReveal2)
   .add(triggerButtonReveal, '-=0.25');
 
 // Responsive height
@@ -313,7 +314,7 @@ var makeMenuRespAgain = throttle(300, function() {
     } else {
       bottomLineToBottom.updateTo({ y: getMenuHeight() - 34 });
     }
-    menuPinYAnimSceneUpdate();
+    //menuPinYAnimSceneUpdate();
     $mainLine.setAttribute('y1', -getMenuHeight() - 2);
     mainLineReveal.updateTo({ yPercent: 100 });
   }, 0);
@@ -399,9 +400,9 @@ menu.project = {
   close: function() {
     $trigger.setAttribute('href', '');
     $trigger.addEventListener('click', menu.toggle);
-    TweenMax.delayedCall(menuProjectAnimation.time(), function() {
+    /*TweenMax.delayedCall(menuProjectAnimation.time(), function() {
       menuPinYAnimSceneUpdate();
-    });
+    });*/
     menuProjectAnimation.reverse();
     data.settings.menuStatus == 'closed';
     log('[IX] Menu project mode has closed');

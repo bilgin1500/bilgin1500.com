@@ -40,7 +40,28 @@ module.exports = {
           size: 'small',
           thumbnail: 'thumbnail.svg',
           momentum: { speed: 0.4 },
-          background: [],
+          shapes: [
+            {
+              type: 'rect',
+              attributes: {
+                x: '0',
+                y: '0',
+                width: '7',
+                height: '80',
+                fill: '#e81355'
+              }
+            },
+            {
+              type: 'rect',
+              attributes: {
+                x: '0',
+                y: '0',
+                width: '30',
+                height: '90',
+                fill: '#2121aa'
+              }
+            }
+          ],
           sections: [
             {
               name: 'Desktop',
@@ -82,20 +103,52 @@ module.exports = {
               content: {
                 sources: [
                   {
-                    source: '1.jpg',
+                    source: 'skytankingovenon_brief.png',
+                    caption: '',
+                    alt: 'Briefing',
+                    shadow: false
+                  },
+                  {
+                    source: 'skytankingovenon_wireframe_1.png',
                     caption:
-                      'Here I try to accomplish the best design learnings',
-                    alt: 'What an alternative text'
+                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed facilisis ligula nec diam eleifend laoreet luctus id neque. Sed id metus id lacus molestie sagittis nec sit amet odio. Sed cursus eros pretium mauris posuere aliquam.',
+                    alt: 'Wireframe 1'
                   },
                   {
-                    source: '2.png'
+                    source: 'skytankingovenon_wireframe_2.png',
+                    caption:
+                      'Nec diam eleifend laoreet luctus id neque. Sed id metus id lacus molestie sagittis nec sit amet odio. Sed cursus eros pretium mauris posuere aliquam.',
+                    alt: 'Wireframe 2'
                   },
                   {
-                    source: '1.jpg',
-                    caption: 'Yes yes yes'
+                    source: 'skytankingovenon_design_1.png',
+                    caption: '',
+                    alt: 'Design Draft 1'
                   },
                   {
-                    source: '2.png'
+                    source: 'skytankingovenon_design_2.jpg',
+                    caption: '',
+                    alt: 'Design Draft 2'
+                  },
+                  {
+                    source: 'skytankingovenon_home.png',
+                    caption: '',
+                    alt: 'Final Design of the Home Page'
+                  },
+                  {
+                    source: 'skytankingovenon_list.png',
+                    caption: '',
+                    alt: 'Final Design of Listing Pages'
+                  },
+                  {
+                    source: 'skytankingovenon_single.png',
+                    caption: '',
+                    alt: 'Final Design of a Single Page'
+                  },
+                  {
+                    source: 'skytankingovenon_single_extended.png',
+                    caption: '',
+                    alt: 'Final Design of a Single Extended Page'
                   }
                 ]
               }

@@ -40,7 +40,12 @@ module.exports = {
         __dirname,
         'src/vendors/ThrowPropsPlugin.js'
       )
-      /*DrawSVGPlugin: path.resolve(__dirname, 'src/vendors/DrawSVGPlugin.js'),
+      /*
+      ThrowPropsPlugin: path.resolve(
+        __dirname,
+        'src/vendors/ThrowPropsPlugin.js'
+      ),
+      DrawSVGPlugin: path.resolve(__dirname, 'src/vendors/DrawSVGPlugin.js'),
       MorphSVGPlugin: path.resolve(__dirname, 'src/vendors/MorphSVGPlugin.js'),
       Physics2DPlugin: path.resolve(
         __dirname,

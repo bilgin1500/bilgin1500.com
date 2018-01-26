@@ -160,6 +160,13 @@ var getWidth = function(el) {
   }
 };
 
+var getOffset = function(el) {
+  return {
+    top: el.offsetTop,
+    left: el.offsetLeft
+  };
+};
+
 var getScrollTop = function() {
   return $win.pageYOffset !== undefined
     ? $win.pageYOffset
@@ -230,32 +237,6 @@ var momentum = function(el, options) {
   });
 };
 
-// Check for mime type support against a player instance
-// Credits: http://diveintohtml5.info/everything.html
-// Credits: https://github.com/sampotts/plyr/blob/master/src/js/plyr.js
-/*var supportMime = function(media, mimeType) {
-  switch (mimeType) {
-    case 'video/webm':
-      return !!(
-        media.canPlayType &&
-        media.canPlayType('video/webm; codecs="vp8, vorbis"').replace(/no/, '')
-      );
-    case 'video/mp4':
-      return !!(
-        media.canPlayType &&
-        media
-          .canPlayType('video/mp4; codecs="avc1.42E01E, mp4a.40.2"')
-          .replace(/no/, '')
-      );
-    case 'video/ogg':
-      return !!(
-        media.canPlayType &&
-        media.canPlayType('video/ogg; codecs="theora"').replace(/no/, '')
-      );
-  }
-  return false;
-};*/
-
 export {
   $win,
   $doc,
@@ -270,6 +251,7 @@ export {
   getHeight,
   getWidth,
   getScrollTop,
+  getOffset,
   hasClass,
   addClass,
   removeClass,
