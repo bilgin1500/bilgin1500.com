@@ -30,6 +30,7 @@ This section is my notebook and it's constantly changing.
 * [ ] **Gallery** Gallery'deki alt buttonların arasına bir çizgi ve ok ile projenin gidişat yönünün anlatabilirim
 * [ ] **Gallery** Gallery'de touch draglar başladığında yönlerin isimleri çıkabilir guide
 * [ ] **Video** /projects/skytankingovenon/gallery:1 Uncaught (in promise) DOMException: The play() request was interrupted by a call to pause(). https://goo.gl/LdLk22
+* [ ] **Project** Background shapes on project.js#557
 
 ### Post processes
 * [ ] CSS prefixes

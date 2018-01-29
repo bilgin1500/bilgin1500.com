@@ -1,11 +1,4 @@
-import { TweenMax, TimelineMax } from 'gsap';
-import {
-  createEl,
-  getHeight,
-  removeClass,
-  addClass,
-  momentum
-} from 'utilities/helpers';
+import { createEl, removeClass, addClass, momentum } from 'utilities/helpers';
 import projectThumbTemplate from 'templates/project-thumbnail';
 import data from 'content/index';
 import 'css/projects';
@@ -70,7 +63,7 @@ projectSection[0].list.forEach(function(projectData, i) {
     $projectH2 = $projectItem.querySelector('.project-desc h2'),
     $projectP = $projectItem.querySelector('.project-desc p');
 
-  momentum($projectItem, projectData.momentum);
+  //momentum($projectItem, projectData.momentum);
 
   $projectItem.addEventListener('mouseenter', function() {
     toggleSVGAnimations($projectItem);

@@ -21,7 +21,6 @@
     "normalize.css": "^7.0.0",
     "object-assign": "^4.1.1",
     "page": "^1.7.1",
-    "scrollmagic": "^2.0.5",
     "throttle-debounce": "^1.0.1"
   },
   "devDependencies": {

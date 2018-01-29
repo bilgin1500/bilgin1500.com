@@ -121,7 +121,6 @@ var Project = {
         sectionData._draggable = Draggable.create($sectionWrapper, {
           type: 'y',
           lockAxis: true,
-          throwProps: true,
           zIndexBoost: false,
           edgeResistance: 0.75,
           dragResistance: 0,
