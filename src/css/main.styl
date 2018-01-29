@@ -1,5 +1,6 @@
 @import "assets/fonts"
 @import "assets/colors"
+@import "mixins/layout"
 
 html
 body 
@@ -19,7 +20,10 @@ body
 svg 
   display block
   margin 0
-  
+
+.no-scroll
+  overflow hidden
+
 .button 
   display block
   background-color #fff
@@ -54,8 +58,15 @@ svg
   margin 0 auto
   position relative
 
-#logo 
+#logo-wrapper 
   position fixed
-  left 20px
+  display block
+  width 70px
+  height 70px
+  left 50%
+  margin-left -35px
   top 20px
   z-index 101
+  @media screen and (min-width: tablet)
+    margin-left 0
+    left 20px

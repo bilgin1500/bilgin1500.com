@@ -11,6 +11,7 @@ var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 var pageData = require('./src/content/index');
 var outputFolder = 'dist';
 var publicPath = '/';
@@ -34,8 +35,17 @@ module.exports = {
         'scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap',
       ScrollMagicIndicators:
         'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators',
-      GSAPScrollToPlugin: 'gsap/src/uncompressed/plugins/ScrollToPlugin.js'
-      /*DrawSVGPlugin: path.resolve(__dirname, 'src/vendors/DrawSVGPlugin.js'),
+      GSAPScrollToPlugin: 'gsap/src/uncompressed/plugins/ScrollToPlugin.js',
+      ThrowPropsPlugin: path.resolve(
+        __dirname,
+        'src/vendors/ThrowPropsPlugin.js'
+      )
+      /*
+      ThrowPropsPlugin: path.resolve(
+        __dirname,
+        'src/vendors/ThrowPropsPlugin.js'
+      ),
+      DrawSVGPlugin: path.resolve(__dirname, 'src/vendors/DrawSVGPlugin.js'),
       MorphSVGPlugin: path.resolve(__dirname, 'src/vendors/MorphSVGPlugin.js'),
       Physics2DPlugin: path.resolve(
         __dirname,
@@ -44,7 +54,8 @@ module.exports = {
       PhysicsPropsPlugin: path.resolve(
         __dirname,
         'src/vendors/PhysicsPropsPlugin.js'
-      )*/
+      ),
+      SplitText: path.resolve(__dirname, 'src/vendors/SplitText.js')*/
     }
   },
   module: {
@@ -54,7 +65,7 @@ module.exports = {
         loader: 'imports-loader?define=>false'
       },
       {
-        test: /\.(ico|png|jpg|gif|woff|woff2|eot|ttf|otf)$/,
+        test: /\.(ico|png|jpg|gif|woff|woff2|eot|ttf|otf|webm|mp4)$/,
         use: [
           {
             loader: 'file-loader',
@@ -72,17 +83,23 @@ module.exports = {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
-          use: 'css-loader'
+          use: [{ loader: 'css-loader', options: { minimize: true } }]
         })
       },
       {
         test: /\.styl$/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
-          use: ['css-loader', 'stylus-loader']
+          use: [
+            { loader: 'css-loader', options: { minimize: true } },
+            'stylus-loader'
+          ]
         })
       },
-      { test: /\.dot$/, loader: 'dot-loader' }
+      {
+        test: /\.dot$/,
+        loader: 'dot-loader'
+      }
     ]
   },
   devServer: {
@@ -97,5 +114,6 @@ module.exports = {
     }),
     new ExtractTextPlugin('app.css'),
     new webpack.NamedModulesPlugin()
+    //new UglifyJsPlugin()
   ]
 };

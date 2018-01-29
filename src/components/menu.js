@@ -1,26 +1,21 @@
 import { TweenMax, TimelineMax } from 'gsap';
 import throttle from 'throttle-debounce/throttle';
+import { SVGElement, SVGIcon } from 'utilities/svg';
 import {
+  $win,
+  $doc,
   log,
   createEl,
   getHeight,
-  getWidth,
-  hasClass
+  hasClass,
+  addClass,
+  removeClass
 } from 'utilities/helpers';
-import {
-  createSVG,
-  createLine,
-  createCircle,
-  createIcon,
-  createDefs,
-  createMask
-} from 'utilities/svg';
 import events from 'utilities/events';
-import { winController, addScrollerScene } from 'utilities/scroller';
 import data from 'content/index';
 import 'css/menu';
 
-var $wrapper = createEl('div', { id: 'menu' });
+var $menu = createEl('div', { id: 'menu' });
 
 // Settings
 
@@ -45,7 +40,7 @@ var getMenuHeight = function() {
 
 // Create menu svg items
 
-var $topLine = createLine({
+var $topLine = new SVGElement('line', {
   x1: 23,
   x2: 48,
   y1: 22,
@@ -53,7 +48,7 @@ var $topLine = createLine({
   stroke: 'default'
 });
 
-var $mainLine = createLine({
+var $mainLine = new SVGElement('line', {
   x1: menu.width - menu.hamburgerWidth / 2 - 2,
   x2: menu.width - menu.hamburgerWidth / 2 - 2,
   y1: -getMenuHeight() - 2,
@@ -61,7 +56,7 @@ var $mainLine = createLine({
   stroke: 'default'
 });
 
-var $bottomLine = createLine({
+var $bottomLine = new SVGElement('line', {
   x1: 23,
   x2: 48,
   y1: 22 + menu.hamburgerGap,
@@ -69,11 +64,11 @@ var $bottomLine = createLine({
   stroke: 'default'
 });
 
-var $menuSVG = createSVG();
+var $menuSVG = new SVGElement('svg', { id: 'line-wrapper' });
 $menuSVG.appendChild($topLine);
 $menuSVG.appendChild($mainLine);
 $menuSVG.appendChild($bottomLine);
-$wrapper.appendChild($menuSVG);
+$menu.appendChild($menuSVG);
 
 // Create & insert buttons
 
@@ -90,12 +85,12 @@ data.pages.forEach(function(page) {
   $buttonWrapper.appendChild($buttons[page.slug]);
 });
 
-$wrapper.appendChild($buttonWrapper);
+$menu.appendChild($buttonWrapper);
 
 // Create trigger and X icon
 
 var $trigger = createEl('a', { id: 'trigger', href: '' });
-var $closeMenuIcon = createIcon('x');
+var $closeMenuIcon = new SVGIcon('x');
 
 var closeMenuIconAnimation = TweenMax.to($closeMenuIcon, 0.25, {
   paused: true,
@@ -103,15 +98,15 @@ var closeMenuIconAnimation = TweenMax.to($closeMenuIcon, 0.25, {
 });
 
 $trigger.appendChild($closeMenuIcon);
-$wrapper.appendChild($trigger);
+$menu.appendChild($trigger);
 
 // Create menu pin
 
-var menuPinGroupStartingY = 35; // Static value for top y positioning
-var $menuPinMask = createMask();
-var $menuPinDefs = createDefs();
-var $menuPinGroup = createIcon('pin', { mask: $menuPinMask.id }, 'group');
-var $menuPinMaskCircle = createCircle({
+/*var menuPinGroupStartingY = 35; // Static value for top y positioning
+var $menuPinMask = new SVGElement('mask');
+var $menuPinDefs = new SVGElement('defs');
+var $menuPinGroup = new SVGIcon('pin', { mask: $menuPinMask.id }, 'g');
+var $menuPinMaskCircle = new SVGElement('circle', {
   cx: 10,
   cy: 55,
   r: 20,
@@ -151,7 +146,7 @@ var menuPinYAnimSceneUpdate = function() {
 $menuPinMask.appendChild($menuPinMaskCircle);
 $menuPinDefs.appendChild($menuPinMask);
 $menuPinGroup.appendChild($menuPinDefs);
-$menuSVG.appendChild($menuPinGroup);
+$menuSVG.appendChild($menuPinGroup);*/
 
 // Menu animation
 
@@ -197,24 +192,28 @@ var buttonsReveal = TweenMax.staggerTo(
   0.1
 );
 
-var menuPinReveal = TweenMax.to(
+/*var menuPinReveal = TweenMax.to(
   $menuPinMaskCircle,
   0.25,
   menuPinCircleRevealVars
-);
+);*/
 
 var menuEverRevealed = false;
 
 var menuAnimation = new TimelineMax({
   paused: true,
+  onStart: function() {
+    addClass($menu, 'opened');
+  },
   onComplete: function() {
     if (!menuEverRevealed) menuEverRevealed = true;
     data.settings.menuStatus = 'open';
-    log('Menu has opened');
+    log('[IX] Menu has opened');
   },
   onReverseComplete: function() {
     data.settings.menuStatus = 'closed';
-    log('Menu has closed');
+    log('[IX] Menu has closed');
+    removeClass($menu, 'opened');
   }
 })
   .add(topLineToTop)
@@ -222,16 +221,16 @@ var menuAnimation = new TimelineMax({
   .add(triggerToClose, '-=0.15')
   .add(bottomLineToBottom)
   .add(mainLineReveal, '-=0.25')
-  .add(buttonsReveal, '-=0.25')
-  .add(menuPinReveal, '-=0.5');
+  .add(buttonsReveal, '-=0.25');
+/*.add(menuPinReveal, '-=0.5');*/
 
 // Menu project animation
 
-var setMenuPinPos = TweenMax.to($menuPinGroup, 0.1, {
+/*var setMenuPinPos = TweenMax.to($menuPinGroup, 0.1, {
   rotation: -90,
   x: 13,
   y: 34
-});
+});*/
 
 var setButtonWrapperTop = TweenMax.to($buttonWrapper, 0.1, {
   top: 5
@@ -263,8 +262,9 @@ var topLineToRight = TweenMax.to($topLine, 0.15, {
 });
 
 var bottomLineToRight = TweenMax.to($bottomLine, 0.15, {
-  x: 12.5,
+  x: 0,
   y: -10,
+  rotation: 0,
   ease: 'Power4.easeOut'
 });
 
@@ -272,35 +272,35 @@ var triggerButtonReveal = TweenMax.to($trigger, 0.25, {
   className: '+=close-button',
   transformOrigin: '50% 50%',
   rotation: 360,
-  y: '-=4',
-  x: '-=85',
+  y: '-=2',
+  x: '-=20',
   ease: 'Power4.easeOut'
 });
 
-var menuPinReveal2 = TweenMax.to(
+/*var menuPinReveal2 = TweenMax.to(
   $menuPinMaskCircle,
   0.25,
   menuPinCircleRevealVars
-);
+);*/
 
 var menuProjectAnimation = new TimelineMax({
   paused: true,
   onStart: function() {
-    menuPinYAnimScene.enabled(false);
+    //menuPinYAnimScene.enabled(false);
   },
   onReverseComplete: function() {
-    menuPinYAnimScene.enabled(true);
-    menuPinYAnimScene.update();
+    //menuPinYAnimScene.enabled(true);
+    //menuPinYAnimScene.update();
   }
 })
-  .add(setMenuPinPos)
+  //.add(setMenuPinPos)
   .add(setButtonWrapperTop)
   .add(bottomLineToTopLine)
   .add(topLineRotate)
   .add(bottomLineRotate, '-=0.15')
   .add(topLineToRight)
   .add(bottomLineToRight, '-=0.15')
-  .add(menuPinReveal2)
+  //.add(menuPinReveal2)
   .add(triggerButtonReveal, '-=0.25');
 
 // Responsive height
@@ -314,7 +314,7 @@ var makeMenuRespAgain = throttle(300, function() {
     } else {
       bottomLineToBottom.updateTo({ y: getMenuHeight() - 34 });
     }
-    menuPinYAnimSceneUpdate();
+    //menuPinYAnimSceneUpdate();
     $mainLine.setAttribute('y1', -getMenuHeight() - 2);
     mainLineReveal.updateTo({ yPercent: 100 });
   }, 0);
@@ -346,14 +346,14 @@ menu.toggle = function(e) {
 };
 
 menu.hover = function() {
-  log('Menu hovered', { color: 'red' });
+  log('[IX] Menu hovered');
   if (hasClass($trigger, 'close-button')) {
     closeMenuIconAnimation.play(0);
   }
 };
 
 menu.unhover = function() {
-  log('Menu unhovered', { color: 'red' });
+  log('[IX] Menu unhovered');
   if (hasClass($trigger, 'close-button')) {
     closeMenuIconAnimation.reverse(0);
   }
@@ -365,7 +365,7 @@ menu.autoClose.start = function() {
     data.settings.menuStatus == 'open' &&
     menu.autoClose.timer == null
   ) {
-    log('Menu autoClose has started');
+    log('[IX] Menu autoClose has started');
     menu.autoClose.timer = setTimeout(function() {
       menu.autoClose.end();
       menu.close();
@@ -377,7 +377,7 @@ menu.autoClose.end = function() {
   if (menu.autoClose.active && menu.autoClose.timer !== null) {
     clearTimeout(menu.autoClose.timer);
     menu.autoClose.timer = null;
-    log('Menu autoClose has been ended');
+    log('[IX] Menu autoClose has been ended');
   }
 };
 
@@ -395,28 +395,28 @@ menu.project = {
       menuProjectAnimation.play();
     }
     data.settings.menuStatus == 'project';
-    log('Menu is on project mode');
+    log('[IX] Menu is on project mode');
   },
   close: function() {
     $trigger.setAttribute('href', '');
     $trigger.addEventListener('click', menu.toggle);
-    TweenMax.delayedCall(menuProjectAnimation.time(), function() {
+    /*TweenMax.delayedCall(menuProjectAnimation.time(), function() {
       menuPinYAnimSceneUpdate();
-    });
+    });*/
     menuProjectAnimation.reverse();
     data.settings.menuStatus == 'closed';
-    log('Menu project mode has closed');
+    log('[IX] Menu project mode has closed');
   }
 };
 
 // Bind events
 
-window.addEventListener('resize', makeMenuRespAgain);
+$win.addEventListener('resize', makeMenuRespAgain);
 $trigger.addEventListener('click', menu.toggle);
 $trigger.addEventListener('mouseenter', menu.hover);
 $trigger.addEventListener('mouseleave', menu.unhover);
-$wrapper.addEventListener('mouseenter', menu.autoClose.end);
-$wrapper.addEventListener('mouseleave', menu.autoClose.start);
+$menu.addEventListener('mouseenter', menu.autoClose.end);
+$menu.addEventListener('mouseleave', menu.autoClose.start);
 events.subscribe('project.window.close.onStart', menu.project.close);
 events.subscribe('project.window.open.onStart', menu.project.open);
 
@@ -426,19 +426,19 @@ events.subscribe('page.ready', function() {
   // Place the buttons according to the pages' heights
 
   for (var i = 0; i < data.pages.length; i++) {
-    var el = document.getElementById(data.pages[i].slug);
+    var el = $doc.getElementById(data.pages[i].slug);
     var elTopo = el.getBoundingClientRect().top;
     var perc = 100 / (getHeight('content-wrapper') / elTopo);
     perc = perc < 0 ? 0 : perc;
     $buttons[data.pages[i].slug].setAttribute('style', 'top:' + perc + '%');
   }
 
-  menuPinYAnimScene = addScrollerScene({
+  /*menuPinYAnimScene = addScrollerScene({
     duration: getHeight('content-wrapper'),
     triggerHook: 'onEnter'
   })
     .setTween(menuPinYAnimGenerator())
-    .addTo(winController);
+    .addTo(winController);*/
 });
 
-export default $wrapper;
+export default $menu;

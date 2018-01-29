@@ -1,113 +1,44 @@
-@import "mixins/flex"
+@import "mixins/layout"
 @import "assets/fonts"
-@import "assets/colors"
 
 #projects
   border-top 1px solid #000
 
-#project-items 
-  flex()
-  position relative
-  z-index 2
-
-  .project-item 
-    display block
-    border 2px solid #000
-    background-color #fff
+  .project-items 
+    flex()
+    position relative
     z-index 2
-    margin 2% 2% 20% 2%
-    text-decoration none
-    &.small 
-      width 30%
-    &.medium 
-      width 40%
-    &.large 
-      width 60%
-    &:hover
-      background-color #eee
 
-    .project-visual 
-      box-sizing border-box
+    .project-item 
+      display block
       width 100%
-      padding 20px
-      min-height 100px
-      background-color #000
-
-    .project-desc 
-      padding 20px
-      color #000
-      h2
-      p
-        margin 0
-        word-break break-word
-
-.project-wrapper
-  /*position absolute
-  top 100px
-  right 100px
-  bottom 100px
-  left 100px*/
-  margin 5%
-  
-  .project-desc
-    text-align center
-    margin-bottom 25px
-    
-    h2
-      font-family museoB
-      font-size 29px
-      line-height 31px
-      margin 0
-      
-    p
-      font-family museo
-      font-size 23px
-      line-height 25px
-      margin-top 10px
-      margin-bottom 0
-  
-  .project-showcase
-    background-color #eee
-    height 400px
-
-  .project-nav
-    margin 25px auto 0 auto
-    text-align center
-    
-    a
-      display inline-block
-      color #000
+      border 2px solid #000
+      background-color #fff
+      z-index 2
+      margin 2% 2% 20% 2%
       text-decoration none
-      font-size 13px
-      font-family museoSans
-      margin-right 50px
-      &:last-child
-        margin-right 0
-      &.active
-      &:hover
-        .hovered-svg-element
-          fill yellow
-      
-      .hovered-svg-element
-        transition fill 150ms
-      
-      span
-      svg
-        display inline-block
-        vertical-align middle
-        
-      svg
-        margin-right 10px
-        
-  .projects-adjacent-nav
-    position fixed
-    top 33px
-    right 85px
-    
-    a
-      display inline-block
-      &.prev
-        margin-right 50px
-      
-      span
-        display none
+      @media screen and (min-width: tablet)
+        &.small 
+          width 30%
+        &.medium 
+          width 40%
+        &.large 
+          width 60%
+        &:hover
+          background-color #eee
+
+      .project-visual 
+        box-sizing border-box
+        width 100%
+        padding 20px
+        min-height 100px
+        background-color #000
+
+      .project-desc 
+        padding 20px
+        color #000
+        h2
+        p
+          margin 0
+          word-break break-word
+

@@ -1,10 +1,11 @@
 <div id="project-{{=it.slug}}" class="project-wrapper">
   <div class="project-desc">
-    <h2>{{=it.name}}</h2>
-    <p>{{=it.desc}}</p>
+    <div class="inner-wrapper">
+      <h2>{{=it.name}}</h2>
+      <h3>{{=it.desc}}</h3>
+    </div>
   </div>
-  <div class="project-showcase">
-  </div>
+  <div class="project-showcase"></div>
   <div class="project-nav"></div>
   <div class="projects-adjacent-nav">
     <a href="{{=it.adjacent.prev.link}}" class="prev">
@@ -15,5 +16,10 @@
       {{=it.adjacent.next.icon}}
       <span>{{=it.adjacent.next.name}}</span>
     </a>
+  </div>
+  <div class="project-footer">
+    <div class="inner-wrapper">
+      <p>&copy{{=it.year}}, BİLGİN ÖZKAN</p>
+    </div>
   </div>
 </div>

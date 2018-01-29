@@ -1,0 +1,195 @@
+@import "assets/fonts"
+@import "assets/colors"
+
+.grid-wrapper
+  margin 0 auto
+  max-width 400px
+  .grid-row
+    clear both
+    > div
+      display block
+      float left
+      width 33.333%
+      box-sizing border-box
+      overflow hidden
+
+.frame-gallery
+  &:before,
+  &:after
+    display block
+    content ''
+    position absolute
+    left 0
+    height 100px
+    width 100%
+    z-index 2
+    pointer-events none
+  &:before
+    top 0
+    background:linear-gradient(to bottom, #fff 4px, transparent);
+  &:after
+    bottom 0
+    background:linear-gradient(to top, #fff 4px, transparent);
+
+.frame-browser
+  .grid-wrapper
+    .grid-row
+      .grid-cell-1,
+      .grid-cell-2,
+      .grid-cell-3
+        height 70px
+      .grid-cell-1
+        width 76px
+      .grid-cell-2
+        width calc(100% - 85px)
+        background-color frameGray
+        border-top 2px solid #000
+        border-bottom 2px solid #000
+        position relative
+        svg
+          position absolute
+          top 10px
+          left 10px
+          z-index 2
+        .tab-bar
+          position absolute
+          top 14px
+          z-index 2
+          left 20px
+          width 135px
+          &:before
+            content: '';
+            display block
+            position absolute
+            left 1px
+            top 1px
+            width 10px
+            height 10px
+            background-color rgba(0,0,0,0.1)
+          .tab-text
+            font-family museoSansB
+            font-size 10px
+            white-space nowrap
+            overflow hidden
+            margin-left 15px
+            max-width 120px
+            color rgba(0,0,0,0.6)
+            &:after
+              display block
+              content: '';
+              position absolute
+              right 0
+              top 0
+              height 100%
+              width 30px
+              background:linear-gradient(to left, #ddd 10px, transparent);
+              z-index 2
+        .url-bar-wrapper
+          position absolute
+          width 100%
+          top 25px
+          border-top 2px solid #000
+          box-sizing border-box
+          .url-bar
+            border-radius 8px
+            background-color #fff
+            border 1px solid #ccc
+            width 95%
+            margin 4px auto 0 auto
+            padding 7px 10px 5px 10px
+            box-sizing border-box
+            .text
+              position relative
+              font-family museoB
+              font-size 12px
+              overflow hidden
+              white-space nowrap
+              &:after
+                display block
+                content: '';
+                position absolute
+                right 0
+                top 0
+                height 100%
+                width 50px
+                background:linear-gradient(to left, white 10px, transparent);
+                z-index 2
+      .grid-cell-3
+        width 9px
+      .grid-cell-5
+        width 100%
+        border-left 2px solid #000
+        border-right 2px solid #000
+      .grid-cell-4,
+      .grid-cell-6
+        display none
+      &:last-child
+        > div
+          height 2px
+          background-color #000
+          
+.frame-phone
+  .grid-wrapper
+    max-width: 250px;
+    margin: 0 auto;
+    .grid-row:first-child + .grid-row
+      display table
+      > div
+        display table-cell
+        float none
+    .grid-row
+      .grid-cell-1,
+      .grid-cell-6,
+      .grid-cell-11
+        width 2px
+      .grid-cell-2,
+      .grid-cell-4
+        width 43px
+      .grid-cell-1,
+      .grid-cell-2,
+      .grid-cell-3,
+      .grid-cell-4
+        height 40px
+      .grid-cell-3
+        width calc(100% - 88px)
+        background-color frameGray
+        border-top 2px solid #000
+        svg
+          margin 16px auto 0 auto
+      .grid-cell-7
+        border-left 2px solid #000
+      .grid-cell-8
+        width calc(100% - 32px)
+        background-color frameGray
+        video
+          border 2px solid #000
+          border-radius 4px
+          box-sizing border-box
+      .grid-cell-9
+         border-right 2px solid #000
+      .grid-cell-7,
+      .grid-cell-9
+        background-color frameGray
+        width 15px
+      .grid-cell-11,
+      .grid-cell-12,
+      .grid-cell-13,
+      .grid-cell-14
+        height 55px
+      .grid-cell-13
+        width calc(100% - 86px)
+        background-color frameGray
+        border-bottom 2px solid #000
+        svg
+          margin 10px auto 0 auto
+      .grid-cell-12,
+      .grid-cell-14
+        width 42px
+      .grid-cell-14
+        svg
+          margin-left -2px
+      .grid-cell-5,
+      .grid-cell-10,
+      .grid-cell-15
+        display none !important
+        
