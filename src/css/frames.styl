@@ -17,12 +17,13 @@
   &:before,
   &:after
     display block
-    content: '';
+    content ''
     position absolute
     left 0
     height 100px
     width 100%
     z-index 2
+    pointer-events none
   &:before
     top 0
     background:linear-gradient(to bottom, #fff 4px, transparent);

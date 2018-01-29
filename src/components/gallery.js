@@ -307,8 +307,7 @@ Gallery.prototype = {
    * @return {element} Bullet element
    */
   _createBullet: function(no, alt) {
-    var $bullet;
-    $bullet = createEl('a', {
+    var $bullet = createEl('a', {
       href:
         '/projects/' +
         this.projectSlug +
@@ -317,9 +316,13 @@ Gallery.prototype = {
         '/' +
         (no + 1)
     });
+
     var $bulletSpan = createEl('span');
-    $bulletSpan.innerText = alt;
+    var $bulletText = createEl('span');
+    $bulletText.innerText = alt;
+    $bulletSpan.appendChild($bulletText);
     $bullet.appendChild($bulletSpan);
+
     return $bullet;
   },
 
