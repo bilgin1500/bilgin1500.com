@@ -1,4 +1,3 @@
-import { TweenMax, TimelineMax } from 'gsap';
 import throttle from 'throttle-debounce/throttle';
 import { SVGElement, SVGIcon } from 'utilities/svg';
 import {
@@ -11,15 +10,14 @@ import {
   addClass,
   removeClass
 } from 'utilities/helpers';
+import { getPages, getSetting, setSetting } from 'utilities/orm';
 import events from 'utilities/events';
-import data from 'content/index';
 import 'css/menu';
 
 var $menu = createEl('div', { id: 'menu' });
 
 // Settings
-
-data.settings.menuStatus = 'closed';
+setSetting('menuStatus', 'closed');
 
 var menu = {
   width: 50,
@@ -75,7 +73,7 @@ $menu.appendChild($menuSVG);
 var $buttonWrapper = createEl('div', { id: 'button-wrapper' });
 var $buttons = [];
 
-data.pages.forEach(function(page) {
+getPages().forEach(function(page) {
   $buttons[page.slug] = createEl('a', {
     href: '/' + page.slug,
     id: 'btn-' + page.slug,
@@ -91,7 +89,6 @@ $menu.appendChild($buttonWrapper);
 
 var $trigger = createEl('a', { id: 'trigger', href: '' });
 var $closeMenuIcon = new SVGIcon('x');
-
 var closeMenuIconAnimation = TweenMax.to($closeMenuIcon, 0.25, {
   paused: true,
   rotation: 360
@@ -207,11 +204,11 @@ var menuAnimation = new TimelineMax({
   },
   onComplete: function() {
     if (!menuEverRevealed) menuEverRevealed = true;
-    data.settings.menuStatus = 'open';
+    setSetting('menuStatus', 'open');
     log('[IX] Menu has opened');
   },
   onReverseComplete: function() {
-    data.settings.menuStatus = 'closed';
+    setSetting('menuStatus', 'closed');
     log('[IX] Menu has closed');
     removeClass($menu, 'opened');
   }
@@ -307,7 +304,7 @@ var menuProjectAnimation = new TimelineMax({
 
 var makeMenuRespAgain = throttle(300, function() {
   menuAnimation.pause(0);
-  data.settings.menuStatus = 'closed';
+  setSetting('menuStatus', 'closed');
   setTimeout(function() {
     if (menuEverRevealed) {
       bottomLineToBottom.updateTo({ css: { y: getMenuHeight() - 34 } });
@@ -337,7 +334,7 @@ menu.close = function(args) {
 };
 
 menu.toggle = function(e) {
-  if (data.settings.menuStatus == 'closed') {
+  if (getSetting('menuStatus') == 'closed') {
     menu.open();
   } else {
     menu.close();
@@ -362,7 +359,7 @@ menu.unhover = function() {
 menu.autoClose.start = function() {
   if (
     menu.autoClose.active &&
-    data.settings.menuStatus == 'open' &&
+    getSetting('menuStatus') == 'open' &&
     menu.autoClose.timer == null
   ) {
     log('[IX] Menu autoClose has started');
@@ -385,7 +382,7 @@ menu.project = {
   open: function() {
     $trigger.removeEventListener('click', menu.toggle);
     $trigger.setAttribute('href', '/projects');
-    if (data.settings.menuStatus == 'open') {
+    if (getSetting('menuStatus') == 'open') {
       menu.close({
         onComplete: function() {
           menuProjectAnimation.play();
@@ -394,7 +391,7 @@ menu.project = {
     } else {
       menuProjectAnimation.play();
     }
-    data.settings.menuStatus == 'project';
+    setSetting('menuStatus', 'project');
     log('[IX] Menu is on project mode');
   },
   close: function() {
@@ -404,7 +401,7 @@ menu.project = {
       menuPinYAnimSceneUpdate();
     });*/
     menuProjectAnimation.reverse();
-    data.settings.menuStatus == 'closed';
+    setSetting('menuStatus', 'closed');
     log('[IX] Menu project mode has closed');
   }
 };
@@ -425,12 +422,12 @@ events.subscribe('project.window.open.onStart', menu.project.open);
 events.subscribe('page.ready', function() {
   // Place the buttons according to the pages' heights
 
-  for (var i = 0; i < data.pages.length; i++) {
-    var el = $doc.getElementById(data.pages[i].slug);
+  for (var i = 0; i < getPages().length; i++) {
+    var el = $doc.getElementById(getPages()[i].slug);
     var elTopo = el.getBoundingClientRect().top;
     var perc = 100 / (getHeight('content-wrapper') / elTopo);
     perc = perc < 0 ? 0 : perc;
-    $buttons[data.pages[i].slug].setAttribute('style', 'top:' + perc + '%');
+    $buttons[getPages()[i].slug].setAttribute('style', 'top:' + perc + '%');
   }
 
   /*menuPinYAnimScene = addScrollerScene({

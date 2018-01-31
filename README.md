@@ -31,11 +31,12 @@ This section is my notebook and it's constantly changing.
 * [ ] **Gallery** Gallery'de touch draglar başladığında yönlerin isimleri çıkabilir guide
 * [ ] **Video** /projects/skytankingovenon/gallery:1 Uncaught (in promise) DOMException: The play() request was interrupted by a call to pause(). https://goo.gl/LdLk22
 * [ ] **Project** Background shapes on project.js#557
+* [ ] **Core** TweenMax.ticker for resize and scroll events?
 
 ### Post processes
 * [ ] CSS prefixes
 * [ ] Documentation
-* [ ] Polyfills: https://github.com/kmewhort/pointer_events_polyfill
+* [ ] Polyfills: Promise, ...
 
 ### Licencing issues
 * [ ] Server & domain

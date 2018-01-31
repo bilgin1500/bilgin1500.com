@@ -1,5 +1,5 @@
 import objectAssign from 'object-assign';
-import data from 'content/index';
+import { getSetting, setSetting } from 'utilities/orm';
 
 // Caching
 var $win = window;
@@ -21,8 +21,8 @@ var isNull = function(obj) {
 
 /**
  * Make a string's firs letter uppercase
- * @param  {string} string The string to be uppercased
- * @return {string}        The string after transformation
+ * @param {string} string - The string to be uppercased
+ * @return {string} The string after transformation
  */
 var uppercase = function(string) {
   return string.replace(string.charAt(0), string.charAt(0).toUpperCase());
@@ -31,10 +31,10 @@ var uppercase = function(string) {
 /**
  * Functions like Array.prototype.join. 
  * Convert an object to an array and joins it's content
- * @param  {object} obj       The object to be joined
- * @param  {string} glue      The string between object key and value pair
- * @param  {string} separator The string between array nodes
- * @return {string}           Joined object as string
+ * @param {object} obj - The object to be joined
+ * @param {string} glue - The string between object key and value pair
+ * @param {string} separator - The string between array nodes
+ * @return {string} Joined object as string
  */
 var objectJoin = function(obj, glue, separator) {
   if (glue == undefined) glue = '=';
@@ -49,11 +49,11 @@ var objectJoin = function(obj, glue, separator) {
 
 /**
  * Logs the content to the browser's dev console
- * @param  {string} log     Content to be logged
- * @param  {object} options console.log options like color, font size etc.
+ * @param {string} log -  Content to be logged
+ * @param {object} options - console.log options like color, font size etc.
  */
 var log = function(log, options) {
-  if (data.settings.isLoggerActive) {
+  if (getSetting('isLoggerActive')) {
     var defaultOptions = {
       color: 'blue'
     };
@@ -65,6 +65,12 @@ var log = function(log, options) {
   }
 };
 
+/**
+ * The DOMContentLoaded event is fired when the initial HTML document 
+ * has been completely loaded and parsed, without waiting for stylesheets, 
+ * images, and subframes to finish loading.
+ * @return {Promise} 
+ */
 var docReady = function() {
   return new Promise(function(resolve) {
     if ($doc.readyState === 'complete') {
@@ -81,6 +87,12 @@ var docReady = function() {
   });
 };
 
+/**
+ * document.createElement wrapper with element attributes
+ * @param {string} type - Element's tag name in lowercase
+ * @param {object} attributes - Element's attributes
+ * @return {element} HTML element
+ */
 var createEl = function(type, attributes) {
   type = type ? type : 'div';
   var $el = $doc.createElement(type);
@@ -92,15 +104,24 @@ var createEl = function(type, attributes) {
   return $el;
 };
 
+/**
+ * Creates a unique ID for id attributes
+ * @return {id}
+ */
 var createId = function() {
-  data.settings.idCounter++;
+  setSetting('idCounter', getSetting('idCounter') + 1);
   var uniqueId =
-    data.settings.idCounter +
+    getSetting('idCounter') +
     (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
   return uniqueId;
 };
 
-var getEl = function(el) {
+/**
+ * Basic getElement wrapper for private usage
+ * @param {element/string} el - Object is HTMLElement, string is element id
+ * @return {element}
+ */
+var _getEl = function(el) {
   var $el;
   if (typeof el == 'object') {
     $el = el;
@@ -110,6 +131,14 @@ var getEl = function(el) {
   return $el;
 };
 
+/**
+ * Comprehensive getHeight wrapper
+ * @param {string/object} el
+ *                           window: Gets window height
+ *                           document: Gets doc height
+ *                           string or HTMLElement: Gets element's height 
+ * @return {number}
+ */
 var getHeight = function(el) {
   switch (el) {
     case 'window':
@@ -131,7 +160,7 @@ var getHeight = function(el) {
       );
       break;
     default:
-      var $el = getEl(el);
+      var $el = _getEl(el);
       if ($el instanceof SVGElement) {
         return $el.getBoundingClientRect().height;
       } else {
@@ -140,6 +169,13 @@ var getHeight = function(el) {
   }
 };
 
+/**
+ * Comprehensive getWidth wrapper
+ * @param {string/object} el
+ *                           window: Gets window height
+ *                           string or HTMLElement: Gets element's height 
+ * @return {number}
+ */
 var getWidth = function(el) {
   switch (el) {
     case 'window':
@@ -149,9 +185,8 @@ var getWidth = function(el) {
         $doc.body.clientWidth
       );
       break;
-
     default:
-      var $el = getEl(el);
+      var $el = _getEl(el);
       if ($el instanceof SVGElement) {
         return $el.getBoundingClientRect().width;
       } else {
@@ -160,20 +195,14 @@ var getWidth = function(el) {
   }
 };
 
-var getOffset = function(el) {
-  return {
-    top: el.offsetTop,
-    left: el.offsetLeft
-  };
-};
-
-var getScrollTop = function() {
-  return $win.pageYOffset !== undefined
-    ? $win.pageYOffset
-    : ($doc.documentElement || $doc.body.parentNode || $doc.body).scrollTop;
-};
-
+/**
+ * Class name look up
+ * @param {string/element}  el - HTMLElement or a ID
+ * @param {string} className - Name of the class to look up for
+ * @return {Boolean}
+ */
 var hasClass = function(el, className) {
+  el = _getEl(el);
   if (el.classList) {
     return el.classList.contains(className);
   } else {
@@ -181,12 +210,24 @@ var hasClass = function(el, className) {
   }
 };
 
+/**
+ * Adds class name to an element
+ * @param {string/element}  el - HTMLElement or a ID
+ * @param {string} className - Name of the class to be added
+ */
 var addClass = function(el, className) {
+  el = _getEl(el);
   if (el.classList) el.classList.add(className);
   else el.className += ' ' + className;
 };
 
+/**
+ * Removes a class name from an element
+ * @param {string/element}  el - HTMLElement or a ID
+ * @param {string} className - Name of the class to be removed
+ */
 var removeClass = function(el, className) {
+  el = _getEl(el);
   if (el.classList) el.classList.remove(className);
   else
     el.className = el.className.replace(
@@ -195,7 +236,13 @@ var removeClass = function(el, className) {
     );
 };
 
+/**
+ * Adds or removes a class name
+ * @param {string/element}  el - HTMLElement or a ID
+ * @param {string} className - Name of the class to be toggled
+ */
 var toggleClass = function(el, className) {
+  el = _getEl(el);
   if (el.classList) {
     el.classList.toggle(className);
   } else {
@@ -212,30 +259,26 @@ var toggleClass = function(el, className) {
   }
 };
 
+/**
+ * Clears inner HTML of an element
+ * @param {string/element}  el - HTMLElement or a ID
+ */
 var clearInnerHTML = function(el) {
+  el = _getEl(el);
   while (el.firstChild) {
     el.removeChild(el.firstChild);
   }
 };
 
-var momentum = function(el, options) {
-  var speed = options && options.speed ? options.speed : 0.4;
-  var friction = options && options.friction ? options.friction : 0.08;
-  var currDeltaAttrName = 'data-current-delta';
-  var currentDelta = el.getAttribute(currDeltaAttrName) || 0;
-  var newDelta = 0 - getScrollTop() * speed;
-  var tweenDelta = currentDelta - (currentDelta - newDelta) * friction;
-
-  el.style.transform = 'translateY(' + tweenDelta + 'px) translateZ(0)';
-  el.style.webkitTransform = 'translateY(' + tweenDelta + 'px) translateZ(0)';
-  // TweenLite.to(el, 1, { transform: "translate3d(15em, 50vh, 0)" });
-
-  el.setAttribute(currDeltaAttrName, tweenDelta);
-
-  $win.requestAnimationFrame(function() {
-    momentum(el, options);
-  });
-};
+/**
+ * Cross browser scrolled y pos data of the document
+ * @return {number} Returns the number of pixels that the document is currently scrolled vertically
+ */
+function getDocScrollY() {
+  return $win.pageYOffset !== undefined
+    ? $win.pageYOffset
+    : ($doc.documentElement || $doc.body.parentNode || $doc.body).scrollTop;
+}
 
 export {
   $win,
@@ -247,15 +290,12 @@ export {
   uppercase,
   createEl,
   createId,
-  getEl,
   getHeight,
   getWidth,
-  getScrollTop,
-  getOffset,
   hasClass,
   addClass,
   removeClass,
   toggleClass,
   clearInnerHTML,
-  momentum
+  getDocScrollY
 };

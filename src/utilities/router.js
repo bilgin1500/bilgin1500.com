@@ -1,9 +1,13 @@
 import page from 'page';
-import { TweenMax } from 'gsap';
-import 'GSAPScrollToPlugin';
 import Project from 'components/project';
-import { $win, $doc, log, uppercase, getEl } from 'utilities/helpers';
-import data from 'content/index';
+import {
+  getInfo,
+  getSetting,
+  getPage,
+  getProject,
+  getSection
+} from 'utilities/orm';
+import { $win, $doc, log, uppercase } from 'utilities/helpers';
 
 var router = {
   // Which client-side router to use
@@ -35,9 +39,9 @@ var router = {
   _changeTitle: function(title) {
     var preTitle = '';
     if (title) {
-      preTitle = title + ' ' + data.settings.titleSep + ' ';
+      preTitle = title + ' ' + getSetting('titleSeparator') + ' ';
     }
-    $doc.title = preTitle + data.title;
+    $doc.title = preTitle + getSetting('title');
   },
 
   /**
@@ -48,7 +52,7 @@ var router = {
     Route home
      */
     var routeHome = function() {
-      router._changeTitle(data.subtitle);
+      router._changeTitle(getSetting('subtitle'));
       router._scrollTo();
     };
 
@@ -57,13 +61,8 @@ var router = {
      * @param  {object} ctx Url parameters: project/section/sectionSlideNo
      */
     var routeProject = function(ctx) {
-      // Filter pages and projects to find current project
-      var projectList = data.pages.filter(function(page) {
-        return page.slug == 'projects';
-      })[0].list;
-      var thisProject = projectList.filter(function(project) {
-        return project.slug == ctx.params.project;
-      })[0];
+      // Current project
+      var thisProject = getProject(ctx.params.project);
 
       // If no project is found route to 404
       if (!thisProject) {
@@ -73,21 +72,19 @@ var router = {
 
       // If no section is called via url then the section is
       // the first section of the current project
-      var sectionSlug = ctx.params.section || thisProject.sections[0].slug;
+      var sectionSlug = ctx.params.section || getSection(0, thisProject).slug;
       // The same with the section number. If no page number is specified
       // then the page is the first page: 0
       var sectionSlideNo = ctx.params.sectionSlideNo || 1;
 
       // Get the current section object
-      var thisSection = thisProject.sections.filter(function(section) {
-        return section.slug == sectionSlug;
-      })[0];
+      var thisSection = getSection(sectionSlug, thisProject);
 
       // Change the title to current project and section
       router._changeTitle(
         uppercase(thisSection.name) +
           ' ' +
-          data.settings.titleSep +
+          getSetting('titleSeparator') +
           ' ' +
           thisProject.name
       );
@@ -129,10 +126,7 @@ var router = {
     Route pages
      */
     var routePages = function(ctx) {
-      // Filter pages and find current one
-      var currentPage = data.pages.filter(function(page) {
-        return page.slug == ctx.params.page;
-      })[0];
+      var currentPage = getPage(ctx.params.page);
 
       if (!currentPage) {
         notFound();
@@ -150,7 +144,7 @@ var router = {
       router.engine.redirect('/');
     };
 
-    router._changeTitle(data.subtitle);
+    router._changeTitle(getSetting('subtitle'));
 
     /*
     Map'em all
