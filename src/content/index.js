@@ -3,13 +3,14 @@ module.exports = {
     title: 'bilgin1500',
     subtitle: '👋 Hi!',
     description:
-      'b1500 is Bilgin Özkan,visual designer & front-end developer from Istanbul'
+      'b1500 is Bilgin Özkan,visual designer & front-end developer from Istanbul',
+    separatorMain: '—',
+    separatorProject: '‹'
   },
   settings: {
     isLoggerActive: false,
     isPerformanceActive: false,
-    idCounter: 0,
-    titleSeparator: '‹ — :'
+    idCounter: 0
   },
   pages: [
     {

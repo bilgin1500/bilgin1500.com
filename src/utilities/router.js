@@ -1,13 +1,7 @@
 import page from 'page';
 import Project from 'components/project';
-import {
-  getInfo,
-  getSetting,
-  getPage,
-  getProject,
-  getSection
-} from 'utilities/orm';
-import { $win, $doc, log, uppercase } from 'utilities/helpers';
+import { getInfo, getPage, getProject, getSection } from 'utilities/orm';
+import { $win, $doc, log, uppercase, isUndefined } from 'utilities/helpers';
 
 var router = {
   // Which client-side router to use
@@ -39,9 +33,9 @@ var router = {
   _changeTitle: function(title) {
     var preTitle = '';
     if (title) {
-      preTitle = title + ' ' + getSetting('titleSeparator') + ' ';
+      preTitle = title + ' ' + getInfo('separatorMain') + ' ';
     }
-    $doc.title = preTitle + getSetting('title');
+    $doc.title = preTitle + getInfo('title');
   },
 
   /**
@@ -52,7 +46,7 @@ var router = {
     Route home
      */
     var routeHome = function() {
-      router._changeTitle(getSetting('subtitle'));
+      router._changeTitle(getInfo('subtitle'));
       router._scrollTo();
     };
 
@@ -70,21 +64,20 @@ var router = {
         return;
       }
 
-      // If no section is called via url then the section is
-      // the first section of the current project
-      var sectionSlug = ctx.params.section || getSection(0, thisProject).slug;
+      // Get the current section object
+      var thisSection = isUndefined(ctx.params.section)
+        ? getSection(0, ctx.params.project)
+        : getSection(ctx.params.section, ctx.params.project);
+
       // The same with the section number. If no page number is specified
       // then the page is the first page: 0
       var sectionSlideNo = ctx.params.sectionSlideNo || 1;
-
-      // Get the current section object
-      var thisSection = getSection(sectionSlug, thisProject);
 
       // Change the title to current project and section
       router._changeTitle(
         uppercase(thisSection.name) +
           ' ' +
-          getSetting('titleSeparator') +
+          getInfo('separatorProject') +
           ' ' +
           thisProject.name
       );
@@ -144,7 +137,7 @@ var router = {
       router.engine.redirect('/');
     };
 
-    router._changeTitle(getSetting('subtitle'));
+    router._changeTitle(getInfo('subtitle'));
 
     /*
     Map'em all

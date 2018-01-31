@@ -91,12 +91,12 @@ function findProjectIndex(slug) {
  */
 function getSection(sectionBy, projectBy) {
   var thisProject = getProject(projectBy);
-  if (typeof by == 'string') {
-    thisProject.sections.filter(function(section) {
+  if (typeof sectionBy == 'string') {
+    return thisProject.sections.filter(function(section) {
       return section.slug == sectionBy;
     })[0];
-  } else if (typeof by == 'number') {
-    return thisProject.sections[by];
+  } else if (typeof sectionBy == 'number') {
+    return thisProject.sections[sectionBy];
   }
 }
 

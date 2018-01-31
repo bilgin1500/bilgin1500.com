@@ -10,7 +10,12 @@ import {
   removeClass,
   addClass
 } from 'utilities/helpers';
-import { getProjects, getProject, findProjectIndex } from 'utilities/orm';
+import {
+  getSetting,
+  getProjects,
+  getProject,
+  findProjectIndex
+} from 'utilities/orm';
 import events from 'utilities/events';
 import router from 'utilities/router';
 import frame from 'utilities/frame';
