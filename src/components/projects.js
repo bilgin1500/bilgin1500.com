@@ -1,26 +1,24 @@
-import { createEl, removeClass, addClass, momentum } from 'utilities/helpers';
+import { createEl, removeClass, addClass } from 'utilities/helpers';
+import { getProjects } from 'utilities/orm';
+import Momentum from 'utilities/momentum';
 import projectThumbTemplate from 'templates/project-thumbnail';
-import data from 'content/index';
 import 'css/projects';
 
-var $wrapper = createEl('div', { id: 'projects' }),
-  $items = createEl('div', { class: 'project-items' });
+// Create elements and cache them
+var $wrapper = createEl('div', { id: 'projects' });
+var $items = createEl('div', { class: 'project-items' });
 
-/* Filter projects from all the sections in the db */
+// Create a blank array for
 
-var projectSection = data.pages.filter(function(page) {
-  return page.slug == 'projects';
-});
-
-var CssAnim_defaultClass = 'paused',
+/*var CssAnim_defaultClass = 'paused',
   CssAnim_playingClass = 'playing',
-  CssAnim_animClass = 'animation';
+  CssAnim_animClass = 'animation';*/
 
 /**
  * Toggle SVG parts inside the element to pause and play
  * @param  {element} $projectItem - The parent element which contains the SVG doc
  */
-var toggleSVGAnimations = function($projectItem) {
+/*var toggleSVGAnimations = function($projectItem) {
   var status = 'playing';
   var $animatedSVGelements = $projectItem.querySelectorAll(
     '.' + CssAnim_playingClass
@@ -42,11 +40,11 @@ var toggleSVGAnimations = function($projectItem) {
       addClass($animatedSVGelements[i], CssAnim_playingClass);
     }
   }
-};
+};*/
 
 // Iterate all the projects in the db,
 // append them to the DOM and init the parallax effect
-projectSection[0].list.forEach(function(projectData, i) {
+getProjects().forEach(function(projectData, i) {
   if (projectData.thumbnail) {
     projectData.thumbnail = require('content/' +
       projectData.slug +
@@ -63,15 +61,18 @@ projectSection[0].list.forEach(function(projectData, i) {
     $projectH2 = $projectItem.querySelector('.project-desc h2'),
     $projectP = $projectItem.querySelector('.project-desc p');
 
-  //momentum($projectItem, projectData.momentum);
+  var momentum = new Momentum($projectItem, projectData.momentum);
+  momentum.init();
 
-  $projectItem.addEventListener('mouseenter', function() {
+  /*$projectItem.addEventListener('mouseenter', function() {
     toggleSVGAnimations($projectItem);
+    momentum.toggle();
   });
 
   $projectItem.addEventListener('mouseleave', function() {
     toggleSVGAnimations($projectItem);
-  });
+    momentum.toggle();
+  });*/
 });
 
 $wrapper.appendChild($items);

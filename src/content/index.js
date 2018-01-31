@@ -1,13 +1,15 @@
 module.exports = {
-  title: 'bilgin1500',
-  subtitle: '👋 Hi!',
-  description:
-    'b1500 is Bilgin Özkan,visual designer & front-end developer from Istanbul',
+  info: {
+    title: 'bilgin1500',
+    subtitle: '👋 Hi!',
+    description:
+      'b1500 is Bilgin Özkan,visual designer & front-end developer from Istanbul'
+  },
   settings: {
     isLoggerActive: false,
     isPerformanceActive: false,
     idCounter: 0,
-    titleSep: '‹ — :'
+    titleSeparator: '‹ — :'
   },
   pages: [
     {

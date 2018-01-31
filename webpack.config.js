@@ -31,20 +31,12 @@ module.exports = {
       templates: path.resolve(__dirname, 'src/templates/'),
       content: path.resolve(__dirname, 'src/content/'),
       css: path.resolve(__dirname, 'src/css/'),
-      ScrollMagicGSAP:
-        'scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap',
-      ScrollMagicIndicators:
-        'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators',
-      GSAPScrollToPlugin: 'gsap/src/uncompressed/plugins/ScrollToPlugin.js',
+      ScrollToPlugin: 'gsap/src/uncompressed/plugins/ScrollToPlugin.js',
       ThrowPropsPlugin: path.resolve(
         __dirname,
         'src/vendors/ThrowPropsPlugin.js'
       )
       /*
-      ThrowPropsPlugin: path.resolve(
-        __dirname,
-        'src/vendors/ThrowPropsPlugin.js'
-      ),
       DrawSVGPlugin: path.resolve(__dirname, 'src/vendors/DrawSVGPlugin.js'),
       MorphSVGPlugin: path.resolve(__dirname, 'src/vendors/MorphSVGPlugin.js'),
       Physics2DPlugin: path.resolve(

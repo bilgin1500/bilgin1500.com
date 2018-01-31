@@ -1,5 +1,3 @@
-import { TweenMax } from 'gsap';
-import Draggable from 'gsap/Draggable';
 import throttle from 'throttle-debounce/throttle';
 import {
   $win,
@@ -12,6 +10,7 @@ import {
   removeClass,
   addClass
 } from 'utilities/helpers';
+import { getProjects, getProject, findProjectIndex } from 'utilities/orm';
 import events from 'utilities/events';
 import router from 'utilities/router';
 import frame from 'utilities/frame';
@@ -20,7 +19,6 @@ import Gallery from 'components/gallery';
 import Video from 'components/video';
 import Info from 'components/info';
 import projectTemplate from 'templates/project';
-import data from 'content/index';
 import 'css/project';
 
 /*
@@ -131,6 +129,10 @@ var Project = {
           },
           onPress: function() {
             dragStartY = this.y;
+
+            // Stop bubbling so that this draggable won't interfere with
+            // app's draggable system
+            event.stopPropagation();
           },
           onDrag: function() {
             dragSwipeDir = this.getDirection();
@@ -266,7 +268,7 @@ var Project = {
       var _this = this;
 
       // Performance check for slide changes
-      if (data.settings.isPerformanceActive) {
+      if (getSetting('isPerformanceActive')) {
         var changeBeginTime = performance.now();
       }
 
@@ -421,7 +423,7 @@ var Project = {
             enableNavLinks();
 
             // Log the perf
-            if (data.settings.isPerformanceActive) {
+            if (getSetting('isPerformanceActive')) {
               var changeEndTime = performance.now();
               log(
                 '[PERF] Slide change has ended in ' +
@@ -513,18 +515,13 @@ var Project = {
    */
   open: function(projectSlug, sectionSlug, sectionslideNo) {
     var _this = this;
-    var projects = data.pages.filter(function(page) {
-      return page.slug == 'projects';
-    })[0].list;
 
-    var projectIndex = projects.findIndex(function(project) {
-      return project.slug === projectSlug;
-    });
+    var projects = getProjects();
+    var project = getProject(projectSlug);
+    var projectIndex = findProjectIndex(projectSlug);
 
     _this.isOpen = true;
-    _this.data = projects.filter(function(project) {
-      return project.slug === projectSlug;
-    })[0];
+    _this.data = project;
 
     var previousIndex =
       projectIndex == 0 ? projects.length - 1 : projectIndex - 1;
@@ -532,15 +529,15 @@ var Project = {
 
     _this.data.adjacent = {
       prev: {
-        link: '/projects/' + projects[previousIndex].slug,
-        name: projects[previousIndex].name,
+        link: '/projects/' + getProject(previousIndex).slug,
+        name: getProject(previousIndex).name,
         icon: (function() {
           return new SVGIcon('chevronLeft').outerHTML;
         })()
       },
       next: {
-        link: '/projects/' + projects[nextIndex].slug,
-        name: projects[nextIndex].name,
+        link: '/projects/' + getProject(nextIndex).slug,
+        name: getProject(nextIndex).name,
         icon: (function() {
           return new SVGIcon('chevronRight').outerHTML;
         })()

@@ -1,3 +1,12 @@
+// Import all the GSAP related things
+// They will be inserted into the global namespace
+// so that one time injection would be enough
+import 'gsap';
+import 'gsap/Draggable';
+import 'ScrollToPlugin';
+import 'ThrowPropsPlugin';
+
+// Other injections
 import FontFaceObserver from 'fontfaceobserver';
 import { docReady, createEl } from 'utilities/helpers';
 import { SVGIcon } from 'utilities/svg';

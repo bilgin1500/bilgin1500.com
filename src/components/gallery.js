@@ -1,6 +1,3 @@
-import { TweenMax } from 'gsap';
-import Draggable from 'gsap/Draggable';
-import 'ThrowPropsPlugin';
 import router from 'utilities/router';
 import throttle from 'throttle-debounce/throttle';
 import {
