@@ -99,8 +99,8 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: pageData.title,
-      description: pageData.description,
+      title: pageData.info.title,
+      description: pageData.info.description,
       template: 'src/templates/index.dot',
       favicon: 'src/content/favicon.ico'
     }),

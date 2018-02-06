@@ -1,6 +1,12 @@
 import page from 'page';
 import Project from 'components/project';
-import { getInfo, getPage, getProject, getSection } from 'utilities/orm';
+import {
+  getInfo,
+  getSetting,
+  getPage,
+  getProject,
+  getSection
+} from 'utilities/orm';
 import { $win, $doc, log, uppercase, isUndefined } from 'utilities/helpers';
 
 var router = {
@@ -33,7 +39,7 @@ var router = {
   _changeTitle: function(title) {
     var preTitle = '';
     if (title) {
-      preTitle = title + ' ' + getInfo('separatorMain') + ' ';
+      preTitle = title + ' ' + getSetting('separatorMain') + ' ';
     }
     $doc.title = preTitle + getInfo('title');
   },
@@ -77,7 +83,7 @@ var router = {
       router._changeTitle(
         uppercase(thisSection.name) +
           ' ' +
-          getInfo('separatorProject') +
+          getSetting('separatorProject') +
           ' ' +
           thisProject.name
       );

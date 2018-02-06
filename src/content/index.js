@@ -1,16 +1,23 @@
 module.exports = {
   info: {
-    title: 'bilgin1500',
+    title: 'bilgin1500.com',
     subtitle: '👋 Hi!',
     description:
-      'b1500 is Bilgin Özkan,visual designer & front-end developer from Istanbul',
-    separatorMain: '—',
-    separatorProject: '‹'
+      'Portfolio website of Bilgin Özkan, designer and developer from Istanbul.',
+    intro:
+      'Hi stranger. My name is Bilgin Özkan. I am a designer and developer with 10 years of experience in the service design with titles such as digital designer, art director and digital creative director. Currently I am the Product Design Manager at <a href="#">Yesthatsright</a>. You can reach me at <a href="#">bilgin1500@gmail.com</a>.<br/>And I guess that\'s it.',
+    socialAccounts: [
+      ['GitHub', 'https://github.com/bilgin1500/'],
+      ['LinkedIn', 'https://www.linkedin.com/in/ozkanbilgin/'],
+      ['Twitter', 'https://twitter.com/bilgin1500']
+    ]
   },
   settings: {
     isLoggerActive: false,
     isPerformanceActive: false,
-    idCounter: 0
+    idCounter: 0,
+    separatorMain: '—',
+    separatorProject: '‹'
   },
   pages: [
     {
@@ -41,7 +48,7 @@ module.exports = {
           desc: 'Fueling the rockets',
           url: 'http://skytankingovenon.com',
           size: 'small',
-          thumbnail: 'thumbnail.svg',
+          thumbnail: 'skytankingovenon-thumb.png',
           momentum: { speed: 0.4 },
           shapes: [
             {
@@ -170,7 +177,7 @@ module.exports = {
           name: 'Rolio',
           desc: 'A Theme for The Minimalist',
           size: 'large',
-          thumbnail: 'thumbnail.svg',
+          thumbnail: 'thumbnail.gif',
           momentum: { speed: 0.2 },
           sections: [
             {

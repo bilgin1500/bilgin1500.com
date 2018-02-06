@@ -13,6 +13,7 @@ Hi there 👋 My name is Bilgin Özkan, I am a visual designer & front-end devel
 * [x] **Experiment**  Dom API
 * [ ] **Learn** Basic Git
 * [ ] **Learn** Unit Testing
+* [ ] **Learn** CSS Grid
 
 ## To run the website
 

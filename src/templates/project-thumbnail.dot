@@ -1,7 +1,7 @@
 <a href="/projects/{{=it.slug}}" id="project-thumb-{{=it.slug}}" class="project-item {{=it.size}}">
   <div class="project-visual">
     {{? it.thumbnail }}
-      {{=it.thumbnail}}
+      <img src="{{=it.thumbnail}}" alt="">
     {{?}}
   </div>
   <div class="project-desc">

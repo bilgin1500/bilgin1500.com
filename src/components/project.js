@@ -464,6 +464,32 @@ var Project = {
     }
   },
 
+  /* Background SVG shapes floating all around like it's summer */
+  shapes: function() {
+    var $shapesWrapper = new SVGElement('svg', {
+      class: 'project-bg-shapes'
+    });
+
+    for (var i = 0; i < _this.data.shapes.length; i++) {
+      var $shape = new SVGElement(
+        _this.data.shapes[i].type,
+        _this.data.shapes[i].attributes
+      );
+
+      TweenMax.to($shape, 2, {
+        //transform: 'translate3d(100vw, 100vh, 0)',
+        x: '100vw',
+        y: '100vh',
+        repeat: -1,
+        yoyo: true
+      });
+
+      $shapesWrapper.appendChild($shape);
+    }
+
+    $projectWindow.appendChild($shapesWrapper);
+  },
+
   /**
    * Project window setup and methods
    * Private method for project only
@@ -551,34 +577,15 @@ var Project = {
 
     _this.data.year = new Date().getFullYear();
 
+    // Stop the main screen momentums
+    for (var i = 0; i < getSetting('momentumCache').length; i++) {
+      getSetting('momentumCache')[i].stop();
+    }
+
     _this._window.toggle('open', {
       onStart: function() {
         /* Merge project template with data and insert it */
         this.$el.insertAdjacentHTML('beforeend', projectTemplate(_this.data));
-
-        /* Background SVG shapes floating all around like it's summer */
-        /*var $shapesWrapper = new SVGElement('svg', {
-            class: 'project-bg-shapes'
-          });
-
-          for (var i = 0; i < _this.data.shapes.length; i++) {
-            var $shape = new SVGElement(
-              _this.data.shapes[i].type,
-              _this.data.shapes[i].attributes
-            );
-
-            TweenMax.to($shape, 2, {
-              //transform: 'translate3d(100vw, 100vh, 0)',
-              x: '100vw',
-              y: '100vh',
-              repeat: -1,
-              yoyo: true
-            });
-
-            $shapesWrapper.appendChild($shape);
-          }
-
-          $projectWindow.appendChild($shapesWrapper);*/
 
         // Create sections and insert them
         _this.sections._init.call(_this);
@@ -595,6 +602,11 @@ var Project = {
     var _this = this;
 
     if (_this.isOpen) {
+      // Resume the momentums
+      for (var i = 0; i < getSetting('momentumCache').length; i++) {
+        getSetting('momentumCache')[i].start();
+      }
+
       // Close the #projectWindow
       _this._window.toggle('close', {
         onComplete: function() {

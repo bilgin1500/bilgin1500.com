@@ -2,7 +2,6 @@
 @import "assets/fonts"
 
 #projects
-  border-top 1px solid #000
 
   .project-items 
     flex()
@@ -12,8 +11,6 @@
     .project-item 
       display block
       width 100%
-      border 2px solid #000
-      background-color #fff
       z-index 2
       margin 2% 2% 20% 2%
       text-decoration none
@@ -24,21 +21,25 @@
           width 40%
         &.large 
           width 60%
-        &:hover
-          background-color #eee
+        /*&:hover
+          background-color #eee*/
 
       .project-visual 
         box-sizing border-box
         width 100%
-        padding 20px
         min-height 100px
-        background-color #000
+        box-shadow 0px 0px 10px 2px rgba(0,0,0,0.1)
+        
+        img
+          display block
+          width 100%
+          height auto
 
       .project-desc 
         padding 20px
-        color #000
+        color #fff
         h2
         p
           margin 0
-          word-break break-word
+          white-space no-break
 

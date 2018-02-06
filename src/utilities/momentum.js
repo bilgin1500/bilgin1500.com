@@ -25,7 +25,10 @@ var Momentum = function(el, options) {
 
   // TweenLite object
   var _motion = function(yPos) {
-    return TweenLite.to(el, 0.1, { paused: true, y: yPos });
+    return TweenLite.to(el, 0.1, {
+      paused: true,
+      y: yPos
+    });
   };
 
   // Play the animation and store new deltaY
@@ -40,13 +43,13 @@ var Momentum = function(el, options) {
   */
 
   // Initialize this momentum by adding it to the RAF cycle
-  var init = function() {
+  var start = function() {
     TweenMax.ticker.addEventListener('tick', _play);
     _this.active = true;
   };
 
   // Destroy this momentum by removing it from the RAF cycle
-  var destroy = function() {
+  var stop = function() {
     TweenMax.ticker.removeEventListener('tick', _play);
     _this.active = false;
   };
@@ -54,15 +57,15 @@ var Momentum = function(el, options) {
   // Toggle the init/destroy methods
   var toggle = function() {
     if (_this.active) {
-      destroy();
+      stop();
     } else {
-      init();
+      start();
     }
   };
 
   return {
-    init,
-    destroy,
+    start,
+    stop,
     toggle
   };
 };

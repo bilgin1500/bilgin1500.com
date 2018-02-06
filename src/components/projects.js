@@ -1,6 +1,11 @@
-import { createEl, removeClass, addClass } from 'utilities/helpers';
-import { getProjects } from 'utilities/orm';
 import Momentum from 'utilities/momentum';
+import { getProjects, getSetting, setSetting } from 'utilities/orm';
+import {
+  isUndefined,
+  createEl,
+  removeClass,
+  addClass
+} from 'utilities/helpers';
 import projectThumbTemplate from 'templates/project-thumbnail';
 import 'css/projects';
 
@@ -8,7 +13,53 @@ import 'css/projects';
 var $wrapper = createEl('div', { id: 'projects' });
 var $items = createEl('div', { class: 'project-items' });
 
-// Create a blank array for
+// Create a blank array for Momentum cache
+if (isUndefined(getSetting('momentumCache'))) {
+  setSetting('momentumCache', []);
+}
+
+// Iterate all the projects in the db,
+// append them to the DOM and init the parallax effect
+getProjects().forEach(function(projectData, i) {
+  if (projectData.thumbnail) {
+    projectData.thumbnail = require('content/' +
+      projectData.slug +
+      '/' +
+      projectData.thumbnail);
+  }
+
+  $items.insertAdjacentHTML('beforeend', projectThumbTemplate(projectData));
+
+  var $projectItem = $items.lastChild,
+    $projectItems = $items.children,
+    $projectVisual = $projectItem.querySelector('.project-visual'),
+    //$SVGelementsToBlow = $projectItem.querySelectorAll('.blow'),
+    $projectDesc = $projectItem.querySelector('.project-desc'),
+    $projectP = $projectItem.querySelector('.project-desc p');
+
+  new Momentum($projectVisual).start();
+  new Momentum($projectDesc, { speed: 0.45 }).start();
+  new Momentum($projectP, { speed: 0.1 }).start();
+  //var momentum = new Momentum($projectItem, projectData.momentum);
+  //momentum.start();
+  //getSetting('momentumCache').push(momentum);
+
+  // Tüm momentumları setSetting ile kaydedelim
+  // sonra da gerektiğinde hepsini birlikte durduralım da boşuna hesap kitap
+  // dönmesin ana sayfada.
+
+  /*$projectItem.addEventListener('mouseenter', function() {
+    toggleSVGAnimations($projectItem);
+    momentum.toggle();
+  });
+
+  $projectItem.addEventListener('mouseleave', function() {
+    toggleSVGAnimations($projectItem);
+    momentum.toggle();
+  });*/
+});
+
+$wrapper.appendChild($items);
 
 /*var CssAnim_defaultClass = 'paused',
   CssAnim_playingClass = 'playing',
@@ -41,40 +92,5 @@ var $items = createEl('div', { class: 'project-items' });
     }
   }
 };*/
-
-// Iterate all the projects in the db,
-// append them to the DOM and init the parallax effect
-getProjects().forEach(function(projectData, i) {
-  if (projectData.thumbnail) {
-    projectData.thumbnail = require('content/' +
-      projectData.slug +
-      '/' +
-      projectData.thumbnail);
-  }
-
-  $items.insertAdjacentHTML('beforeend', projectThumbTemplate(projectData));
-
-  var $projectItem = $items.lastChild,
-    $projectItems = $items.children,
-    $projectVisual = $projectItem.querySelector('.project-visual svg'),
-    $SVGelementsToBlow = $projectItem.querySelectorAll('.blow'),
-    $projectH2 = $projectItem.querySelector('.project-desc h2'),
-    $projectP = $projectItem.querySelector('.project-desc p');
-
-  var momentum = new Momentum($projectItem, projectData.momentum);
-  momentum.init();
-
-  /*$projectItem.addEventListener('mouseenter', function() {
-    toggleSVGAnimations($projectItem);
-    momentum.toggle();
-  });
-
-  $projectItem.addEventListener('mouseleave', function() {
-    toggleSVGAnimations($projectItem);
-    momentum.toggle();
-  });*/
-});
-
-$wrapper.appendChild($items);
 
 export default $wrapper;
