@@ -1,4 +1,6 @@
-hideButtons()
+@import "assets/fonts"
+
+/*hideButtons()
   position absolute
   right -100%
   transform scale(0.5)
@@ -18,10 +20,10 @@ hideButtons()
     height 100%
     width 100%
 
-/*#line-wrapper
+#line-wrapper
   display none
   @media screen and (min-width: tablet)
-    display block*/
+    display block
 
 #button-wrapper 
   pointer-events none
@@ -48,9 +50,39 @@ hideButtons()
   right -4px
   z-index 2
   @media screen and (min-width: tablet)
-    /*right -4px*/
+    right -4px
   &.close-button svg
     display block
   
   svg
     display none
+*/
+
+.nav-item
+  display block
+  font-size fMini
+  color rgba(0,0,0,0.75)
+  text-align right
+  padding 7px 0
+  text-decoration none
+  transition color 300ms
+  &:hover
+    color rgba(0,0,0,1)
+  
+#social-nav 
+  margin-top 10px
+  text-align right
+  a
+    display inline-block
+    margin-left 15px
+    &:first-child
+      margin-left 0
+    img
+      width 16px
+      height 16px
+    span
+      display none
+    &:hover
+      svg
+        path
+          fill rgba(0,0,0,1)

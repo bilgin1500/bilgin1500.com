@@ -1,4 +1,4 @@
-import data from 'content/index';
+import data from 'content/database';
 
 /**
  * Grabs a specific info from db
@@ -56,6 +56,17 @@ function getProjects() {
 }
 
 /**
+ * Returns filtered projects by given category name
+ * @param  {string} catName - Name of the category
+ * @return {array} Array of projects
+ */
+function getProjectsByCategory(catName) {
+  return getPage('projects').list.filter(function(project) {
+    return project.category.toLowerCase() == catName.toLowerCase();
+  });
+}
+
+/**
  * Grabs a specific project from db by slug or index
  * @param  {string/number} by - 
  *                            slug: Slug name of the desired project
@@ -100,6 +111,29 @@ function getSection(sectionBy, projectBy) {
   }
 }
 
+/**
+ * Returns all (unique) project category names as an array
+ * and reverses it so that it begins with the 'Personal Projects'
+ * @return {array} of string (category names) 
+ */
+function getCategories() {
+  return Array.from(
+    new Set(
+      getProjects().map(function(project) {
+        return project.category;
+      })
+    )
+  ).reverse();
+}
+
+/**
+ * Grabs intro's content
+ * @return {string}
+ */
+function getIntroContent() {
+  return getPage('intro').content;
+}
+
 // globals
 
 export {
@@ -109,7 +143,10 @@ export {
   getPages,
   getPage,
   getProjects,
+  getProjectsByCategory,
   getProject,
   findProjectIndex,
-  getSection
+  getSection,
+  getCategories,
+  getIntroContent
 };

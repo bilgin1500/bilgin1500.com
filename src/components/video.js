@@ -23,7 +23,7 @@ Video.prototype = {
    */
   _init: function(args) {
     // Poster image for video
-    var videoPoster = require('content/' +
+    var videoPoster = require('../projects/' +
       args.projectSlug +
       '/' +
       args.content.poster);
@@ -44,7 +44,7 @@ Video.prototype = {
 
     // Append the sources
     for (var i = 0; i < args.content.sources.length; i++) {
-      var videoSource = require('content/' +
+      var videoSource = require('../projects/' +
         args.projectSlug +
         '/' +
         args.content.sources[i].source);

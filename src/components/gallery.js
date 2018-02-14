@@ -12,7 +12,7 @@ import {
   getWidth,
   isUndefined
 } from 'utilities/helpers';
-import loaderIcon from 'content/loader-tail-spin.svg';
+import loaderIcon from 'images/loader-tail-spin.svg';
 import 'css/gallery';
 
 // Base64 Encode of 1x1px Transparent GIF
@@ -82,9 +82,12 @@ Gallery.prototype = {
    */
   _createSlide: function(source) {
     var _this = this;
-    var $slide, $img, $caption, slideSource, swipeDirection;
+    var $slide, $img, $loader, $caption, slideSource, swipeDirection;
 
-    slideSource = require('content/' + _this.projectSlug + '/' + source.source);
+    slideSource = require('../projects/' +
+      _this.projectSlug +
+      '/' +
+      source.source);
 
     // Does this image cast a shadow?
     var isShadowed =
@@ -97,12 +100,19 @@ Gallery.prototype = {
       src: transparentGif,
       alt: source.alt || source.caption || '',
       'data-src': slideSource,
-      'data-shadow': isShadowed
+      'data-shadow': isShadowed,
+      class: 'image'
+    });
+
+    $loader = createEl('img', {
+      src: loaderIcon,
+      alt: 'Image is loading...',
+      class: 'loader'
     });
 
     $slide = createEl('figure');
     $slide.appendChild($img);
-    $slide.insertAdjacentHTML('beforeend', loaderIcon);
+    $slide.appendChild($loader);
 
     if (source.caption) {
       $caption = createEl('figcaption');
@@ -231,8 +241,8 @@ Gallery.prototype = {
 
     function _loadImage(slide) {
       // Find the image and loader inside the slide
-      var $img = slide.querySelector('img'),
-        $loader = slide.querySelector('svg');
+      var $img = slide.querySelector('.image'),
+        $loader = slide.querySelector('.loader');
 
       // If the image is not loaded yet
       if ($img.getAttribute('src') == transparentGif) {
@@ -275,8 +285,8 @@ Gallery.prototype = {
   _bestFitCurrentImage: function() {
     if (this.isActive) {
       // Find the image and loader inside the slide
-      var $img = this.currentSlide.querySelector('img'),
-        $loader = this.currentSlide.querySelector('svg');
+      var $img = this.currentSlide.querySelector('.image'),
+        $loader = this.currentSlide.querySelector('.loader');
 
       // Ratios
       var imgAspectRatio = getWidth($img) / getHeight($img),

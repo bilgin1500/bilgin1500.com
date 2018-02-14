@@ -18,12 +18,10 @@ import {
 } from 'utilities/orm';
 import events from 'utilities/events';
 import router from 'utilities/router';
-import frame from 'utilities/frame';
-import { SVGElement, SVGIcon } from 'utilities/svg';
+import { SVGElement } from 'utilities/svg';
 import Gallery from 'components/gallery';
 import Video from 'components/video';
 import Info from 'components/info';
-import projectTemplate from 'templates/project';
 import 'css/project';
 
 /*
@@ -43,6 +41,38 @@ var Project = {
 
   // To disable the key and drag events during the tweens
   isNavLocked: false,
+
+  // Project window html
+  template: function(args) {
+    return `<div id="project-${args.slug}" class="project-wrapper">
+      <div class="project-desc">
+        <div class="inner-wrapper">
+          <h2>${args.name}</h2>
+          <h3>${args.desc}</h3>
+        </div>
+      </div>
+      <div class="project-showcase"></div>
+      <div class="project-nav"></div>
+      <div class="projects-adjacent-nav">
+        <a href="${args.adjacent.prev.href}" class="prev">
+          <img src="${args.adjacent.prev.src}" alt="Previous Project: ${args
+      .adjacent.prev.name}">
+          <span>${args.adjacent.prev.name}</span>
+        </a>
+        <a href="${args.adjacent.next.href}" class="next">
+          <img src="${args.adjacent.next.src}" alt="Previous Project: ${args
+      .adjacent.next.name}">
+          <span>${args.adjacent.next.name}</span>
+        </a>
+      </div>
+      <div class="project-footer">
+        <div class="inner-wrapper">
+          <p>&copy${args.year}, BİLGİN ÖZKAN</p>
+        </div>
+      </div>
+    </div>
+    `;
+  },
 
   // Setup and init subsections of the current project
   sections: {
@@ -95,15 +125,15 @@ var Project = {
           addClass($sectionWrapper, 'frame-' + sectionData.frame);
 
           // 9-box framing
-          var $frame = frame.create({
+          /*var $frame = frame.create({
             type: sectionData.frame,
             content: sectionData._instance.element,
             url: _this.data.url,
             title: _this.data.name
-          });
+          });*/
 
           // Append the frames
-          $sectionInnerWrapper.appendChild($frame);
+          //$sectionInnerWrapper.appendChild($frame);
         } else {
           // Add section's type as a frame name class
           addClass($sectionWrapper, 'frame-' + sectionData.type);
@@ -189,7 +219,10 @@ var Project = {
         $navItemText.innerHTML = sectionData.name;
 
         // Append nav item
-        $navItem.appendChild(new SVGIcon(sectionData.icon));
+        var sectionIcon = createEl('img', {
+          src: require('images/' + sectionData.icon + '.svg')
+        });
+        $navItem.appendChild(sectionIcon);
         $navItem.appendChild($navItemText);
         $projectNav.appendChild($navItem);
       });
@@ -464,32 +497,6 @@ var Project = {
     }
   },
 
-  /* Background SVG shapes floating all around like it's summer */
-  shapes: function() {
-    var $shapesWrapper = new SVGElement('svg', {
-      class: 'project-bg-shapes'
-    });
-
-    for (var i = 0; i < _this.data.shapes.length; i++) {
-      var $shape = new SVGElement(
-        _this.data.shapes[i].type,
-        _this.data.shapes[i].attributes
-      );
-
-      TweenMax.to($shape, 2, {
-        //transform: 'translate3d(100vw, 100vh, 0)',
-        x: '100vw',
-        y: '100vh',
-        repeat: -1,
-        yoyo: true
-      });
-
-      $shapesWrapper.appendChild($shape);
-    }
-
-    $projectWindow.appendChild($shapesWrapper);
-  },
-
   /**
    * Project window setup and methods
    * Private method for project only
@@ -560,18 +567,14 @@ var Project = {
 
     _this.data.adjacent = {
       prev: {
-        link: '/projects/' + getProject(previousIndex).slug,
+        href: '/projects/' + getProject(previousIndex).slug,
         name: getProject(previousIndex).name,
-        icon: (function() {
-          return new SVGIcon('chevronLeft').outerHTML;
-        })()
+        src: require('images/chevron-left.svg')
       },
       next: {
-        link: '/projects/' + getProject(nextIndex).slug,
+        href: '/projects/' + getProject(nextIndex).slug,
         name: getProject(nextIndex).name,
-        icon: (function() {
-          return new SVGIcon('chevronRight').outerHTML;
-        })()
+        src: require('images/chevron-right.svg')
       }
     };
 
@@ -585,7 +588,7 @@ var Project = {
     _this._window.toggle('open', {
       onStart: function() {
         /* Merge project template with data and insert it */
-        this.$el.insertAdjacentHTML('beforeend', projectTemplate(_this.data));
+        this.$el.insertAdjacentHTML('beforeend', _this.template(_this.data));
 
         // Create sections and insert them
         _this.sections._init.call(_this);

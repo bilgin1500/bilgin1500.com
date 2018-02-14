@@ -1,11 +1,9 @@
 module.exports = {
   info: {
     title: 'bilgin1500.com',
-    subtitle: '👋 Hi!',
+    subtitle: 'Welcome',
     description:
       'Portfolio website of Bilgin Özkan, designer and developer from Istanbul.',
-    intro:
-      'Hi stranger. My name is Bilgin Özkan. I am a designer and developer with 10 years of experience in the service design with titles such as digital designer, art director and digital creative director. Currently I am the Product Design Manager at <a href="#">Yesthatsright</a>. You can reach me at <a href="#">bilgin1500@gmail.com</a>.<br/>And I guess that\'s it.',
     socialAccounts: [
       ['GitHub', 'https://github.com/bilgin1500/'],
       ['LinkedIn', 'https://www.linkedin.com/in/ozkanbilgin/'],
@@ -23,9 +21,9 @@ module.exports = {
     {
       slug: 'intro',
       name: 'Intro',
-      basics:
-        'b1500 is Bilgin Özkan,visual designer & front-end developer from Istanbul',
-      more: [
+      content:
+        '👋 Hi stranger. My name is Bilgin Özkan. I am a designer and developer with 10 years of experience in the service design with titles such as digital designer, art director and digital creative director. Currently I am the Product Design Manager at <a href="#">Yesthatsright</a>. You can reach me at <a href="#">bilgin1500@gmail.com</a>.<br/>And I guess that\'s it.',
+      list: [
         'who loves to get inspired by great architecture.',
         'who has a focus on web design',
         'think off the grid.',
@@ -47,38 +45,20 @@ module.exports = {
           name: 'SkytankingOvenon.com',
           desc: 'Fueling the rockets',
           url: 'http://skytankingovenon.com',
-          size: 'small',
-          thumbnail: 'skytankingovenon-thumb.png',
-          momentum: { speed: 0.4 },
-          shapes: [
-            {
-              type: 'rect',
-              attributes: {
-                x: '0',
-                y: '0',
-                width: '7',
-                height: '80',
-                fill: '#e81355'
-              }
-            },
-            {
-              type: 'rect',
-              attributes: {
-                x: '0',
-                y: '0',
-                width: '30',
-                height: '90',
-                fill: '#2121aa'
-              }
-            }
-          ],
+          category: 'Commercial Works',
+          tags: ['Wordpress', 'Responsive'],
+          theme: {
+            size: 'large',
+            color: 'light',
+            thumbnail: 'skytankingovenon-thumb.png',
+            momentum: { speed: 0.4 }
+          },
           sections: [
             {
               name: 'Desktop',
               slug: 'desktop',
               icon: 'desktop',
               type: 'video',
-              frame: 'browser',
               content: {
                 poster: 'video-poster.png',
                 width: 640,
@@ -94,7 +74,6 @@ module.exports = {
               slug: 'mobile',
               icon: 'mobile',
               type: 'video',
-              frame: 'phone',
               content: {
                 poster: 'video-poster.png',
                 width: 320,
@@ -176,9 +155,14 @@ module.exports = {
           slug: 'rolio',
           name: 'Rolio',
           desc: 'A Theme for The Minimalist',
-          size: 'large',
-          thumbnail: 'thumbnail.gif',
-          momentum: { speed: 0.2 },
+          category: 'Personal Projects',
+          tags: ['Wordpress', 'Theme Development'],
+          theme: {
+            size: 'large',
+            color: 'dark',
+            thumbnail: 'rolio.png',
+            momentum: { speed: 0.2 }
+          },
           sections: [
             {
               name: 'Desktop',
@@ -239,48 +223,61 @@ module.exports = {
           ]
         },
         {
-          slug: 'test',
-          name: 'Test.com',
-          desc: 'Something wicked',
-          size: 'medium',
-          momentum: { speed: 0.4 },
+          slug: 'sirinpancaroglu',
+          name: 'Sirinpancaroglu.com',
+          desc: 'Personal Website of Turkish Harpist Şirin Pancaroğlu',
+          url: 'http://sirinpancaroglu.com',
+          category: 'Commercial Works',
+          tags: ['Wordpress', 'Responsive'],
+          theme: {
+            color: 'dark',
+            size: 'large',
+            thumbnail: 'sp-f3.png',
+            momentum: { speed: 0.4 }
+          },
           sections: []
         },
         {
-          slug: 'yesyes',
-          name: 'Yesyes',
-          desc: 'This is a placeholder',
-          size: 'medium',
-          momentum: { speed: 0.3 },
+          slug: 'beatsmap',
+          name: 'Beatsmap',
+          desc: 'Follow the beats, never miss an event',
+          category: 'Personal Projects',
+          tags: ['Node.js', 'GraphQL', 'Crawler', 'React'],
+          theme: {
+            color: 'light',
+            size: 'large',
+            thumbnail: 'beatsmap.png',
+            momentum: { speed: 0.4 }
+          },
           sections: []
         },
         {
-          slug: 'this-is-it',
-          name: 'Thisisit.com',
-          desc: 'Fueling the rockets',
-          size: 'small',
-          momentum: { speed: 0.5 },
+          slug: 'isbank-sermaye-piyasalari',
+          name: 'İş Bankası Sermaye Piyasaları',
+          desc:
+            'Aliquip exea commodo consequat duis aute irure dolor in reprehenderit',
+          category: 'Commercial Works',
+          tags: ['Web App', 'Cross Browser'],
+          theme: {
+            color: 'light',
+            size: 'large',
+            thumbnail: 'isbank.png',
+            momentum: { speed: 0.5 }
+          },
           sections: []
         },
         {
-          slug: 'yep-it-is',
-          name: 'Rolio',
-          desc: 'A Theme for The Minimalist',
-          size: 'large',
-          sections: []
-        },
-        {
-          slug: 'what-a-day',
-          name: 'Test.com',
-          desc: 'Something wicked',
-          size: 'medium',
-          sections: []
-        },
-        {
-          slug: 'ultimate-project',
-          name: 'Yesyes',
-          desc: 'This is a placeholder',
-          size: 'medium',
+          slug: 'cappadox',
+          name: 'Cappadox',
+          desc: 'Suntin culpa qui officia deserunt mollit anim id est laborum',
+          category: 'Commercial Works',
+          tags: ['Responsive', 'Web App'],
+          theme: {
+            color: 'light',
+            size: 'large',
+            thumbnail: 'cappadox.png',
+            momentum: { speed: 0.5 }
+          },
           sections: []
         }
       ]

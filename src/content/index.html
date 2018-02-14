@@ -3,9 +3,11 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>{{= it.htmlWebpackPlugin.options.title }}</title>
-    <meta name="description" content="{{=it.htmlWebpackPlugin.options.description}}">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <meta name="description" content="<%=htmlWebpackPlugin.options.description%>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="icon" type="image/png" sizes="32x32" href="<%= htmlWebpackPlugin.options.favRetina %>">
+    <link rel="icon" type="image/png" sizes="16x16" href="<%= htmlWebpackPlugin.options.favNormal %>">
   </head>
   <body>
     <!--[if lte IE 9]>

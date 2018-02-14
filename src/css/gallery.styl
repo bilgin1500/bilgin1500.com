@@ -24,16 +24,16 @@
       &.active
         display block
         
-      svg
-        width 100px
-        height 100px
+      .loader
+        width 32px
+        height 32px
         position absolute
         top 50%
         left 50%
-        margin-top -50px
-        margin-left -50px
+        margin-top -(@height / 2)
+        margin-left -(@width / 2)
     
-      img
+      .image
         display block
         width 100%
         height auto

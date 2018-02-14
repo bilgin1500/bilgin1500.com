@@ -1,96 +1,85 @@
-import Momentum from 'utilities/momentum';
-import { getProjects, getSetting, setSetting } from 'utilities/orm';
 import {
   isUndefined,
   createEl,
   removeClass,
   addClass
 } from 'utilities/helpers';
-import projectThumbTemplate from 'templates/project-thumbnail';
+import {
+  getProjectsByCategory,
+  getCategories,
+  getSetting,
+  setSetting
+} from 'utilities/orm';
+import Momentum from 'utilities/momentum';
 import 'css/projects';
+
+// Template for category title
+function templateTitle(args) {
+  return `<h3>${args.title}</h3>`;
+}
+
+// Template for single project showcase
+function templateProject(args) {
+  return `<a href="/projects/${args.slug}" id="project-thumb-${args.slug}" class="project-item ${args.theme &&
+    args.theme.size} ${args.theme && args.theme.color}">
+    <div class="project-visual">
+      <img src="${args.thumbnail}" alt="${args.name}">
+    </div>
+    <div class="project-desc">
+      <h4>${args.name}</h4>
+      <p>${args.desc}</p>
+      <div class="tags">
+        <span>${args.tags.join('</span><span>')}</span>
+      </div>
+    </div>
+  </a>`;
+}
 
 // Create elements and cache them
 var $wrapper = createEl('div', { id: 'projects' });
-var $items = createEl('div', { class: 'project-items' });
 
 // Create a blank array for Momentum cache
 if (isUndefined(getSetting('momentumCache'))) {
   setSetting('momentumCache', []);
 }
 
-// Iterate all the projects in the db,
-// append them to the DOM and init the parallax effect
-getProjects().forEach(function(projectData, i) {
-  if (projectData.thumbnail) {
-    projectData.thumbnail = require('content/' +
-      projectData.slug +
-      '/' +
-      projectData.thumbnail);
-  }
-
-  $items.insertAdjacentHTML('beforeend', projectThumbTemplate(projectData));
-
-  var $projectItem = $items.lastChild,
-    $projectItems = $items.children,
-    $projectVisual = $projectItem.querySelector('.project-visual'),
-    //$SVGelementsToBlow = $projectItem.querySelectorAll('.blow'),
-    $projectDesc = $projectItem.querySelector('.project-desc'),
-    $projectP = $projectItem.querySelector('.project-desc p');
-
-  new Momentum($projectVisual).start();
-  new Momentum($projectDesc, { speed: 0.45 }).start();
-  new Momentum($projectP, { speed: 0.1 }).start();
-  //var momentum = new Momentum($projectItem, projectData.momentum);
-  //momentum.start();
-  //getSetting('momentumCache').push(momentum);
-
-  // Tüm momentumları setSetting ile kaydedelim
-  // sonra da gerektiğinde hepsini birlikte durduralım da boşuna hesap kitap
-  // dönmesin ana sayfada.
-
-  /*$projectItem.addEventListener('mouseenter', function() {
-    toggleSVGAnimations($projectItem);
-    momentum.toggle();
+// Function wrapper to list and append projects by category
+function listProjects(categoryName) {
+  // Create a wrapper for this category
+  var $items = createEl('div', {
+    class: 'project-items ' + categoryName.toLowerCase().replace(/\s/g, '-')
   });
 
-  $projectItem.addEventListener('mouseleave', function() {
-    toggleSVGAnimations($projectItem);
-    momentum.toggle();
-  });*/
-});
-
-$wrapper.appendChild($items);
-
-/*var CssAnim_defaultClass = 'paused',
-  CssAnim_playingClass = 'playing',
-  CssAnim_animClass = 'animation';*/
-
-/**
- * Toggle SVG parts inside the element to pause and play
- * @param  {element} $projectItem - The parent element which contains the SVG doc
- */
-/*var toggleSVGAnimations = function($projectItem) {
-  var status = 'playing';
-  var $animatedSVGelements = $projectItem.querySelectorAll(
-    '.' + CssAnim_playingClass
+  // Category title
+  $wrapper.insertAdjacentHTML(
+    'beforeend',
+    templateTitle({ title: categoryName })
   );
 
-  if ($animatedSVGelements.length == 0) {
-    $animatedSVGelements = $projectItem.querySelectorAll(
-      '.' + CssAnim_defaultClass
-    );
-    status = 'paused';
-  }
+  // Iterate all projects in db, append them to the DOM
+  // and init the momentum (parallax) effect
+  getProjectsByCategory(categoryName).forEach(function(projectData, i) {
+    projectData.thumbnail =
+      projectData.theme && projectData.theme.thumbnail
+        ? require('../projects/' +
+            projectData.slug +
+            '/' +
+            projectData.theme.thumbnail)
+        : '';
 
-  for (var i = $animatedSVGelements.length - 1; i >= 0; i--) {
-    if (status == 'playing') {
-      removeClass($animatedSVGelements[i], CssAnim_playingClass);
-      addClass($animatedSVGelements[i], CssAnim_defaultClass);
-    } else {
-      removeClass($animatedSVGelements[i], CssAnim_defaultClass);
-      addClass($animatedSVGelements[i], CssAnim_playingClass);
-    }
-  }
-};*/
+    $items.insertAdjacentHTML('beforeend', templateProject(projectData));
+
+    var $projectItem = $items.lastChild;
+
+    //new Momentum($projectItem).start();
+  });
+
+  $wrapper.appendChild($items);
+}
+
+// List projects
+for (var i = 0; i < getCategories().length; i++) {
+  listProjects(getCategories()[i]);
+}
 
 export default $wrapper;

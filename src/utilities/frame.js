@@ -60,9 +60,8 @@ function create(options) {
 
     // Append frame border images as SVGs
     if (typeof frames[type][i + 1] !== 'undefined') {
-      $cell[i + 1].appendChild(
-        new SVGIcon(i + 1, null, null, null, frames[type])
-      );
+      $cell[i + 1].appendChild;
+      new SVGIcon(i + 1, null, null, null, frames[type])();
     }
 
     if (useRows) {

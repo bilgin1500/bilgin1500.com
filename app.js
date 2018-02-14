@@ -9,7 +9,6 @@ import 'ThrowPropsPlugin';
 // Other injections
 import FontFaceObserver from 'fontfaceobserver';
 import { docReady, createEl } from 'utilities/helpers';
-import { SVGIcon } from 'utilities/svg';
 import events from 'utilities/events';
 import { log } from 'utilities/helpers';
 import router from 'utilities/router';
@@ -32,8 +31,8 @@ Promise.all([
   fontAvenirRegular.load(),
   fontAvenirHeavy.load()
 ]).then(function() {
-  //var $logoIcon = new SVGIcon('logo', { id: 'logo-icon' });
-  var $logo = createEl('a', { id: 'logo', href: '/' });
+  var $logoWrapper = createEl('h1', { id: 'logo' });
+  var $logo = createEl('a', { href: '/' });
   var $wrapper = createEl('div', { id: 'content-wrapper' });
   var $app = document.getElementById('app');
 
@@ -42,9 +41,9 @@ Promise.all([
     $wrapper.appendChild(require('components/' + pageSlug).default);
   }
 
-  //$logoWrapper.appendChild($logoIcon);
   $logo.innerHTML = getInfo('title');
-  $app.appendChild($logo);
+  $logoWrapper.appendChild($logo);
+  $app.appendChild($logoWrapper);
   $app.appendChild($menu);
   $app.appendChild($wrapper);
 
