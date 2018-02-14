@@ -4,8 +4,9 @@ import 'css/menu';
 
 // Create menu and inner elements
 var $menu = createEl('div', { id: 'menu' });
-var $nav = createEl('div', { id: 'nav' });
-var $socialNav = createEl('div', { id: 'social-nav' });
+var $navWrapper = createEl('div', { id: 'nav-wrapper' });
+var $navPages = createEl('div', { id: 'nav-pages' });
+var $navSocial = createEl('div', { id: 'nav-social' });
 
 // Loop pages and append them as a link
 for (var i = 0; i < getPages().length; i++) {
@@ -13,11 +14,10 @@ for (var i = 0; i < getPages().length; i++) {
 
   var $navItem = createEl('a', {
     href: '/' + page.slug,
-    id: 'nav-' + page.slug,
-    class: 'nav-item'
+    id: 'nav-' + page.slug
   });
   $navItem.textContent = page.name;
-  $nav.appendChild($navItem);
+  $navPages.appendChild($navItem);
 }
 
 // Loop social media accounts and append them as a link
@@ -36,10 +36,30 @@ for (var i = 0; i < getInfo('socialAccounts').length; i++) {
   $socialItemText.textContent = account[0];
   $socialItem.appendChild($socialItemIcon);
   $socialItem.appendChild($socialItemText);
-  $socialNav.appendChild($socialItem);
+  $navSocial.appendChild($socialItem);
 }
 
-$menu.appendChild($nav);
-$menu.appendChild($socialNav);
+// Create a hamburger icon
+/*var $mainLine = new SVGElement('line', {
+  x1: 0,
+  x2: 32,
+  y1: 0,
+  y2: 0,
+  stroke: 'default'
+});
+
+var $bottomLine = new SVGElement('line', {
+  x1: 23,
+  x2: 48,
+  y1: 22 + menu.hamburgerGap,
+  y2: 22 + menu.hamburgerGap,
+  stroke: 'default'
+});
+
+var $menuSVG = new SVGElement('svg', { id: 'line-wrapper' });*/
+
+$menu.appendChild($navWrapper);
+$navWrapper.appendChild($navPages);
+$navWrapper.appendChild($navSocial);
 
 export default $menu;
