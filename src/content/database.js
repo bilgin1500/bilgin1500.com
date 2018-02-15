@@ -8,7 +8,8 @@ module.exports = {
       ['GitHub', 'https://github.com/bilgin1500/'],
       ['LinkedIn', 'https://www.linkedin.com/in/ozkanbilgin/'],
       ['Twitter', 'https://twitter.com/bilgin1500']
-    ]
+    ],
+    copyright: '&copy;{year} Bilgin Özkan'
   },
   settings: {
     isLoggerActive: false,

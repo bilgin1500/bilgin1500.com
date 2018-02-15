@@ -58,10 +58,6 @@ module.exports = {
           }
         ]
       },
-      /*{
-        test: /\.svg$/,
-        loader: 'svg-inline-loader'
-      },*/
       {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({

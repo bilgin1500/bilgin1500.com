@@ -4,7 +4,6 @@ import 'css/menu';
 
 // Create menu and inner elements
 var $menu = createEl('div', { id: 'menu' });
-var $navWrapper = createEl('div', { id: 'nav-wrapper' });
 var $navPages = createEl('div', { id: 'nav-pages' });
 var $navSocial = createEl('div', { id: 'nav-social' });
 
@@ -28,38 +27,30 @@ for (var i = 0; i < getInfo('socialAccounts').length; i++) {
     href: account[1],
     target: '_blank'
   });
-  var $socialItemIcon = createEl('img', {
-    src: require('images/' + account[0].toLowerCase() + '.svg'),
-    alt: account[0]
-  });
+
+  var socialItemIcon = require('!svg-inline-loader!images/' +
+    account[0].toLowerCase() +
+    '.svg');
+
   var $socialItemText = createEl('span');
+
   $socialItemText.textContent = account[0];
-  $socialItem.appendChild($socialItemIcon);
+  $socialItem.insertAdjacentHTML('beforeend', socialItemIcon);
   $socialItem.appendChild($socialItemText);
   $navSocial.appendChild($socialItem);
 }
 
-// Create a hamburger icon
-/*var $mainLine = new SVGElement('line', {
-  x1: 0,
-  x2: 32,
-  y1: 0,
-  y2: 0,
-  stroke: 'default'
-});
+// Copyright
+var $copyright = createEl('div', { id: 'copyright' });
+var $copyrighText = createEl('p');
+$copyrighText.innerHTML = getInfo('copyright').replace(
+  '{year}',
+  new Date().getFullYear()
+);
+$copyright.appendChild($copyrighText);
 
-var $bottomLine = new SVGElement('line', {
-  x1: 23,
-  x2: 48,
-  y1: 22 + menu.hamburgerGap,
-  y2: 22 + menu.hamburgerGap,
-  stroke: 'default'
-});
-
-var $menuSVG = new SVGElement('svg', { id: 'line-wrapper' });*/
-
-$menu.appendChild($navWrapper);
-$navWrapper.appendChild($navPages);
-$navWrapper.appendChild($navSocial);
+$menu.appendChild($navPages);
+$menu.appendChild($navSocial);
+$menu.appendChild($copyright);
 
 export default $menu;
