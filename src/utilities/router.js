@@ -48,19 +48,20 @@ var router = {
    * Setup and start routing
    */
   init: function() {
-    /*
-    Route home
+    /**
+     * Route home
      */
-    var routeHome = function() {
+    function routeHome(ctx, next) {
       router._changeTitle(getInfo('subtitle'));
       router._scrollTo();
-    };
+      next();
+    }
 
     /**
      * Route all projects and their sections
      * @param  {object} ctx Url parameters: project/section/sectionSlideNo
      */
-    var routeProject = function(ctx) {
+    function routeProject(ctx, next) {
       // Current project
       var thisProject = getProject(ctx.params.project);
 
@@ -119,12 +120,12 @@ var router = {
         log('[ROUTE] Project window is closed, open it');
         Project.open(thisProject.slug, thisSection.slug, sectionSlideNo);
       }
-    };
+    }
 
-    /*
-    Route pages
+    /**
+     * Route pages
      */
-    var routePages = function(ctx) {
+    function routePages(ctx, next) {
       var currentPage = getPage(ctx.params.page);
 
       if (!currentPage) {
@@ -133,23 +134,30 @@ var router = {
         router._changeTitle(currentPage.name);
         router._scrollTo({ to: currentPage.slug });
       }
-    };
 
-    /*
-    404 Not found
+      next();
+    }
+
+    /**
+     * 404
      */
-    var notFound = function() {
+    function notFound() {
       log('[ROUTE] Ooops! Not found.');
       router.engine.redirect('/');
-    };
+    }
 
-    router._changeTitle(getInfo('subtitle'));
-
-    /*
-    Map'em all
+    /**
+     * Load projects' images on home page
      */
-    router.engine('/', routeHome);
-    router.engine('/:page', routePages);
+    function loadProjectImages() {
+      for (var i = 0; i < getSetting('imageInstanceCache').length; i++) {
+        getSetting('imageInstanceCache')[i].load();
+      }
+    }
+
+    // Map'em all
+    router.engine('/', routeHome, loadProjectImages);
+    router.engine('/:page', routePages, loadProjectImages);
     router.engine(
       '/projects/:project/:section?/:sectionSlideNo?',
       routeProject

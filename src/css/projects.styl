@@ -36,23 +36,25 @@
         .tags
           span
             border-color rgba(255,255,255,0.2)
+      &:hover
+        .tags
+          display block !important
+            
+      .project-visual
         
-      /*@media screen and (min-width: tablet)
-        &.small 
-          width 30%
-        &.medium 
-          width 40%
-        &.large 
-          width 60%*/
-
-      .project-visual 
-        box-sizing border-box
-        width 100%
-        
-        img
-          display block
-          width 100%
-          height auto
+        .img-wrapper
+          background-color #eee
+          padding-bottom 66.66%
+          
+          .img
+            position absolute
+          
+          .loader
+            position absolute
+            top 50%
+            left 50%
+            margin-left -19px
+            margin-top -19px
 
       .project-desc 
         position absolute
@@ -72,6 +74,7 @@
           font-size fSmall
           
         .tags
+          display none
           margin-top 10px
           span
             display inline-block

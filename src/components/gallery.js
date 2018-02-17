@@ -1,5 +1,6 @@
-import router from 'utilities/router';
 import throttle from 'throttle-debounce/throttle';
+import Image from 'utilities/image';
+import router from 'utilities/router';
 import {
   $win,
   $doc,
@@ -12,26 +13,20 @@ import {
   getWidth,
   isUndefined
 } from 'utilities/helpers';
-import loaderIcon from 'images/loader-tail-spin.svg';
 import 'css/gallery';
-
-// Base64 Encode of 1x1px Transparent GIF
-var transparentGif =
-  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-var boxShadow = '1px 1px 25px 1px rgba(0,0,0,0.25)';
-var boxShadowMore = '1px 1px 35px 1px rgba(0,0,0,0.5)';
 
 /*
  * Gallery constructor
  * @param  {object} args - Argument object with projectSlug, sectionSlug and content properties
- * @return {element} - Wrapper element
  */
 function Gallery(args) {
   this.isActive = false;
   this.isNavLocked = false;
+  this.currentIndex = null;
   this.projectSlug = args.projectSlug;
   this.sectionSlug = args.sectionSlug;
   this.slidesLength = args.content.sources.length;
+  this.images = [];
   this.element = this._init(args);
 }
 
@@ -96,24 +91,22 @@ Gallery.prototype = {
         ? true
         : false;
 
-    $img = createEl('img', {
-      src: transparentGif,
+    // Create the image instance and cache returning wrapper and image elements
+    var imgInstance = new Image({
+      src: slideSource,
       alt: source.alt || source.caption || '',
-      'data-src': slideSource,
-      'data-shadow': isShadowed,
-      class: 'image'
+      isShadowed: isShadowed
     });
+    var $wrapper = imgInstance.elements.wrapper;
+    var $image = imgInstance.elements.image;
 
-    $loader = createEl('img', {
-      src: loaderIcon,
-      alt: 'Image is loading...',
-      class: 'loader'
-    });
+    // Save image instances to be able to load in the future
+    this.images.push(imgInstance);
 
+    // Create the <figure> wrapper
     $slide = createEl('figure');
-    $slide.appendChild($img);
-    $slide.appendChild($loader);
-
+    $slide.appendChild($wrapper);
+    // Append the caption if available
     if (source.caption) {
       $caption = createEl('figcaption');
       $caption.innerHTML = source.caption;
@@ -127,7 +120,7 @@ Gallery.prototype = {
       dragThreshold = 75,
       dragBoundaries = 100;
 
-    Draggable.create($img, {
+    Draggable.create($wrapper, {
       type: 'x,y',
       lockAxis: true,
       throwProps: true,
@@ -146,7 +139,7 @@ Gallery.prototype = {
 
         // Update the boundaries so that they cover the image
         var slideHeight = getHeight($slide);
-        var imageHeight = getHeight($img);
+        var imageHeight = getHeight($image);
         var dynamicDragBoundaryMinY = -imageHeight + slideHeight;
 
         this.applyBounds({
@@ -158,7 +151,9 @@ Gallery.prototype = {
 
         // Let the user sense that the image is pressed
         if (isShadowed) {
-          TweenMax.to($img, 0.5, { boxShadow: boxShadowMore });
+          TweenMax.to($image, 0.5, {
+            boxShadow: imgInstance.settings.boxShadowMore
+          });
         }
 
         // Stop bubbling so that this draggable won't interfere with
@@ -168,7 +163,9 @@ Gallery.prototype = {
       onRelease: function() {
         // Release the image's hover
         if (isShadowed) {
-          TweenMax.to($img, 0.5, { boxShadow: boxShadow });
+          TweenMax.to($image, 0.5, {
+            boxShadow: imgInstance.settings.boxShadow
+          });
         }
       },
       onDrag: function() {
@@ -219,74 +216,12 @@ Gallery.prototype = {
   },
 
   /**
-   * Load the gallery image at the given index plus 2 adjacent slide's images in both (previous and next) direction.
-   * @param  {number} index - Slide's index
-   */
-  _loadImageWithAdjacentImages: function(index) {
-    var _this = this;
-
-    var $allSlides = _this.element.querySelectorAll('figure');
-    var $currSlide = $allSlides[index];
-    var $previousSlide =
-      $allSlides[_this._findAdjacentIndex('previous', index)];
-    var $nextSlide = $allSlides[_this._findAdjacentIndex('next', index)];
-
-    // All the slides to be loaded
-    var slidesToBeLoaded = [];
-    var slidesToBeLoadedIndex = 0;
-    slidesToBeLoaded.push($currSlide, $nextSlide, $previousSlide);
-
-    // Start loading by first one
-    _loadImage(slidesToBeLoaded[slidesToBeLoadedIndex]);
-
-    function _loadImage(slide) {
-      // Find the image and loader inside the slide
-      var $img = slide.querySelector('.image'),
-        $loader = slide.querySelector('.loader');
-
-      // If the image is not loaded yet
-      if ($img.getAttribute('src') == transparentGif) {
-        // Set opacity to zero
-        TweenMax.set($img, { autoAlpha: 0 });
-
-        // Does this image cast a shadow?
-        var boxShadowProperty =
-          $img.getAttribute('data-shadow') == 'true' ? boxShadow : 'none';
-
-        // After loading fade in the image, remove the svg loader
-        // and load other images nearby
-        $img.onload = function() {
-          TweenMax.to($img, 1, {
-            autoAlpha: 1,
-            boxShadow: boxShadowProperty,
-            onStart: function() {
-              // Hide the loader
-              TweenMax.set($loader, { autoAlpha: 0 });
-            },
-            onComplete: function() {
-              // Load the next image in the array
-              if (slidesToBeLoadedIndex < slidesToBeLoaded.length - 1) {
-                slidesToBeLoadedIndex++;
-                _loadImage(slidesToBeLoaded[slidesToBeLoadedIndex]);
-              }
-            }
-          });
-        };
-
-        // Load the image
-        $img.setAttribute('src', $img.getAttribute('data-src'));
-      }
-    }
-  },
-
-  /**
    * Fit the current slide's image inside its container element
    */
   _bestFitCurrentImage: function() {
     if (this.isActive) {
       // Find the image and loader inside the slide
-      var $img = this.currentSlide.querySelector('.image'),
-        $loader = this.currentSlide.querySelector('.loader');
+      var $img = this.currentSlide.querySelector('.image');
 
       // Ratios
       var imgAspectRatio = getWidth($img) / getHeight($img),
@@ -431,7 +366,7 @@ Gallery.prototype = {
     _this.isNavLocked = true;
 
     // First time opened?
-    var firstTime = typeof currentIndex == 'undefined';
+    var firstTime = currentIndex == null;
 
     // Cache
     var $slidesWrapper = _this.element.querySelector('.slides');
@@ -466,7 +401,7 @@ Gallery.prototype = {
     }
 
     // Next slide's slideIn duration
-    var transitionSec = immediately ? 0.01 : 1;
+    var transitionSec = immediately ? 0.01 : 0.5;
 
     // If this isn't the first time we should slide out the current slide
     if (!firstTime) {
@@ -495,13 +430,21 @@ Gallery.prototype = {
           // Make this index active
           addClass($nextSlide, 'active');
           addClass($nextBullet, 'active');
-
-          // Load the gallery image
-          _this._loadImageWithAdjacentImages(_this.currentIndex);
         },
         onComplete: function() {
           // Open the nav lock
           _this.isNavLocked = false;
+          // Load the gallery image with adjacent images
+          var currIndex = _this.currentIndex;
+          var preIndex = _this._findAdjacentIndex('previous', currIndex);
+          var nextIndex = _this._findAdjacentIndex('next', currIndex);
+
+          // Start loading by first one
+          _this.images[currIndex].load(function() {
+            _this.images[preIndex].load(function() {
+              _this.images[nextIndex].load();
+            });
+          });
         }
       }
     );

@@ -7,10 +7,10 @@ import {
 import {
   getProjectsByCategory,
   getCategories,
-  getSetting,
   setSetting
 } from 'utilities/orm';
 import Momentum from 'utilities/momentum';
+import Image from 'utilities/image';
 import 'css/projects';
 
 // Template for category title
@@ -22,9 +22,7 @@ function templateTitle(args) {
 function templateProject(args) {
   return `<a href="/projects/${args.slug}" id="project-thumb-${args.slug}" class="project-item ${args.theme &&
     args.theme.size} ${args.theme && args.theme.color}">
-    <div class="project-visual">
-      <img src="${args.thumbnail}" alt="${args.name}">
-    </div>
+    <div class="project-visual"></div>
     <div class="project-desc">
       <h4>${args.name}</h4>
       <p>${args.desc}</p>
@@ -38,10 +36,8 @@ function templateProject(args) {
 // Create elements and cache them
 var $wrapper = createEl('div', { id: 'projects' });
 
-// Create a blank array for Momentum cache
-if (isUndefined(getSetting('momentumCache'))) {
-  setSetting('momentumCache', []);
-}
+// Cache all the images to control the loading process in the near future
+var imgInstanceCache = [];
 
 // Function wrapper to list and append projects by category
 function listProjects(categoryName) {
@@ -57,7 +53,6 @@ function listProjects(categoryName) {
   );
 
   // Iterate all projects in db, append them to the DOM
-  // and init the momentum (parallax) effect
   getProjectsByCategory(categoryName).forEach(function(projectData, i) {
     projectData.thumbnail =
       projectData.theme && projectData.theme.thumbnail
@@ -70,12 +65,29 @@ function listProjects(categoryName) {
     $items.insertAdjacentHTML('beforeend', templateProject(projectData));
 
     var $projectItem = $items.lastChild;
+    var $projectVisual = $projectItem.querySelector('.project-visual');
+
+    // Create Image instance
+    var imgInstance = new Image({
+      src: projectData.thumbnail,
+      alt: projectData.name
+    });
+    $projectVisual.appendChild(imgInstance.elements.wrapper);
+
+    // Cache Image instance
+    imgInstanceCache.push(imgInstance);
 
     //new Momentum($projectItem).start();
   });
 
   $wrapper.appendChild($items);
 }
+
+// Save momentum cache
+setSetting('momentumCache', []);
+
+// Save img instance cache
+setSetting('imageInstanceCache', imgInstanceCache);
 
 // List projects
 for (var i = 0; i < getCategories().length; i++) {

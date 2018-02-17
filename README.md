@@ -38,6 +38,7 @@ This section is my notebook and it's constantly changing.
 * [ ] CSS prefixes
 * [ ] Documentation
 * [ ] Polyfills: Promise, ...
+* [ ] Cache-Control for images etc.
 
 ### Licencing issues
 * [ ] Server & domain

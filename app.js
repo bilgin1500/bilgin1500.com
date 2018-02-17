@@ -22,42 +22,43 @@ if (getSetting('isPerformanceActive')) {
   var pageLoadBeginTime = performance.now();
 }
 
-// Observe the font loads
-var fontAvenirRegular = new FontFaceObserver('AvenirNextLTPro-Regular'),
-  fontAvenirHeavy = new FontFaceObserver('AvenirNextLTPro-Heavy');
+docReady().then(function() {
+  // Observe the font loads
+  var fontAvenirRegular = new FontFaceObserver('AvenirNextLTPro-Regular'),
+    fontAvenirHeavy = new FontFaceObserver('AvenirNextLTPro-Heavy');
 
-Promise.all([
-  docReady(),
-  fontAvenirRegular.load(),
-  fontAvenirHeavy.load()
-]).then(function() {
-  var $logoWrapper = createEl('h1', { id: 'logo' });
-  var $logo = createEl('a', { href: '/' });
-  var $wrapper = createEl('div', { id: 'content-wrapper' });
-  var $app = document.getElementById('app');
+  Promise.all([
+    fontAvenirRegular.load(),
+    fontAvenirHeavy.load()
+  ]).then(function() {
+    var $logoWrapper = createEl('h1', { id: 'logo' });
+    var $logo = createEl('a', { href: '/' });
+    var $wrapper = createEl('div', { id: 'content-wrapper' });
+    var $app = document.getElementById('app');
 
-  for (var i = 0; i < getPages().length; i++) {
-    var pageSlug = getPages()[i].slug;
-    $wrapper.appendChild(require('components/' + pageSlug).default);
-  }
+    for (var i = 0; i < getPages().length; i++) {
+      var pageSlug = getPages()[i].slug;
+      $wrapper.appendChild(require('components/' + pageSlug).default);
+    }
 
-  $logo.innerHTML = getInfo('title');
-  $logoWrapper.appendChild($logo);
-  $app.appendChild($logoWrapper);
-  $app.appendChild($menu);
-  $app.appendChild($wrapper);
+    $logo.innerHTML = getInfo('title');
+    $logoWrapper.appendChild($logo);
+    $app.appendChild($logoWrapper);
+    $app.appendChild($menu);
+    $app.appendChild($wrapper);
 
-  router.init();
-  events.publish('page.ready');
+    router.init();
+    events.publish('page.ready');
 
-  // Log the perf
-  if (getSetting('isPerformanceActive')) {
-    var pageLoadEndTime = performance.now();
-    log(
-      '[PERF] Page is ready in ' +
-        Math.round(pageLoadEndTime - pageLoadBeginTime) +
-        ' milliseconds.',
-      { color: 'green' }
-    );
-  }
+    // Log the perf
+    if (getSetting('isPerformanceActive')) {
+      var pageLoadEndTime = performance.now();
+      log(
+        '[PERF] Page is ready in ' +
+          Math.round(pageLoadEndTime - pageLoadBeginTime) +
+          ' milliseconds.',
+        { color: 'green' }
+      );
+    }
+  });
 });

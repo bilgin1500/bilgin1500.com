@@ -65,11 +65,6 @@ var Project = {
           <span>${args.adjacent.next.name}</span>
         </a>
       </div>
-      <div class="project-footer">
-        <div class="inner-wrapper">
-          <p>&copy${args.year}, BİLGİN ÖZKAN</p>
-        </div>
-      </div>
     </div>
     `;
   },
@@ -118,30 +113,8 @@ var Project = {
             break;
         }
 
-        // Append the content to the grid frame if it's visually needed
-        // or append it to the inner-wrapper directly
-        if (sectionData.frame) {
-          // Add frame name as a class
-          addClass($sectionWrapper, 'frame-' + sectionData.frame);
-
-          // 9-box framing
-          /*var $frame = frame.create({
-            type: sectionData.frame,
-            content: sectionData._instance.element,
-            url: _this.data.url,
-            title: _this.data.name
-          });*/
-
-          // Append the frames
-          //$sectionInnerWrapper.appendChild($frame);
-        } else {
-          // Add section's type as a frame name class
-          addClass($sectionWrapper, 'frame-' + sectionData.type);
-          // Append the content without frames
-          $sectionInnerWrapper.appendChild(sectionData._instance.element);
-        }
-
-        // Append section content and wrappers
+        // Append the content
+        $sectionInnerWrapper.appendChild(sectionData._instance.element);
         $sectionWrapper.appendChild($sectionInnerWrapper);
         $projectShowcase.appendChild($sectionWrapper);
 
@@ -219,10 +192,12 @@ var Project = {
         $navItemText.innerHTML = sectionData.name;
 
         // Append nav item
-        var sectionIcon = createEl('img', {
-          src: require('images/' + sectionData.icon + '.svg')
-        });
-        $navItem.appendChild(sectionIcon);
+        $navItem.insertAdjacentHTML(
+          'beforeend',
+          require('!svg-inline-loader?removeSVGTagAttrs=false!images/' +
+            sectionData.icon +
+            '.svg')
+        );
         $navItem.appendChild($navItemText);
         $projectNav.appendChild($navItem);
       });
@@ -577,8 +552,6 @@ var Project = {
         src: require('images/chevron-right.svg')
       }
     };
-
-    _this.data.year = new Date().getFullYear();
 
     // Stop the main screen momentums
     for (var i = 0; i < getSetting('momentumCache').length; i++) {
