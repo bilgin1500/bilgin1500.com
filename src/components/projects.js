@@ -1,86 +1,101 @@
-import { TweenMax, TimelineMax } from 'gsap';
+import Momentum from 'utilities/momentum';
+import Image from 'utilities/image';
 import {
+  isUndefined,
   createEl,
-  getHeight,
   removeClass,
   addClass,
-  momentum
+  slugify
 } from 'utilities/helpers';
-import projectThumbTemplate from 'templates/project-thumbnail';
-import data from 'content/index';
+import {
+  getProjectsByCategory,
+  getCategories,
+  setSetting
+} from 'utilities/orm';
 import 'css/projects';
 
-var $wrapper = createEl('div', { id: 'projects' }),
-  $items = createEl('div', { class: 'project-items' });
+// Template for category title
+function templateTitle(args) {
+  return `<h3>${args.title}</h3>`;
+}
 
-/* Filter projects from all the sections in the db */
+// Template for single project showcase
+function templateProject(args) {
+  return `<a href="/projects/${slugify(args.name)}" id="project-thumb-${slugify(
+    args.name
+  )}" class="project-item ${args.theme && args.theme.size} ${args.theme &&
+    args.theme.color}">
+    <div class="project-visual"></div>
+    <div class="project-desc">
+      <h4>${args.name}</h4>
+      <p>${args.desc}</p>
+      <div class="tags">
+        <span>${args.meta.tags.join('</span><span>')}</span>
+      </div>
+    </div>
+  </a>`;
+}
 
-var projectSection = data.pages.filter(function(page) {
-  return page.slug == 'projects';
-});
+// Create elements and cache them
+var $wrapper = createEl('div', { id: 'projects' });
 
-var CssAnim_defaultClass = 'paused',
-  CssAnim_playingClass = 'playing',
-  CssAnim_animClass = 'animation';
+// Cache all the images to control the loading process in the near future
+var imgInstanceCache = [];
 
-/**
- * Toggle SVG parts inside the element to pause and play
- * @param  {element} $projectItem - The parent element which contains the SVG doc
- */
-var toggleSVGAnimations = function($projectItem) {
-  var status = 'playing';
-  var $animatedSVGelements = $projectItem.querySelectorAll(
-    '.' + CssAnim_playingClass
+// Function wrapper to list and append projects by category
+function listProjects(categoryName) {
+  // Create a wrapper for this category
+  var $items = createEl('div', {
+    class: 'project-items ' + categoryName.toLowerCase().replace(/\s/g, '-')
+  });
+
+  // Category title
+  $wrapper.insertAdjacentHTML(
+    'beforeend',
+    templateTitle({ title: categoryName })
   );
 
-  if ($animatedSVGelements.length == 0) {
-    $animatedSVGelements = $projectItem.querySelectorAll(
-      '.' + CssAnim_defaultClass
-    );
-    status = 'paused';
-  }
+  // Iterate all projects in db, append them to the DOM
+  getProjectsByCategory(categoryName).forEach(function(projectData, i) {
+    var projectSlug = slugify(projectData.name);
+    projectData.thumbnail =
+      projectData.theme && projectData.theme.thumbnail
+        ? require('../projects/' +
+            projectSlug +
+            '/' +
+            projectData.theme.thumbnail)
+        : '';
 
-  for (var i = $animatedSVGelements.length - 1; i >= 0; i--) {
-    if (status == 'playing') {
-      removeClass($animatedSVGelements[i], CssAnim_playingClass);
-      addClass($animatedSVGelements[i], CssAnim_defaultClass);
-    } else {
-      removeClass($animatedSVGelements[i], CssAnim_defaultClass);
-      addClass($animatedSVGelements[i], CssAnim_playingClass);
-    }
-  }
-};
+    $items.insertAdjacentHTML('beforeend', templateProject(projectData));
 
-// Iterate all the projects in the db,
-// append them to the DOM and init the parallax effect
-projectSection[0].list.forEach(function(projectData, i) {
-  if (projectData.thumbnail) {
-    projectData.thumbnail = require('content/' +
-      projectData.slug +
-      '/' +
-      projectData.thumbnail);
-  }
+    var $projectItem = $items.lastChild;
+    var $projectVisual = $projectItem.querySelector('.project-visual');
 
-  $items.insertAdjacentHTML('beforeend', projectThumbTemplate(projectData));
+    // Create Image instance
+    var imgInstance = new Image({
+      src: projectData.thumbnail,
+      alt: projectData.name
+    });
+    $projectVisual.appendChild(imgInstance.elements.wrapper);
 
-  var $projectItem = $items.lastChild,
-    $projectItems = $items.children,
-    $projectVisual = $projectItem.querySelector('.project-visual svg'),
-    $SVGelementsToBlow = $projectItem.querySelectorAll('.blow'),
-    $projectH2 = $projectItem.querySelector('.project-desc h2'),
-    $projectP = $projectItem.querySelector('.project-desc p');
+    // Cache Image instance
+    imgInstanceCache.push(imgInstance);
 
-  momentum($projectItem, projectData.momentum);
-
-  $projectItem.addEventListener('mouseenter', function() {
-    toggleSVGAnimations($projectItem);
+    //new Momentum($projectItem).start();
   });
 
-  $projectItem.addEventListener('mouseleave', function() {
-    toggleSVGAnimations($projectItem);
-  });
-});
+  $wrapper.appendChild($items);
+}
 
-$wrapper.appendChild($items);
+// Save momentum cache
+setSetting('momentumCache', []);
+
+// Save img instance cache
+setSetting('imageInstanceCache', imgInstanceCache);
+
+// List projects
+for (var i = 0; i < getCategories().length; i++) {
+  listProjects(getCategories()[i]);
+}
 
 export default $wrapper;

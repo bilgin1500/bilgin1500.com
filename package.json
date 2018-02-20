@@ -14,19 +14,16 @@
   "author": "bilgin1500@gmail.com",
   "license": "ISC",
   "dependencies": {
-    "dot": "^1.1.2",
     "fontfaceobserver": "^2.0.13",
     "gsap": "^1.20.3",
     "normalize-wheel": "^1.0.1",
     "normalize.css": "^7.0.0",
     "object-assign": "^4.1.1",
     "page": "^1.7.1",
-    "scrollmagic": "^2.0.5",
     "throttle-debounce": "^1.0.1"
   },
   "devDependencies": {
     "css-loader": "^0.28.7",
-    "dot-loader": "^0.1.1",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.5",
     "html-webpack-plugin": "^2.30.1",

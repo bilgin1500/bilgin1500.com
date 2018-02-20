@@ -1,6 +1,7 @@
 @import "assets/fonts"
 @import "assets/colors"
-@import "mixins/layout"
+@import "assets/layout"
+@import "assets/bulleted"
 
 #project-window
   display block
@@ -11,50 +12,32 @@
   top 100%
   left 0
   background-color #fff
-  border-top 4px solid #000
+  border-width 10px
+  border-style solid
+  border-color #000
+  box-sizing border-box
   
   .project-wrapper
     absoluteFull()
   
     .project-desc
-      position relative
-      top 100px
-      height 65px
-      text-align center
-      z-index 2
-      pointer-events none
-      @media screen and (min-width: tablet)
-        top 0
-        height 20%
+      position absolute
+      right 40px
+      top 40px
+      text-align right
       
-      .inner-wrapper
-        absoluteFullWidth()
-        bottom 0      
-        @media screen and (min-width: tablet)
-          top 50%
-          margin-top -36px
-      
-        h2
-          font-family museoB
-          font-size 23px
-          line-height 1.1em
-          margin 0
-          @media screen and (min-width: tablet)
-            font-size 29px
-          
-        h3
-          display inline-block
-          font-family museo
-          font-weight normal
-          font-size 19px
-          line-height 1.6em
-          margin-top 5px
-          margin-bottom 0
-          padding-left 2px
-          padding-right 2px
-          background linear-gradient(transparent 50%,yellow 50%, yellow 100%)
-          @media screen and (min-width: tablet)
-            font-size 23px
+      h2
+        font-family AvenirRegular
+        font-size fNormal
+        margin 0
+        
+      h3
+        display inline-block
+        font-family AvenirRegular
+        font-weight normal
+        font-size fSmall
+        margin-top 5px
+        margin-bottom 0
 
     .project-showcase
       absoluteFull()
@@ -69,66 +52,27 @@
         
         > .section-inner-wrapper
           position relative
-          top calc(165px)
-          max-width 960px
-          height calc(90% - 230px)
-          width 90%
+          width calc(100% - 160px)
+          max-width 800px
+          height calc(100% - 240px)
           margin 0 auto
-          padding 20px
+          top 120px
           box-sizing border-box
-          @media screen and (min-width: tablet)
+          /*@media screen and (min-width: tablet)
             top 20%
             height 70%
-            width calc(100% - 240px)
+            width calc(100% - 240px)*/
             
     .project-nav
-      absoluteFullWidth()
-      bottom 10%
-      height 65px
+      position absolute
       text-align center
       z-index 2
       user-select none
-      @media screen and (min-width: tablet)
-        top 50%
-        right 40px
-        bottom auto
-        left auto
-        height auto
-        width auto
-        transform translateY(-50%)
-      
-      a
-        display inline-block
-        color #000
-        text-decoration none
-        font-size 13px
-        font-family museoSans
-        transition opacity 250ms
-        margin-right 20px
-        @media screen and (min-width: tablet)
-          display block
-          margin-right 0
-          margin-bottom 20px
-        &:last-child
-          margin-bottom 0
-          margin-right 0
-        &.active
-        &:hover
-          .hovered-svg-element
-            fill yellow
+      top 50%
+      right 30px
+      transform translateY(-50%)
+      bulleted('vertical')
         
-        .hovered-svg-element
-          transition fill 150ms
-        
-        span
-        svg
-          display block
-          text-align center
-          margin 0 auto
-        
-        span
-          margin-top 10px
-          
     .projects-adjacent-nav
       display none
       position fixed
@@ -145,30 +89,3 @@
         
         span
           display none
-          
-    .project-footer
-      absoluteFullWidth()
-      bottom 0
-      height 10%
-      z-index 1
-      user-select none
-      pointer-events none
-      
-      .inner-wrapper
-        absoluteFullWidth()
-        top 50%
-        margin-top -8px
-      
-        p
-          color #ccc
-          font-size 10px
-          line-height 17px
-          text-align center
-          margin 0
-          
-          svg
-            display inline-block
-            vertical-align middle
-
-  .project-bg-shapes
-    absoluteFull()

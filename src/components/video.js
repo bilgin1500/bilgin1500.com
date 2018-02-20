@@ -1,77 +1,75 @@
-import { createEl } from 'utilities/helpers';
+import { createEl, slugify } from 'utilities/helpers';
 import 'css/video';
 
 /*
  * Video constructor
- * @param  {object} args - argument:
- *                       projectSlug: current project's slug
- *                       sectionSlug: current section's slug
- *                       content: section's content property, usually an array
- * @return {element} - Wrapper element
+ * @param  {object} sectionData - content: Section content from the database
+ *                                name: Section name from the database 
+ *                                type: Section type (this Constructor)
+ *                                _draggable: This sections's Draggable instance
+ *                                _projectName: Parent project's data
+ *                                _wrapper: Section wrapper element
  */
-function Video(args) {
-  this.projectSlug = args.projectSlug;
-  this.sectionSlug = args.sectionSlug;
-  this.element = this._init(args);
+function Video(sectionData) {
+  this.isActive = false;
+  this.content = sectionData.content;
+  this.projectSlug = slugify(sectionData._projectName);
+  this._createDom();
 }
 
-Video.prototype = {
-  /**
-   * Creates the <video> element
-   * @param  {object} args Argument object with projectSlug and content properties
-   * @return {element} - Wrapper element
-   */
-  _init: function(args) {
-    // Poster image for video
-    var videoPoster = require('content/' +
-      args.projectSlug +
+/**
+ * Creates the <video> element
+ */
+Video.prototype._createDom = function() {
+  // Poster image for video
+  var videoPoster = require('../projects/' +
+    this.projectSlug +
+    '/' +
+    this.content.poster);
+
+  // Create <video> tag
+  var $video = createEl('video', {
+    poster: videoPoster,
+    preload: 'none',
+    width: this.content.width,
+    height: this.content.height,
+    muted: true,
+    loop: true
+  });
+
+  // Create a div wrapper
+  var $wrapper = createEl('div', { class: 'video-wrapper' });
+  $wrapper.appendChild($video);
+
+  // Append the sources
+  for (var i = 0; i < this.content.sources.length; i++) {
+    var videoSource = require('../projects/' +
+      this.projectSlug +
       '/' +
-      args.content.poster);
+      this.content.sources[i].source);
 
-    // Create <video> tag
-    var $video = createEl('video', {
-      poster: videoPoster,
-      preload: 'none',
-      width: args.content.width,
-      height: args.content.height,
-      muted: true,
-      loop: true
-    });
-
-    // Create a div wrapper
-    var $wrapper = createEl('div', { class: 'video-wrapper' });
-    $wrapper.appendChild($video);
-
-    // Append the sources
-    for (var i = 0; i < args.content.sources.length; i++) {
-      var videoSource = require('content/' +
-        args.projectSlug +
-        '/' +
-        args.content.sources[i].source);
-
-      $video.appendChild(
-        createEl('source', {
-          src: videoSource,
-          type: 'video/' + args.content.sources[i].type
-        })
-      );
-    }
-
-    // HTML5 <video> API
-    this.api = $video;
-
-    return $wrapper;
-  },
-
-  // Api wrapper for video's pause method
-  pause: function() {
-    this.api.pause();
-  },
-
-  // Api wrapper for video's pause method
-  play: function() {
-    this.api.play();
+    $video.appendChild(
+      createEl('source', {
+        src: videoSource,
+        type: 'video/' + this.content.sources[i].type
+      })
+    );
   }
+
+  // HTML5 <video> API
+  this.api = $video;
+  // Cache the element
+  this.element = $wrapper;
+};
+
+// Api wrapper for video's pause method
+Video.prototype.pause = function() {
+  this.api.pause();
+};
+
+// Api wrapper for video's pause method
+Video.prototype.play = function() {
+  this.api.play();
 };
 
 export default Video;

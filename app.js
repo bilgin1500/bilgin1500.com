@@ -1,60 +1,65 @@
+// Import all the GSAP related things
+// They will be inserted into the global namespace
+// so that one time injection would be enough
+import 'gsap';
+import 'gsap/Draggable';
+import 'ScrollToPlugin';
+import 'ThrowPropsPlugin';
+
+// Other injections
 import FontFaceObserver from 'fontfaceobserver';
-import { docReady, createEl } from 'utilities/helpers';
-import { SVGIcon } from 'utilities/svg';
+import { docReady, createEl, slugify } from 'utilities/helpers';
 import events from 'utilities/events';
 import { log } from 'utilities/helpers';
 import router from 'utilities/router';
+import { getInfo, getSetting, getPages } from 'utilities/orm';
 import $menu from 'components/menu';
-import data from 'content/index';
 import 'normalize.css';
 import 'css/main';
+import 'css/helpers';
 
 // Preload time
-if (data.settings.isPerformanceActive) {
+if (getSetting('isPerformanceActive')) {
   var pageLoadBeginTime = performance.now();
 }
 
-// Observe the font loads
-var fontMuseoSans300 = new FontFaceObserver('MuseoSans-300'),
-  fontMuseoSans300I = new FontFaceObserver('MuseoSans-300Italic'),
-  fontMuseoSans900 = new FontFaceObserver('MuseoSans-900'),
-  fontMuseo300 = new FontFaceObserver('Museo-300'),
-  fontMuseo700 = new FontFaceObserver('Museo-700');
+docReady().then(function() {
+  // Observe the font loads
+  var fontAvenirRegular = new FontFaceObserver('AvenirNextLTPro-Regular'),
+    fontAvenirHeavy = new FontFaceObserver('AvenirNextLTPro-Heavy');
 
-Promise.all([
-  docReady(),
-  fontMuseoSans300.load(),
-  fontMuseoSans300I.load(),
-  fontMuseoSans900.load(),
-  fontMuseo300.load(),
-  fontMuseo700.load()
-]).then(function() {
-  var $logo = new SVGIcon('logo', { id: 'logo' });
-  var $logoWrapper = createEl('a', { id: 'logo-wrapper', href: '/' });
-  var $wrapper = createEl('div', { id: 'content-wrapper' });
-  var $app = document.getElementById('app');
+  Promise.all([
+    fontAvenirRegular.load(),
+    fontAvenirHeavy.load()
+  ]).then(function() {
+    var $logoWrapper = createEl('h1', { id: 'logo' });
+    var $logo = createEl('a', { href: '/' });
+    var $wrapper = createEl('div', { id: 'content-wrapper' });
+    var $app = document.getElementById('app');
 
-  for (var i = 0; i < data.pages.length; i++) {
-    var pageSlug = data.pages[i].slug;
-    $wrapper.appendChild(require('components/' + pageSlug).default);
-  }
+    for (var i = 0; i < getPages().length; i++) {
+      var pageSlug = slugify(getPages()[i].name);
+      $wrapper.appendChild(require('components/' + pageSlug).default);
+    }
 
-  $logoWrapper.appendChild($logo);
-  $app.appendChild($logoWrapper);
-  $app.appendChild($menu);
-  $app.appendChild($wrapper);
+    $logo.innerHTML = getInfo('title');
+    $logoWrapper.appendChild($logo);
+    $app.appendChild($logoWrapper);
+    $app.appendChild($menu);
+    $app.appendChild($wrapper);
 
-  router.init();
-  events.publish('page.ready');
+    router.init();
+    events.publish('page.ready');
 
-  // Log the perf
-  if (data.settings.isPerformanceActive) {
-    var pageLoadEndTime = performance.now();
-    log(
-      '[PERF] Page is ready in ' +
-        Math.round(pageLoadEndTime - pageLoadBeginTime) +
-        ' milliseconds.',
-      { color: 'green' }
-    );
-  }
+    // Log the perf
+    if (getSetting('isPerformanceActive')) {
+      var pageLoadEndTime = performance.now();
+      log(
+        '[PERF] Page is ready in ' +
+          Math.round(pageLoadEndTime - pageLoadBeginTime) +
+          ' milliseconds.',
+        { color: 'green' }
+      );
+    }
+  });
 });

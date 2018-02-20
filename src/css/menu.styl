@@ -1,56 +1,75 @@
-hideButtons()
-  position absolute
-  right -100%
-  transform scale(0.5)
+@import "assets/layout"
+@import "assets/fonts"
 
-#menu 
+border()
+  content ''
+  display block
+  width 10px
+  border-top 1px solid darksalmon
+
+#menu
   position fixed
+  top 60px
   right 40px
-  top 30px
-  width 50px
-  height 50px
-  z-index 100
-  &.opened
-    bottom 30px
-    height auto
-  
-  svg
-    height 100%
-    width 100%
+  z-index 101
+  @media screen and (min-width: desktop)
+    top 120px
+    left 0
+    right auto
+    &:before
+      border()
+      margin-left 10px
+      margin-bottom 10px
 
-/*#line-wrapper
+.project-window
+  #nav-pages
+    display none
+
+#nav-pages
   display none
   @media screen and (min-width: tablet)
-    display block*/
-
-#button-wrapper 
-  pointer-events none
-  position absolute
-  display block
-  overflow hidden
-  left -130px
-  right 0
-  top 45px
-  bottom 25px
-  z-index 1
-
-  .button 
-    hideButtons()
-    pointer-events auto
-    transform-origin 100% 50% 
-
-#trigger 
-  display block
-  width 37px
-  height 37px
-  position absolute
-  top 6px
-  right -4px
-  z-index 2
-  @media screen and (min-width: tablet)
-    /*right -4px*/
-  &.close-button svg
     display block
+  a
+    display inline-block
+    font-size fMini
+    line-height 1em
+    color #000
+    margin-left 15px
+    padding 6px 10px
+    text-decoration none
+    transition color 300ms
+    @media screen and (min-width: desktop)
+      display block
+      margin-left 50px
+      padding 10px 0
   
-  svg
-    display none
+#nav-social 
+  position fixed
+  bottom 60px
+  right 50px
+  a
+    display inline-block
+    margin-left 15px
+    &:first-child
+      margin-left 0
+    svg
+      width 16px
+      height 16px
+      path
+        fill #000
+    span
+      display none
+
+#copyright
+  position fixed
+  bottom 30px
+  right 0
+  &:after
+    border()
+    float right
+    margin-right 10px
+    margin-top 10px
+  p
+    margin-right 50px
+    font-size fTiny
+  

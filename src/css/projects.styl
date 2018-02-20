@@ -1,8 +1,15 @@
-@import "mixins/layout"
+@import "assets/layout"
 @import "assets/fonts"
+@import "assets/colors"
 
 #projects
-  border-top 1px solid #000
+  
+  h3
+    font-size fTiny
+    letter-spacing 1.5px
+    text-transform uppercase
+    color rgba(0,0,0,0.5)
+    margin 30px 0
 
   .project-items 
     flex()
@@ -10,35 +17,74 @@
     z-index 2
 
     .project-item 
+      position relative
       display block
       width 100%
-      border 2px solid #000
-      background-color #fff
+      margin-bottom 20px
       z-index 2
-      margin 2% 2% 20% 2%
       text-decoration none
-      @media screen and (min-width: tablet)
-        &.small 
-          width 30%
-        &.medium 
-          width 40%
-        &.large 
-          width 60%
-        &:hover
+      width 100%
+      &:last-child
+        margin-bottom 0
+      &.dark
+        color rgba(0,0,0,0.75)
+        .tags
+          span
+            border-color rgba(0,0,0,0.3)
+      &.light
+        color rgba(255,255,255,0.75)
+        .tags
+          span
+            border-color rgba(255,255,255,0.2)
+      &:hover
+        .tags
+          display block !important
+            
+      .project-visual
+        
+        .img-wrapper
           background-color #eee
-
-      .project-visual 
-        box-sizing border-box
-        width 100%
-        padding 20px
-        min-height 100px
-        background-color #000
+          padding-bottom 66.66%
+          
+          .img
+            position absolute
+          
+          .loader
+            position absolute
+            top 50%
+            left 50%
+            margin-left -19px
+            margin-top -19px
 
       .project-desc 
+        position absolute
+        top 0
+        bottom 0
         padding 20px
-        color #000
-        h2
+        width 100%
+        box-sizing border-box
+        
+        h4
+          margin 0
+          font-size fNormal
+          margin-bottom 5px
+          
         p
           margin 0
-          word-break break-word
+          font-size fSmall
+          
+        .tags
+          display none
+          margin-top 10px
+          span
+            display inline-block
+            font-size fTiny
+            border-width 1px
+            border-style solid
+            padding 7px 10px 5px 10px
+            margin-right 10px
+            text-transform uppercase
+            letter-spacing 0.1em
+          &:last-child 
+            margin-right 0
 

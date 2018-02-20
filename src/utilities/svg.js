@@ -1,7 +1,17 @@
 import objectAssign from 'object-assign';
-import icons from 'content/icons';
 import { isUndefined, isNull } from 'utilities/helpers';
 import { $doc, createId } from 'utilities/helpers';
+
+var defaults = {
+  fill: '#fff',
+  stroke: {
+    stroke: '#000',
+    'stroke-width': 1,
+    'stroke-linecap': 'round',
+    'stroke-linejoin': 'round',
+    'stroke-miterlimit': 10
+  }
+};
 
 /**
  * Creates SVG elements
@@ -34,9 +44,9 @@ function SVGElement(type, attributes) {
     if (
       !isUndefined(attributes.width) &&
       !isUndefined(attributes.height) &&
-      isUndefined(attributes.viewbox)
+      isUndefined(attributes.viewBox)
     )
-      attributes.viewbox = '0 0 ' + attributes.width + ' ' + attributes.height;
+      attributes.viewBox = '0 0 ' + attributes.width + ' ' + attributes.height;
   }
 
   // Mask attribute is a reference to other element
@@ -66,7 +76,7 @@ SVGElement.prototype.setAttributes = function(attributes) {
           case 'fill':
             if (typeof val !== 'string') return;
             if (val == 'default') {
-              this.element.setAttribute('fill', icons.settings.fill);
+              this.element.setAttribute('fill', defaults.fill);
             } else {
               this.element.setAttribute('fill', val);
             }
@@ -76,9 +86,9 @@ SVGElement.prototype.setAttributes = function(attributes) {
           // stroke objects like stroke: {stroke-width:'',stroke-linecap:''}
           case 'stroke':
             if (typeof val == 'object') {
-              val = objectAssign({}, icons.settings.stroke, val);
+              val = objectAssign({}, defaults.stroke, val);
             } else if (typeof val == 'string' && val == 'default') {
-              val = icons.settings.stroke;
+              val = defaults.stroke;
             }
 
             for (var strokeAttr in val) {
@@ -98,6 +108,7 @@ SVGElement.prototype.setAttributes = function(attributes) {
 };
 
 /**
+ * DEPRECATED
  * Creates a svg icon from given path and circle data
  * 
  * @param  {string} iconName - Icon name from the iconList
@@ -114,6 +125,7 @@ function SVGIcon(
   childAttributes,
   iconList
 ) {
+  //!! icons.js is DEPRECATED, this won't work anymore
   iconList = isUndefined(iconList) || isNull(iconList) ? icons.list : iconList;
 
   var iconData = iconList[iconName];
@@ -127,23 +139,13 @@ function SVGIcon(
     )
   );
 
-  if (!isUndefined(iconData.paths)) {
-    for (var i = 0; i < iconData.paths.length; i++) {
-      var $path = new SVGElement(
-        'path',
-        objectAssign(iconData.paths[i], childAttributes)
+  if (!isUndefined(iconData.shapes)) {
+    for (var i = 0; i < iconData.shapes.length; i++) {
+      var $shape = new SVGElement(
+        iconData.shapes[i].type,
+        objectAssign(iconData.shapes[i].attributes, childAttributes)
       );
-      $iconContainer.appendChild($path);
-    }
-  }
-
-  if (!isUndefined(iconData.circles)) {
-    for (var i = 0; i < iconData.circles.length; i++) {
-      var $circle = new SVGElement(
-        'circle',
-        objectAssign(iconData.circles[i], childAttributes)
-      );
-      $iconContainer.appendChild($circle);
+      $iconContainer.appendChild($shape);
     }
   }
 
