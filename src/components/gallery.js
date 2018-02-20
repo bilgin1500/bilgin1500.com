@@ -131,10 +131,6 @@ Gallery.prototype._createSlide = function(index, source) {
       maxX: dragBoundaries
     },
     onPress: function(e) {
-      // Cache these values
-      dragStartY = this.y;
-      dragStartX = this.x;
-
       // Update the boundaries so that they cover the image
       var slideHeight = getHeight($slide);
       var imageHeight = getHeight($image);
@@ -174,8 +170,7 @@ Gallery.prototype._createSlide = function(index, source) {
       // to reset target's position with motion
       var resetDragToStartPos = TweenMax.to(this.target, 0.5, {
         paused: true,
-        y: dragStartY,
-        x: dragStartX,
+        x: 0,
         ease: _this.elasticEase
       });
 
@@ -330,7 +325,7 @@ Gallery.prototype.goTo = function(slideNo, immediately) {
       onComplete: function() {
         removeClass($currSlide, 'active');
         // Reset the current image's position
-        TweenMax.set(currImgInstance.elements.image, { x: 0, y: 0 });
+        _this.resetPosition(currImgInstance.elements.image);
       }
     });
   }
@@ -407,14 +402,14 @@ Gallery.prototype._mouseWheelNav = function(e) {
       }
 
       // If the draggable isn't initiated yet
-      // ThrowPropsPlugin and onUodate methods won't work
+      // ThrowPropsPlugin and onUpdate method don't work
       if (
-        isUndefined(imgInstance.initiatedDragging) ||
-        !imgInstance.initiatedDragging
+        isUndefined(imgInstance._initiatedDragging) ||
+        !imgInstance._initiatedDragging
       ) {
         imgInstance._draggable[0].startDrag(e);
         imgInstance._draggable[0].endDrag(e);
-        imgInstance.initiatedDragging = true;
+        imgInstance._initiatedDragging = true;
       }
 
       // Up and down scroll
@@ -430,6 +425,16 @@ Gallery.prototype._mouseWheelNav = function(e) {
       });
     }
   }
+};
+
+/**
+ * Reset position
+ */
+Gallery.prototype.resetPosition = function(el) {
+  if (isUndefined(el)) {
+    el = this.slides[this.currentIndex].image.elements.image;
+  }
+  TweenMax.set(el, { y: 0, x: 0 });
 };
 
 /**

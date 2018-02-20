@@ -379,9 +379,13 @@ var Project = {
             // Pause current video
             if (currentSection.type == 'video') {
               currentSection._instance.pause();
-              // Make the gallery inactive
-            } else if (currentSection.type == 'gallery') {
-              currentSection._instance.isActive = false;
+            }
+
+            // Make the section inactive..
+            currentSection._instance.isActive = false;
+            // and reset its position
+            if ('resetPosition' in currentSection._instance) {
+              currentSection._instance.resetPosition();
             }
           },
           onComplete: function() {
@@ -422,9 +426,7 @@ var Project = {
             }
 
             // After the section appears it means we're active
-            if (nextSection.type == 'gallery') {
-              nextSection._instance.isActive = true;
-            }
+            nextSection._instance.isActive = true;
 
             // Open the keyboard lock,
             // enable nav links and

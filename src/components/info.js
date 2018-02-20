@@ -1,5 +1,5 @@
 import normalizeWheel from 'normalize-wheel';
-import { createEl } from 'utilities/helpers';
+import { createEl, getHeight, isUndefined } from 'utilities/helpers';
 import Project from 'components/project';
 import { $doc, getHeight } from 'utilities/helpers';
 import 'css/info';
@@ -14,9 +14,11 @@ import 'css/info';
  *                                _wrapper: Section wrapper element
  */
 function Info(sectionData) {
+  this.isActive = false;
   this.elasticEase = Elastic.easeOut.config(1, 0.75);
   this.content = sectionData.content;
   this._parentDraggable = sectionData._draggable;
+  this._parentSectionWrapper = sectionData._wrapper;
   this.createDOM();
   this.addAllListeners();
   this._attachDraggable();
@@ -47,36 +49,25 @@ Info.prototype.createDOM = function() {
 Info.prototype._attachDraggable = function() {
   var _this = this;
 
-  var dragStartY,
-    dragThreshold = 75,
-    dragBoundaries = 100;
-
-  this._draggable = Draggable.create(this.element, {
+  _this._draggable = Draggable.create(_this.element, {
     type: 'y',
     throwProps: true,
     zIndexBoost: false,
     edgeResistance: 0.75,
     dragResistance: 0,
-    cursor: 'move',
-    bounds: {
-      minX: -dragBoundaries,
-      maxX: dragBoundaries
-    },
+    cursor: 'ns-resize',
     onPress: function(e) {
-      // Cache these values
-      dragStartY = this.y;
-
       // Update the boundaries so that they cover the image
-      /*var slideHeight = getHeight($slide);
-      var imageHeight = getHeight($image);
-      var dynamicDragBoundaryMinY = -imageHeight + slideHeight;
+      var slideHeight = getHeight(
+        _this._parentSectionWrapper.querySelector('.section-inner-wrapper')
+      );
+      var infoHeight = getHeight(_this.element);
+      var dynamicDragBoundaryMinY = -infoHeight + slideHeight;
 
       this.applyBounds({
-        minX: -dragBoundaries,
-        maxX: dragBoundaries,
         minY: dynamicDragBoundaryMinY,
         maxY: 0
-      });*/
+      });
 
       // Stop bubbling so that this draggable won't interfere with
       // section's draggable system
@@ -89,36 +80,6 @@ Info.prototype._attachDraggable = function() {
       // If the parent draggable is disabled manually we should enable it
       _this._parentDraggable.enable();
     }
-    /*onDragEnd: function() {
-      // If not dragged properly we'll use this tween
-      // to reset target's position with motion
-      var resetDragToStartPos = TweenMax.to(this.target, 0.5, {
-        paused: true,
-        y: dragStartY,
-        ease: _this.elasticEase
-      });
-
-      // The axis along which movement is locked during that
-      // particular drag (either "x" or "y"). For example,
-      // if lockAxis is true on a Draggable of type:"x,y",
-      // and the user starts dragging horizontally,
-      // lockedAxis would be "y" because vertical movement
-      // won't be allowed during that drag.
-      if (this.lockedAxis == 'y') {
-        // Check if the user is dragging good enough
-        // If he is, proceed with dragEnd effects.
-        if (this.endX > dragThreshold || this.endX < -dragThreshold) {
-          // Left/Right: Change the gallery slide
-          // Down/Up: Scroll the gallery image
-          if (dragSwipeDir == 'left') {
-            _this.next();
-          } else if (dragSwipeDir == 'right') {
-            _this.previous();
-          }
-        }
-        resetDragToStartPos.play();
-      }
-    }*/
   });
 };
 
@@ -127,21 +88,38 @@ Info.prototype._attachDraggable = function() {
  * @param  {object} e - event
  */
 Info.prototype._mouseWheelNav = function(e) {
-  //if (this.isActive && !this.isNavLocked) {
-  var normalized = normalizeWheel(e);
+  var _this = this;
 
-  // Up and down scroll
-  // It's synchronized with the draggable
-  ThrowPropsPlugin.to(this.element, {
-    throwProps: { y: Math.round(normalized.pixelY) * -25 },
-    force3D: true
-    /*onUpdate: function() {
-        imgInstance.draggable[0].update({
+  if (_this.isActive) {
+    var normalized = normalizeWheel(e);
+
+    // If the draggable isn't initiated yet
+    // ThrowPropsPlugin and onUpdate methods don't work
+    if (isUndefined(_this._initiatedDragging) || !_this._initiatedDragging) {
+      _this._draggable[0].startDrag(e);
+      _this._draggable[0].endDrag(e);
+      _this._initiatedDragging = true;
+    }
+
+    // Up and down scroll
+    // It's synchronized with the draggable
+    ThrowPropsPlugin.to(_this.element, {
+      throwProps: { y: Math.round(normalized.pixelY) * -25 },
+      force3D: true,
+      onUpdate: function() {
+        _this._draggable[0].update({
           applyBounds: true
         });
-      }*/
-  });
-  //}
+      }
+    });
+  }
+};
+
+/**
+ * Reset position
+ */
+Info.prototype.resetPosition = function() {
+  TweenMax.set(this.element, { y: 0 });
 };
 
 /**

@@ -11,6 +11,7 @@ import 'css/video';
  *                                _wrapper: Section wrapper element
  */
 function Video(sectionData) {
+  this.isActive = false;
   this.content = sectionData.content;
   this.projectSlug = slugify(sectionData._projectName);
   this._createDom();
