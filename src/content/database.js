@@ -20,46 +20,110 @@ module.exports = {
   },
   pages: [
     {
-      slug: 'intro',
       name: 'Intro',
       content:
-        '👋 Hi stranger. My name is Bilgin Özkan. I am a designer and developer with 10 years of experience in the service design with titles such as digital designer, art director and digital creative director. Currently I am the Product Design Manager at <a href="#">Yesthatsright</a>. You can reach me at <a href="#">bilgin1500@gmail.com</a>.<br/>And I guess that\'s it.',
-      list: [
-        'who loves to get inspired by great architecture.',
-        'who has a focus on web design',
-        'think off the grid.',
-        'decode guidelines.',
-        'code',
-        'play role playing games',
-        'play board games',
-        'read comics',
-        'get inspired by great architecture',
-        'enjoy good storytelling'
-      ]
+        'Hi there! I&apos;m Bilgin Özkan, a creative soul with a main focus on web design and development. Over the years I had the great opportunity to work for some of the best brands and products in Turkey such as Türkiye İş Bankası, Nike, Ikea, Babylon, Pozitif, Hürriyet and Enka Kültür Sanat. Currently I am partner and Digital Design Lead at <a href="#">Rolakosta</a>, a boutique design studio with a multidisciplinary approach specialized in branding, cultural projects and new media content.'
     },
     {
-      slug: 'projects',
       name: 'Projects',
       list: [
         {
-          slug: 'skytankingovenon',
-          name: 'SkytankingOvenon.com',
-          desc: 'Fueling the rockets',
-          url: 'http://skytankingovenon.com',
-          category: 'Commercial Works',
-          tags: ['Wordpress', 'Responsive'],
+          name: 'Skytanking Ovenon Website',
+          desc: 'Website design and development for Skytanking Ovenon',
+          meta: {
+            category: 'Commercial Work',
+            tags: ['Wordpress Integration', 'Responsive'],
+            links: [{ Website: 'http://skytankingovenon.com' }],
+            date: '2017'
+          },
           theme: {
             size: 'large',
             color: 'light',
+            bg: '#b9bcc5',
+            border: '#010a61',
             thumbnail: 'skytankingovenon-thumb.png',
             momentum: { speed: 0.4 }
           },
           sections: [
             {
+              name: 'About',
+              type: 'info',
+              content: [
+                {
+                  title: 'Problem',
+                  text:
+                    "After acquired by Hamburg based Skytanking Group, the Turkish Aviation Fuelling Company Ovenon, with its new name Skytanking Ovenon hired Rolakosta to design and develop their new corporate website. Our main goal was to merge the needs of Ovenon brand with their new global partner's vision and brand identity."
+                },
+                {
+                  title: 'Design',
+                  text:
+                    "After careful examination of the Skytanking website and detailed briefing process by Ovenon's lead team the design process began with the initial wireframing. After completed the architecture and the overall layout we iterated through the visual design with a modular approach where we've built variety of design choices for every module available on the page. The design process was finished in the browser by implementing the interaction layer including the animations and responsive layout."
+                },
+                {
+                  title: 'Results',
+                  text:
+                    'The light and modern design of the website gained very positive feedback from the users and the companies involved in the process. Thanks to the user-friendly Wordpress panel we have integrated the website is getting more content updates than before which makes it more alive than its counterparts.'
+                }
+              ]
+            },
+            {
+              name: 'Gallery',
+              type: 'gallery',
+              content: [
+                {
+                  source: 'skytankingovenon_brief.png',
+                  caption: '',
+                  alt: 'Briefing',
+                  shadow: false
+                },
+                {
+                  source: 'skytankingovenon_wireframe_1.png',
+                  caption:
+                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed facilisis ligula nec diam eleifend laoreet luctus id neque. Sed id metus id lacus molestie sagittis nec sit amet odio. Sed cursus eros pretium mauris posuere aliquam.',
+                  alt: 'Wireframe 1'
+                },
+                {
+                  source: 'skytankingovenon_wireframe_2.png',
+                  caption:
+                    'Nec diam eleifend laoreet luctus id neque. Sed id metus id lacus molestie sagittis nec sit amet odio. Sed cursus eros pretium mauris posuere aliquam.',
+                  alt: 'Wireframe 2'
+                },
+                {
+                  source: 'skytankingovenon_design_1.png',
+                  caption: '',
+                  alt: 'Design Draft 1'
+                },
+                {
+                  source: 'skytankingovenon_design_2.jpg',
+                  caption: '',
+                  alt: 'Design Draft 2'
+                },
+                {
+                  source: 'skytankingovenon_home.png',
+                  caption: '',
+                  alt: 'Final Design of the Home Page'
+                },
+                {
+                  source: 'skytankingovenon_list.png',
+                  caption: '',
+                  alt: 'Final Design of Listing Pages'
+                },
+                {
+                  source: 'skytankingovenon_single.png',
+                  caption: '',
+                  alt: 'Final Design of a Single Page'
+                },
+                {
+                  source: 'skytankingovenon_single_extended.png',
+                  caption: '',
+                  alt: 'Final Design of a Single Extended Page'
+                }
+              ]
+            },
+            {
               name: 'Desktop',
-              slug: 'desktop',
-              icon: 'desktop',
               type: 'video',
+              source: 'https://player.vimeo.com/video/252621827',
               content: {
                 poster: 'video-poster.png',
                 width: 640,
@@ -72,8 +136,6 @@ module.exports = {
             },
             {
               name: 'Mobile',
-              slug: 'mobile',
-              icon: 'mobile',
               type: 'video',
               content: {
                 poster: 'video-poster.png',
@@ -84,80 +146,18 @@ module.exports = {
                   { type: 'webm', source: 'video.webm' }
                 ]
               }
-            },
-            {
-              name: 'Gallery',
-              slug: 'gallery',
-              icon: 'gallery',
-              type: 'gallery',
-              content: {
-                sources: [
-                  {
-                    source: 'skytankingovenon_brief.png',
-                    caption: '',
-                    alt: 'Briefing',
-                    shadow: false
-                  },
-                  {
-                    source: 'skytankingovenon_wireframe_1.png',
-                    caption:
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed facilisis ligula nec diam eleifend laoreet luctus id neque. Sed id metus id lacus molestie sagittis nec sit amet odio. Sed cursus eros pretium mauris posuere aliquam.',
-                    alt: 'Wireframe 1'
-                  },
-                  {
-                    source: 'skytankingovenon_wireframe_2.png',
-                    caption:
-                      'Nec diam eleifend laoreet luctus id neque. Sed id metus id lacus molestie sagittis nec sit amet odio. Sed cursus eros pretium mauris posuere aliquam.',
-                    alt: 'Wireframe 2'
-                  },
-                  {
-                    source: 'skytankingovenon_design_1.png',
-                    caption: '',
-                    alt: 'Design Draft 1'
-                  },
-                  {
-                    source: 'skytankingovenon_design_2.jpg',
-                    caption: '',
-                    alt: 'Design Draft 2'
-                  },
-                  {
-                    source: 'skytankingovenon_home.png',
-                    caption: '',
-                    alt: 'Final Design of the Home Page'
-                  },
-                  {
-                    source: 'skytankingovenon_list.png',
-                    caption: '',
-                    alt: 'Final Design of Listing Pages'
-                  },
-                  {
-                    source: 'skytankingovenon_single.png',
-                    caption: '',
-                    alt: 'Final Design of a Single Page'
-                  },
-                  {
-                    source: 'skytankingovenon_single_extended.png',
-                    caption: '',
-                    alt: 'Final Design of a Single Extended Page'
-                  }
-                ]
-              }
-            },
-            {
-              name: 'About',
-              slug: 'about',
-              icon: 'info',
-              type: 'info',
-              content: {}
             }
           ]
         },
         {
-          slug: 'rolio',
           name: 'Rolio',
-          desc: 'A Theme for The Minimalist',
-          category: 'Personal Projects',
-          tags: ['Wordpress', 'Theme Development'],
+          desc: 'A minimal Wordpress theme for the creative individual ',
+          meta: {
+            category: 'Personal Project',
+            tags: ['Wordpress Theme Development'],
+            links: [{ GitHub: 'https://github.com/bilgin1500/rolio' }],
+            date: '2016 - 2017'
+          },
           theme: {
             size: 'large',
             color: 'dark',
@@ -166,70 +166,51 @@ module.exports = {
           },
           sections: [
             {
-              name: 'Desktop',
-              slug: 'desktop',
-              icon: 'desktop',
-              type: 'video',
-              content: {
-                poster: 'video-poster.png',
-                width: 640,
-                height: 400,
-                sources: [
-                  { type: 'mp4', source: 'SampleVideo_720x480_2mb.mp4' },
-                  { type: 'webm', source: 'SampleVideo_720x480_2mb.webm' }
-                ]
-              }
-            },
-            {
-              name: 'Mobile',
-              slug: 'mobile',
-              icon: 'mobile',
-              type: 'video',
-              content: {
-                poster: 'video-poster.png',
-                width: 320,
-                height: 240,
-                sources: [
-                  { type: 'mp4', source: 'video.mp4' },
-                  { type: 'webm', source: 'video.webm' }
-                ]
-              }
-            },
-            {
               name: 'Gallery',
-              slug: 'gallery',
-              icon: 'gallery',
               type: 'gallery',
-              content: {
-                sources: [
-                  {
-                    source: '1.jpg',
-                    caption:
-                      'Here I try to accomplish the best design learnings',
-                    alt: 'What an alternative text',
-                    width: 300,
-                    height: 100
-                  },
-                  { source: '2.png' }
-                ]
-              }
+              content: [
+                {
+                  source: '1.jpg',
+                  caption: 'Here I try to accomplish the best design learnings',
+                  alt: 'What an alternative text',
+                  width: 300,
+                  height: 100
+                },
+                { source: '2.png' }
+              ]
             },
             {
               name: 'About',
-              slug: 'about',
-              icon: 'info',
               type: 'info',
-              content: {}
+              content: [
+                {
+                  title: 'Problem',
+                  text:
+                    'At [Rolakosta][1] we had a customer segment consisting of individual artists, makers, writers and designers with a common need for a simple, ease to maintain and yet elegant website. After working with many of these troubled souls we found ourselves repeating the same design process in every project and decided to find a better and easy way to serve their common problem.'
+                },
+                {
+                  title: 'Design',
+                  text:
+                    "Altough these people are not familiar with any of the content management tools available in the market they have explicit opinions about their data, how to structure and showcase it. The content management tool we're going to provide them should be easy to learn and flexible to fit these individuals different needs. We decided to build a basic Wordpress theme using the Customize API where we can give them the opportunity to manage their own data and have the ability to change the look of their site in a easy and not that time consuming way. After sketching and designing the guide screens on Sketch the process mostly went in the browser. I was responsible for both the front-end design and development and Wordpress theme development."
+                },
+                {
+                  title: 'Results',
+                  text:
+                    'Rolio is used for many of our customers ([burakozkan.info](http://www.burakozkan.info), [artwalkistanbul.com](http://www.artwalkistanbul.com), [utkudervent.com](http://www.utkudervent.com)) at [Rolakosta][1]. Rolio&apos;s vision in the near future is to make its way to Wordpress Theme Directory and gain some recognition and feedback on [GitHub][2]'
+                }
+              ]
             }
           ]
         },
         {
-          slug: 'sirinpancaroglu',
-          name: 'Sirinpancaroglu.com',
+          name: 'Şirin Pancaroğlu Website',
           desc: 'Personal Website of Turkish Harpist Şirin Pancaroğlu',
-          url: 'http://sirinpancaroglu.com',
-          category: 'Commercial Works',
-          tags: ['Wordpress', 'Responsive'],
+          meta: {
+            category: 'Commercial Work',
+            tags: ['Wordpress Integration', 'Responsive'],
+            links: [{ Website: 'http://sirinpancaroglu.com' }],
+            date: '2017'
+          },
           theme: {
             color: 'dark',
             size: 'large',
@@ -237,58 +218,13 @@ module.exports = {
             momentum: { speed: 0.4 }
           },
           sections: []
-        },
-        {
-          slug: 'beatsmap',
-          name: 'Beatsmap',
-          desc: 'Follow the beats, never miss an event',
-          category: 'Personal Projects',
-          tags: ['Node.js', 'GraphQL', 'Crawler', 'React'],
-          theme: {
-            color: 'light',
-            size: 'large',
-            thumbnail: 'beatsmap.png',
-            momentum: { speed: 0.4 }
-          },
-          sections: []
-        },
-        {
-          slug: 'isbank-sermaye-piyasalari',
-          name: 'İş Bankası Sermaye Piyasaları',
-          desc:
-            'Aliquip exea commodo consequat duis aute irure dolor in reprehenderit',
-          category: 'Commercial Works',
-          tags: ['Web App', 'Cross Browser'],
-          theme: {
-            color: 'light',
-            size: 'large',
-            thumbnail: 'isbank.png',
-            momentum: { speed: 0.5 }
-          },
-          sections: []
-        },
-        {
-          slug: 'cappadox',
-          name: 'Cappadox',
-          desc: 'Suntin culpa qui officia deserunt mollit anim id est laborum',
-          category: 'Commercial Works',
-          tags: ['Responsive', 'Web App'],
-          theme: {
-            color: 'light',
-            size: 'large',
-            thumbnail: 'cappadox.png',
-            momentum: { speed: 0.5 }
-          },
-          sections: []
         }
       ]
     },
     {
-      slug: 'about',
       name: 'About me'
     },
     {
-      slug: 'sketchbook',
       name: 'Sketchbook'
     }
   ]

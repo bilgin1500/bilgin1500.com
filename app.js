@@ -8,7 +8,7 @@ import 'ThrowPropsPlugin';
 
 // Other injections
 import FontFaceObserver from 'fontfaceobserver';
-import { docReady, createEl } from 'utilities/helpers';
+import { docReady, createEl, slugify } from 'utilities/helpers';
 import events from 'utilities/events';
 import { log } from 'utilities/helpers';
 import router from 'utilities/router';
@@ -16,6 +16,7 @@ import { getInfo, getSetting, getPages } from 'utilities/orm';
 import $menu from 'components/menu';
 import 'normalize.css';
 import 'css/main';
+import 'css/helpers';
 
 // Preload time
 if (getSetting('isPerformanceActive')) {
@@ -37,7 +38,7 @@ docReady().then(function() {
     var $app = document.getElementById('app');
 
     for (var i = 0; i < getPages().length; i++) {
-      var pageSlug = getPages()[i].slug;
+      var pageSlug = slugify(getPages()[i].name);
       $wrapper.appendChild(require('components/' + pageSlug).default);
     }
 

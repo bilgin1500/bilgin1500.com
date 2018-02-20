@@ -1,4 +1,4 @@
-import { createEl } from 'utilities/helpers';
+import { createEl, slugify } from 'utilities/helpers';
 import { getPages, getInfo } from 'utilities/orm';
 import 'css/menu';
 
@@ -12,8 +12,8 @@ for (var i = 0; i < getPages().length; i++) {
   var page = getPages()[i];
 
   var $navItem = createEl('a', {
-    href: '/' + page.slug,
-    id: 'nav-' + page.slug
+    href: '/' + slugify(page.name),
+    id: 'nav-' + slugify(page.name)
   });
   $navItem.textContent = page.name;
   $navPages.appendChild($navItem);

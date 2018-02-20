@@ -1,16 +1,17 @@
+import Momentum from 'utilities/momentum';
+import Image from 'utilities/image';
 import {
   isUndefined,
   createEl,
   removeClass,
-  addClass
+  addClass,
+  slugify
 } from 'utilities/helpers';
 import {
   getProjectsByCategory,
   getCategories,
   setSetting
 } from 'utilities/orm';
-import Momentum from 'utilities/momentum';
-import Image from 'utilities/image';
 import 'css/projects';
 
 // Template for category title
@@ -20,14 +21,16 @@ function templateTitle(args) {
 
 // Template for single project showcase
 function templateProject(args) {
-  return `<a href="/projects/${args.slug}" id="project-thumb-${args.slug}" class="project-item ${args.theme &&
-    args.theme.size} ${args.theme && args.theme.color}">
+  return `<a href="/projects/${slugify(args.name)}" id="project-thumb-${slugify(
+    args.name
+  )}" class="project-item ${args.theme && args.theme.size} ${args.theme &&
+    args.theme.color}">
     <div class="project-visual"></div>
     <div class="project-desc">
       <h4>${args.name}</h4>
       <p>${args.desc}</p>
       <div class="tags">
-        <span>${args.tags.join('</span><span>')}</span>
+        <span>${args.meta.tags.join('</span><span>')}</span>
       </div>
     </div>
   </a>`;
@@ -54,10 +57,11 @@ function listProjects(categoryName) {
 
   // Iterate all projects in db, append them to the DOM
   getProjectsByCategory(categoryName).forEach(function(projectData, i) {
+    var projectSlug = slugify(projectData.name);
     projectData.thumbnail =
       projectData.theme && projectData.theme.thumbnail
         ? require('../projects/' +
-            projectData.slug +
+            projectSlug +
             '/' +
             projectData.theme.thumbnail)
         : '';

@@ -1,0 +1,80 @@
+@import "assets/triangle"
+
+$triangleWidth=10px
+$triangleHeight=5px
+
+bulleted(type = 'horizontal')
+  pointer-events none
+  
+  a
+    if type == 'horizontal'
+      display inline-block
+    else if type == 'vertical'
+      display block
+    position relative
+    box-sizing border-box
+    vertical-align middle
+    pointer-events auto
+    width 24px
+    height 24px
+    transform-origin 50% 50%
+    &:before
+      position absolute
+      display block
+      content ''
+      top 50%
+      left 50%
+      width 4px
+      height 4px
+      margin-top -4px
+      margin-left -4px
+      background-color rgba(0,0,0,0.75)
+      border 1px solid transparent
+      border-radius 50%
+      transition transform 150ms ease-in-out, background-color 250ms, border 250ms
+      transform-origin 50% 50%
+    &:hover
+      &:before
+        background-color #000
+        transform scale(1.5)
+      span
+        display block
+    &.active
+      &:before
+        background-color transparent
+        border 1px solid #000
+        transform scale(2)
+      &:hover
+        &:before
+          background-color transparent
+          transform scale(2)
+    
+    > span
+      display none 
+      position absolute
+      if type == 'horizontal'
+        bottom 100%
+        transform translateX(-50%)
+        margin-left 12px
+      else if type == 'vertical'
+        right 30px
+      span
+        background-color #000
+        color #fff
+        font-size 12px
+        border-radius 6px
+        padding 6px 12px 4px 12px
+        white-space nowrap
+      &:after
+        display block
+        content ''
+        if type == 'horizontal'
+          triangle($triangleWidth, $triangleHeight)
+          margin 0 auto
+        else if type == 'vertical'
+          triangle($triangleHeight, $triangleWidth, 'right')
+          position absolute
+          right -5px
+          top 50%
+          margin-top -6px
+        

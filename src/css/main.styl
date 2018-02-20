@@ -1,6 +1,6 @@
 @import "assets/fonts"
 @import "assets/colors"
-@import "mixins/layout"
+@import "assets/layout"
 
 html
   background-color darksalmon
@@ -31,59 +31,19 @@ p
   @media screen and (min-width: tablet)
     font-size fBigger
   a
+    position relative
     color rgba(0,0,0,0.5)
     text-decoration underline
-    position relative
     transition color 100ms
-    /*text-shadow -1px -1px 0 pageBackground, 1px -1px 0 pageBackground, -1px 1px 0 pageBackground, 1px 1px 0 pageBackground
-    background-image linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 2px, rgba(0,0,0,0.5) 2px, rgba(0,0,0,0.5) 3px, rgba(0, 0, 0, 0) 3px)*/
     &:hover
       color rgba(0,0,0,1)
       text-decoration none
-      /*background-image linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 2px, rgba(0,0,0,1) 2px, rgba(0,0,0,1) 3px, rgba(0, 0, 0, 0) 3px)*/
-
-.no-scroll
-  overflow hidden
-
-.button 
-  display block
-  background-color pageBackground
-  border 1px solid #000
-  padding 10px 20px
-  text-transform uppercase
-  font-size fSmall
-  box-shadow 2px 2px 0px 0px rgba(0, 0, 0, 0.75)
-  font-family AvenirRegular
-  color #000
-  text-decoration none
-  letter-spacing 0.03em
-  line-height 100%
-  outline 0
-  cursor pointer
-  &:hover 
-    background-color yellow
-  &:active
-  &.active 
-    background-color yellow
-    box-shadow none
-    margin-top 2px
-    margin-left 2px
-
-.img-wrapper
-  box-sizing border-box
-  width 100%
-  
-  .img
-    display block
-    width 100%
-    height auto
-    
-  .loader
-    display block
-    margin 0 auto
 
 #app
-  border: 10px solid darksalmon;
+  border-width 10px 
+  border-style solid
+  border-color darksalmon
+  //border-image linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%) 20
   box-sizing border-box
 
 #logo
@@ -95,14 +55,14 @@ p
   font-size fNormal
   z-index 101
   a
-    color rgba(0,0,0,0.75)
+    color #000
+    font-family AvenirRegular
     font-size fSmall
     text-align center
     text-decoration none
     display block
     line-height 1em
     padding 5px 10px
-    background-color #fff
     transition background-color 150ms,box-shadow 300ms
   @media screen and (min-width: tablet)
     top 60px

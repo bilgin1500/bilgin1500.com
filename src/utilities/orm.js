@@ -1,3 +1,4 @@
+import { slugify } from 'utilities/helpers';
 import data from 'content/database';
 
 /**
@@ -37,13 +38,13 @@ function getPages() {
 }
 
 /**
- * Grabs a specific page from db by slug
- * @param  {string} slug - Slug name of the page
+ * Grabs a specific page from db by name
+ * @param  {string} name -  Name of the page
  * @return {object} Single project object
  */
-function getPage(slug) {
+function getPage(name) {
   return getPages().filter(function(page) {
-    return page.slug == slug;
+    return slugify(page.name) == slugify(name);
   })[0];
 }
 
@@ -62,21 +63,21 @@ function getProjects() {
  */
 function getProjectsByCategory(catName) {
   return getPage('projects').list.filter(function(project) {
-    return project.category.toLowerCase() == catName.toLowerCase();
+    return project.meta.category.toLowerCase() == catName.toLowerCase();
   });
 }
 
 /**
- * Grabs a specific project from db by slug or index
+ * Grabs a specific project from db by name or index
  * @param  {string/number} by - 
- *                            slug: Slug name of the desired project
+ *                            name: Name of the desired project
  *                            index: Index number in the projects array 
  * @return {object} Single project object
  */
 function getProject(by) {
   if (typeof by == 'string') {
     return getProjects().filter(function(project) {
-      return project.slug == by;
+      return slugify(project.name) == slugify(by);
     })[0];
   } else if (typeof by == 'number') {
     return getProjects()[by];
@@ -85,26 +86,26 @@ function getProject(by) {
 
 /**
  * Finds a specific project's index number
- * @param  {string/number} by - Get by slug
+ * @param  {string} by - The name to search for
  * @return {number} Index number 
  */
-function findProjectIndex(slug) {
+function findProjectIndex(name) {
   return getProjects().findIndex(function(project) {
-    return project.slug === slug;
+    return slugify(project.name) === slugify(name);
   });
 }
 
 /**
- * Grabs a specific section from a specific project by slug or index
- * @param  {string/number} sectionBy - Slug name or index number of the section
- * @param  {string/number} projectBy - Slug name or index number of the project
+ * Grabs a specific section from a specific project by name or index
+ * @param  {string/number} sectionBy - Name or index number of the section
+ * @param  {string/number} projectBy - Name or index number of the project
  * @return {object} Single section object
  */
 function getSection(sectionBy, projectBy) {
   var thisProject = getProject(projectBy);
   if (typeof sectionBy == 'string') {
     return thisProject.sections.filter(function(section) {
-      return section.slug == sectionBy;
+      return slugify(section.name) == slugify(sectionBy);
     })[0];
   } else if (typeof sectionBy == 'number') {
     return thisProject.sections[sectionBy];
@@ -120,7 +121,7 @@ function getCategories() {
   return Array.from(
     new Set(
       getProjects().map(function(project) {
-        return project.category;
+        return project.meta.category;
       })
     )
   ).reverse();

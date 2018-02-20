@@ -8,7 +8,7 @@ import loaderIcon from 'images/loader-tail-spin.svg';
 function Image(attr) {
   this.isLoaded = false;
   this.attributes = attr;
-  this.createDOM();
+  this._createDOM();
 }
 
 /**
@@ -26,7 +26,7 @@ Image.prototype.settings = {
 /**
  * Creates wrapper, image and loader DOM elements
  */
-Image.prototype.createDOM = function() {
+Image.prototype._createDOM = function() {
   var attr = this.attributes;
 
   var $wrapper = createEl('div', {

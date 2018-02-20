@@ -7,7 +7,14 @@ import {
   getProject,
   getSection
 } from 'utilities/orm';
-import { $win, $doc, log, uppercase, isUndefined } from 'utilities/helpers';
+import {
+  $win,
+  $doc,
+  log,
+  uppercase,
+  isUndefined,
+  slugify
+} from 'utilities/helpers';
 
 var router = {
   // Which client-side router to use
@@ -21,7 +28,7 @@ var router = {
 
     if (Project.isOpen) {
       if (args != undefined) {
-        to = '#project-thumb-' + Project.data.slug;
+        to = '#project-thumb-' + slugify(Project.data.name);
       }
       Project.close();
     }
@@ -92,11 +99,11 @@ var router = {
       // Setup the routing logic
       if (Project.isOpen) {
         // Same project
-        if (Project.data.slug == thisProject.slug) {
+        if (slugify(Project.data.name) == slugify(thisProject.name)) {
           log(
             "[ROUTE] Same project called, just change the section or section's slide"
           );
-          Project.sections.goTo.call(Project, thisSection.slug, sectionSlideNo);
+          Project.sections.goTo.call(Project, thisSection.name, sectionSlideNo);
 
           // Different project
         } else {
@@ -104,11 +111,11 @@ var router = {
           Project.close({
             onComplete: function() {
               router._scrollTo({
-                to: 'project-thumb-' + thisProject.slug,
+                to: 'project-thumb-' + slugify(thisProject.name),
                 onComplete: function() {
                   Project.open(
-                    thisProject.slug,
-                    thisSection.slug,
+                    thisProject.name,
+                    thisSection.name,
                     sectionSlideNo
                   );
                 }
@@ -118,7 +125,7 @@ var router = {
         }
       } else {
         log('[ROUTE] Project window is closed, open it');
-        Project.open(thisProject.slug, thisSection.slug, sectionSlideNo);
+        Project.open(thisProject.name, thisSection.name, sectionSlideNo);
       }
     }
 
@@ -132,7 +139,7 @@ var router = {
         notFound();
       } else {
         router._changeTitle(currentPage.name);
-        router._scrollTo({ to: currentPage.slug });
+        router._scrollTo({ to: slugify(currentPage.name) });
       }
 
       next();

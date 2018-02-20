@@ -8,7 +8,8 @@ import {
   clearInnerHTML,
   toggleClass,
   removeClass,
-  addClass
+  addClass,
+  slugify
 } from 'utilities/helpers';
 import {
   getSetting,
@@ -44,7 +45,7 @@ var Project = {
 
   // Project window html
   template: function(args) {
-    return `<div id="project-${args.slug}" class="project-wrapper">
+    return `<div id="project-${slugify(args.name)}" class="project-wrapper">
       <div class="project-desc">
         <div class="inner-wrapper">
           <h2>${args.name}</h2>
@@ -52,14 +53,14 @@ var Project = {
         </div>
       </div>
       <div class="project-showcase"></div>
-      <div class="project-nav"></div>
+      <div class="project-nav bullets"></div>
       <div class="projects-adjacent-nav">
-        <a href="${args.adjacent.prev.href}" class="prev">
+        <a href="/projects/${slugify(args.adjacent.prev.name)}" class="prev">
           <img src="${args.adjacent.prev.src}" alt="Previous Project: ${args
       .adjacent.prev.name}">
           <span>${args.adjacent.prev.name}</span>
         </a>
-        <a href="${args.adjacent.next.href}" class="next">
+        <a href="/projects/${slugify(args.adjacent.next.name)}" class="next">
           <img src="${args.adjacent.next.src}" alt="Previous Project: ${args
       .adjacent.next.name}">
           <span>${args.adjacent.next.name}</span>
@@ -94,30 +95,6 @@ var Project = {
           class: 'section-inner-wrapper'
         });
 
-        // Create new content's instance, initialize and append it
-        var instanceArgs = {
-          projectSlug: _this.data.slug,
-          sectionSlug: sectionData.slug,
-          content: sectionData.content
-        };
-
-        switch (sectionData.type) {
-          case 'video':
-            sectionData._instance = new Video(instanceArgs);
-            break;
-          case 'gallery':
-            sectionData._instance = new Gallery(instanceArgs);
-            break;
-          case 'info':
-            sectionData._instance = new Info(instanceArgs);
-            break;
-        }
-
-        // Append the content
-        $sectionInnerWrapper.appendChild(sectionData._instance.element);
-        $sectionWrapper.appendChild($sectionInnerWrapper);
-        $projectShowcase.appendChild($sectionWrapper);
-
         // Make the sections draggable and touch enabled via GSAP
         var dragSwipeDir,
           dragStartY,
@@ -126,7 +103,6 @@ var Project = {
 
         sectionData._draggable = Draggable.create($sectionWrapper, {
           type: 'y',
-          lockAxis: true,
           zIndexBoost: false,
           edgeResistance: 0.75,
           dragResistance: 0,
@@ -182,23 +158,42 @@ var Project = {
 
         // Cache wrappers
         sectionData._wrapper = $sectionWrapper;
+        // Cache parent project's name
+        sectionData._projectName = _this.data.name;
+
+        // Create all the section instances according to their types and
+        // cache them on _instance property so in the future we can use
+        // the instances' APIs
+        switch (sectionData.type) {
+          case 'video':
+            sectionData._instance = new Video(sectionData);
+            break;
+          case 'gallery':
+            sectionData._instance = new Gallery(sectionData);
+            break;
+          case 'info':
+            sectionData._instance = new Info(sectionData);
+            break;
+        }
+
+        // Append the content
+        $sectionInnerWrapper.appendChild(sectionData._instance.element);
+        $sectionWrapper.appendChild($sectionInnerWrapper);
+        $projectShowcase.appendChild($sectionWrapper);
 
         // Create nav item for this section
         var $navItem = createEl('a', {
-          href: '/projects/' + _this.data.slug + '/' + sectionData.slug
+          href:
+            '/projects/' +
+            slugify(_this.data.name) +
+            '/' +
+            slugify(sectionData.name)
         });
-
+        var $navItemSpan = createEl('span');
         var $navItemText = createEl('span');
-        $navItemText.innerHTML = sectionData.name;
-
-        // Append nav item
-        $navItem.insertAdjacentHTML(
-          'beforeend',
-          require('!svg-inline-loader?removeSVGTagAttrs=false!images/' +
-            sectionData.icon +
-            '.svg')
-        );
-        $navItem.appendChild($navItemText);
+        $navItemText.innerText = sectionData.name;
+        $navItemSpan.appendChild($navItemText);
+        $navItem.appendChild($navItemSpan);
         $projectNav.appendChild($navItem);
       });
 
@@ -250,11 +245,13 @@ var Project = {
     previous: function() {
       router.engine(
         '/projects/' +
-          this.data.slug +
+          slugify(this.data.name) +
           '/' +
-          this.data.sections[
-            this.sections._findAdjacentIndex.call(this, 'previous')
-          ].slug
+          slugify(
+            this.data.sections[
+              this.sections._findAdjacentIndex.call(this, 'previous')
+            ].name
+          )
       );
     },
 
@@ -264,20 +261,22 @@ var Project = {
     next: function() {
       router.engine(
         '/projects/' +
-          this.data.slug +
+          slugify(this.data.name) +
           '/' +
-          this.data.sections[
-            this.sections._findAdjacentIndex.call(this, 'next')
-          ].slug
+          slugify(
+            this.data.sections[
+              this.sections._findAdjacentIndex.call(this, 'next')
+            ].name
+          )
       );
     },
 
     /**
      * Change the section visually (slide, nav etc.)
-     * @param  {object} slug -  The slug of the section to be changed
+     * @param  {object} name -  The name of the section to be changed
      * @param  {number} slideNo - The instance page (gallery slide etc.) to be changed
      */
-    goTo: function(slug, slideNo) {
+    goTo: function(name, slideNo) {
       var _this = this;
 
       // Performance check for slide changes
@@ -288,7 +287,7 @@ var Project = {
       // Cache the old and new index numbers
       var currentIndex = _this.sections.currentIndex;
       var nextIndex = _this.data.sections.findIndex(function(section) {
-        return section.slug == slug;
+        return slugify(section.name) == slugify(name);
       });
       // And save the currentIndex
       _this.sections.currentIndex = nextIndex;
@@ -454,13 +453,10 @@ var Project = {
      * Reset section specific listeners, clear data etc.
      */
     destroy: function() {
-      // Remove all gallery revent listeners one by one
+      // Remove all section event listeners
       this.data.sections.forEach(function(section) {
-        if (section.type == 'gallery') {
-          $doc.removeEventListener(
-            'keydown',
-            section._instance._keyNavWithThrottle
-          );
+        if ('removeAllListeners' in section._instance) {
+          section._instance.removeAllListeners();
         }
       });
 
@@ -484,7 +480,14 @@ var Project = {
     _init: function() {
       var windowID = 'project-window';
       if (!$doc.getElementById(windowID)) {
-        this.$el = createEl('div', { id: windowID });
+        this.$el = createEl('div', {
+          id: windowID,
+          style:
+            'background-color:' +
+            Project.data.theme.bg +
+            ';border-color:' +
+            Project.data.theme.border
+        });
         $doc.getElementById('app').appendChild(this.$el);
       }
       return this.$el;
@@ -497,10 +500,12 @@ var Project = {
      */
     toggle: function(act, callbacks) {
       var _this = this;
-      var currentProject = events.publish('project.window.' + act + '.onStart');
+      var $projectWindow = _this._init();
+
+      events.publish('project.window.' + act + '.onStart');
+
       toggleClass($doc.body, 'no-scroll');
       toggleClass($doc.body, 'project-window');
-      var $projectWindow = _this._init();
 
       TweenMax.to($projectWindow, 0.5, {
         yPercent: act == 'open' ? -100 : 100,
@@ -522,16 +527,16 @@ var Project = {
 
   /**
    * Initializes and opens current project
-   * @param  {string} projectSlug - The slug of the project to be opened
-   * @param  {string} sectionSlug -  The slug of the section to be opened
+   * @param  {string} projectName - The name of the project to be opened
+   * @param  {string} sectionName -  The name of the section to be opened
    * @param  {number} sectionslideNo -  Page number of the section to be opened
    */
-  open: function(projectSlug, sectionSlug, sectionslideNo) {
+  open: function(projectName, sectionName, sectionslideNo) {
     var _this = this;
 
     var projects = getProjects();
-    var project = getProject(projectSlug);
-    var projectIndex = findProjectIndex(projectSlug);
+    var project = getProject(projectName);
+    var projectIndex = findProjectIndex(projectName);
 
     _this.isOpen = true;
     _this.data = project;
@@ -542,12 +547,10 @@ var Project = {
 
     _this.data.adjacent = {
       prev: {
-        href: '/projects/' + getProject(previousIndex).slug,
         name: getProject(previousIndex).name,
         src: require('images/chevron-left.svg')
       },
       next: {
-        href: '/projects/' + getProject(nextIndex).slug,
         name: getProject(nextIndex).name,
         src: require('images/chevron-right.svg')
       }
@@ -565,7 +568,7 @@ var Project = {
 
         // Create sections and insert them
         _this.sections._init.call(_this);
-        _this.sections.goTo.call(_this, sectionSlug, sectionslideNo);
+        _this.sections.goTo.call(_this, sectionName, sectionslideNo);
       }
     });
   },
