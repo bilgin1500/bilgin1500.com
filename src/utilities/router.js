@@ -5,7 +5,8 @@ import {
   getSetting,
   getPage,
   getProject,
-  getSection
+  getSection,
+  setSetting
 } from 'utilities/orm';
 import {
   $win,
@@ -25,12 +26,13 @@ var router = {
    */
   _scrollTo: function(args) {
     var to = args && args.to ? '#' + args.to : 0;
+    var prjInstance = getSetting('projectInstance');
 
-    if (Project.isOpen) {
+    if (!isUndefined(prjInstance)) {
       if (args != undefined) {
-        to = '#project-thumb-' + slugify(Project.data.name);
+        to = '#project-thumb-' + prjInstance.slug;
       }
-      Project.close();
+      prjInstance.close();
     }
 
     TweenMax.to($win, 0.5, {
@@ -69,63 +71,71 @@ var router = {
      * @param  {object} ctx Url parameters: project/section/sectionSlideNo
      */
     function routeProject(ctx, next) {
-      // Current project
-      var thisProject = getProject(ctx.params.project);
+      // Current project's data
+      var prjData = getProject(ctx.params.project);
+      // Current project and sections instances
+      var prjInstance = getSetting('projectInstance');
+      var sectionsInstance = getSetting('sectionsInstance');
 
       // If no project is found route to 404
-      if (!thisProject) {
+      if (isUndefined(prjData)) {
         notFound();
         return;
       }
 
       // Get the current section object
-      var thisSection = isUndefined(ctx.params.section)
+      var prjSection = isUndefined(ctx.params.section)
         ? getSection(0, ctx.params.project)
         : getSection(ctx.params.section, ctx.params.project);
 
       // The same with the section number. If no page number is specified
       // then the page is the first page: 0
-      var sectionSlideNo = ctx.params.sectionSlideNo || 1;
+      var prjSlideNo = ctx.params.sectionSlideNo || 1;
 
       // Change the title to current project and section
       router._changeTitle(
-        uppercase(thisSection.name) +
+        uppercase(prjSection.name) +
           ' ' +
           getSetting('separatorProject') +
           ' ' +
-          thisProject.name
+          prjData.name
       );
 
       // Setup the routing logic
-      if (Project.isOpen) {
+      if (!isUndefined(prjInstance)) {
         // Same project
-        if (slugify(Project.data.name) == slugify(thisProject.name)) {
+        if (prjInstance.slug == slugify(prjData.name)) {
           log(
             "[ROUTE] Same project called, just change the section or section's slide"
           );
-          Project.sections.goTo.call(Project, thisSection.name, sectionSlideNo);
+          sectionsInstance.goto(prjSection.name, prjSlideNo);
 
           // Different project
         } else {
           log('[ROUTE] Different project called, change the project');
-          Project.close({
+          /*prjInstance.close({
             onComplete: function() {
               router._scrollTo({
-                to: 'project-thumb-' + slugify(thisProject.name),
+                to: 'project-thumb-' + slugify(prjData.name),
                 onComplete: function() {
-                  Project.open(
-                    thisProject.name,
-                    thisSection.name,
-                    sectionSlideNo
-                  );
+                  prjInstance = new Project(prjData, {
+                    section: prjSection.name,
+                    slide: prjSlideNo
+                  });
+                  prjInstance.open();
                 }
               });
             }
-          });
+          });*/
         }
       } else {
         log('[ROUTE] Project window is closed, open it');
-        Project.open(thisProject.name, thisSection.name, sectionSlideNo);
+        prjInstance = new Project(prjData, {
+          section: prjSection.name,
+          slide: prjSlideNo
+        });
+        prjInstance.open();
+        setSetting('projectInstance', prjInstance);
       }
     }
 
@@ -133,13 +143,13 @@ var router = {
      * Route pages
      */
     function routePages(ctx, next) {
-      var currentPage = getPage(ctx.params.page);
+      var pageData = getPage(ctx.params.page);
 
-      if (!currentPage) {
+      if (!pageData) {
         notFound();
       } else {
-        router._changeTitle(currentPage.name);
-        router._scrollTo({ to: slugify(currentPage.name) });
+        router._changeTitle(pageData.name);
+        router._scrollTo({ to: slugify(pageData.name) });
       }
 
       next();

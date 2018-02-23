@@ -7,24 +7,45 @@
   display block
   position fixed
   z-index 99
-  width 100%
+  width 0
   height 100%
-  top 100%
+  top 0
   left 0
-  background-color #fff
-  border-width 10px
-  border-style solid
-  border-color #000
-  box-sizing border-box
+  background-color transparent
+
+.project-window
+  #project-window
+    width 100%
+  
+  .layer
+    position absolute
+    height 100%
+    width 100%
+    top 0
+    left -100%
+    border-width 0
+    border-style solid
+    border-color #000
+    box-sizing border-box
+    
+  #layer1
+    background-color darksalmon
+    z-index 1
+    
+  #layer2
+    background-color #fff
+    z-index 3
   
   .project-wrapper
     absoluteFull()
+    z-index 2
   
-    .project-desc
+    .project-head
       position absolute
       right 40px
       top 40px
       text-align right
+      z-index 2
       
       h2
         font-family AvenirRegular
@@ -39,7 +60,7 @@
         margin-top 5px
         margin-bottom 0
 
-    .project-showcase
+    .project-sections
       absoluteFull()
       z-index 1
         
@@ -73,19 +94,12 @@
       transform translateY(-50%)
       bulleted('vertical')
         
-    .projects-adjacent-nav
-      display none
-      position fixed
-      top 33px
-      right 0
-      z-index 100
-      /*@media screen and (min-width: tablet)
-        display block*/
-      
+    .project-helper-nav
       a
         display inline-block
-        &.prev
-          margin-right 50px
-        
-        span
-          display none
+        color rgba(0,0,0,0.25);
+        font-size fTiny
+        text-transform uppercase
+        text-decoration none
+        letter-spacing 0.01em
+        margin-left 5px

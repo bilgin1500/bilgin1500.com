@@ -1,19 +1,16 @@
 import { createEl, slugify } from 'utilities/helpers';
 import 'css/video';
 
-/*
+/**
  * Video constructor
- * @param  {object} sectionData - content: Section content from the database
- *                                name: Section name from the database 
- *                                type: Section type (this Constructor)
- *                                _draggable: This sections's Draggable instance
- *                                _projectName: Parent project's data
- *                                _wrapper: Section wrapper element
+ * @param  {object} sectionData from database
+ * @param  {string} projectSlug
+ * @param  {object} section - Parent section
  */
-function Video(sectionData) {
+function Video(sectionData, projectSlug, section) {
   this.isActive = false;
   this.content = sectionData.content;
-  this.projectSlug = slugify(sectionData._projectName);
+  this.projectSlug = projectSlug;
   this._createDom();
 }
 

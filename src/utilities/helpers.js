@@ -161,6 +161,8 @@ var docReady = function() {
  * document.createElement wrapper with element attributes
  * @param {string} type - Element's tag name in lowercase
  * @param {object} attributes - Element's attributes
+ *                              key: Attribute name
+ *                              value: A single or multi attribute value
  * @return {element} HTML element
  */
 var createEl = function(type, attributes) {
@@ -168,7 +170,18 @@ var createEl = function(type, attributes) {
   var $el = $doc.createElement(type);
   for (var key in attributes) {
     if (attributes.hasOwnProperty(key)) {
-      $el.setAttribute(key, attributes[key]);
+      var val = attributes[key];
+
+      if (key == 'innerText' || key == 'innerHTML') {
+        $el[key] = val;
+        break;
+      }
+
+      if (typeof val == 'string') {
+        $el.setAttribute(key, val);
+      } else if (Array.isArray(val)) {
+        $el.setAttribute(key, val.join(' '));
+      }
     }
   }
   return $el;
@@ -307,25 +320,27 @@ var removeClass = function(el, className) {
 };
 
 /**
- * Adds or removes a class name
+ * Adds or removes class
  * @param {string/element}  el - HTMLElement or a ID
- * @param {string} className - Name of the class to be toggled
+ * @param {string/array} className - Name of the class or classes to be toggled
  */
 var toggleClass = function(el, className) {
   el = _getEl(el);
-  if (el.classList) {
-    el.classList.toggle(className);
-  } else {
-    var classes = el.className.split(' ');
-    var existingIndex = -1;
-    for (var i = classes.length; i--; ) {
-      if (classes[i] === className) existingIndex = i;
+
+  function toggle(c) {
+    if (!hasClass(el, c)) {
+      addClass(el, c);
+    } else {
+      removeClass(el, c);
     }
+  }
 
-    if (existingIndex >= 0) classes.splice(existingIndex, 1);
-    else classes.push(className);
-
-    el.className = classes.join(' ');
+  if (typeof className == 'string') {
+    toggle(className);
+  } else if (Array.isArray(className)) {
+    for (var i = 0; i < className.length; i++) {
+      toggle(className[i]);
+    }
   }
 };
 

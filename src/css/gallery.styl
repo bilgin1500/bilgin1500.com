@@ -1,5 +1,6 @@
 @import "assets/layout"
 @import "assets/bulleted"
+@import "assets/fonts"
 
 .gallery
   position relative
@@ -45,15 +46,25 @@
       figcaption
         background-color #000
         color #fff
-        font-size 13px
         text-align center
         position absolute
         bottom 0
         padding 15px
         box-sizing border-box
-        border-radius 8px
-        poninter-events none
+        max-width 30em
+        pointer-events none
+        left 50%
+        transform translateX(-50%)
         
+        h4
+          margin 0
+          margin-bottom 5px
+          font-size fSmall
+        
+        p
+          margin 0
+          font-size fSmall
+
   .bullets
     position fixed
     bottom 27px

@@ -16,7 +16,8 @@ module.exports = {
     isPerformanceActive: false,
     idCounter: 0,
     separatorMain: '—',
-    separatorProject: '‹'
+    separatorProject: '‹',
+    projectWindowId: 'project-window'
   },
   pages: [
     {
