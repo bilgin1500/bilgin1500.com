@@ -56,7 +56,7 @@ Info.prototype._attachDraggable = function() {
     onPress: function(e) {
       // Update the boundaries so that they cover the image
       var slideHeight = getHeight(
-        self._parentSectionWrapper.querySelector('.section-inner-wrapper')
+        self._parentSectionWrapper.querySelector('.section-content-wrapper')
       );
       var infoHeight = getHeight(self.element);
       var dynamicDragBoundaryMinY = -infoHeight + slideHeight;

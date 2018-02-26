@@ -61,7 +61,7 @@ function getProjects() {
  * @param  {string} catName - Name of the category
  * @return {array} Array of projects
  */
-function getProjectsByCategory(catName) {
+function getProjectsByCat(catName) {
   return getPage('projects').list.filter(function(project) {
     return project.meta.category.toLowerCase() == catName.toLowerCase();
   });
@@ -102,14 +102,51 @@ function findProjectIndex(name) {
  * @return {object} Single section object
  */
 function getSection(sectionBy, projectBy) {
-  var thisProject = getProject(projectBy);
+  var project = getProject(projectBy);
   if (typeof sectionBy == 'string') {
-    return thisProject.sections.filter(function(section) {
+    return project.sections.filter(function(section) {
       return slugify(section.name) == slugify(sectionBy);
     })[0];
   } else if (typeof sectionBy == 'number') {
-    return thisProject.sections[sectionBy];
+    return project.sections[sectionBy];
   }
+}
+
+/**
+ * Finds a specific section's index number
+ * @param  {string} sectionName - The section name to search for
+ * @param  {string/number} projectBy - The project which contains the section
+ * @return {number} Index number 
+ */
+function findSectionIndex(sectionName, projectBy) {
+  var project = getProject(projectBy);
+  return project.sections.findIndex(function(section) {
+    return slugify(section.name) === slugify(sectionName);
+  });
+}
+
+/**
+ * Find the adjacent section indexes
+ * @param  {string/number} projectBy - Which project
+ * @param  {string/number} sectionBy - Which section
+ * @return {object} Adjacent indexes in an object: {previous,next}
+ */
+function getAdjSectionIndexes(projectBy, sectionBy) {
+  var project = getProject(projectBy);
+  var sections = project.sections;
+  var sectionIndex;
+
+  if (typeof sectionBy == 'string') {
+    sectionIndex = findSectionIndex(sectionBy, projectBy);
+  } else if (typeof sectionBy == 'number') {
+    sectionIndex = sectionBy;
+  }
+
+  return {
+    previous:
+      sectionIndex == 0 ? project.sections.length - 1 : sectionIndex - 1,
+    next: sectionIndex == project.sections.length - 1 ? 0 : sectionIndex + 1
+  };
 }
 
 /**
@@ -144,10 +181,12 @@ export {
   getPages,
   getPage,
   getProjects,
-  getProjectsByCategory,
+  getProjectsByCat,
   getProject,
   findProjectIndex,
   getSection,
+  findSectionIndex,
+  getAdjSectionIndexes,
   getCategories,
   getIntroContent
 };

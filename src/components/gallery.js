@@ -142,12 +142,11 @@ Gallery.prototype._createSlide = function(index, source) {
       // Update the boundaries so that they cover the image
       var slideHeight = getHeight($slide);
       var imageHeight = getHeight($image);
-      var dynamicDragBoundaryMinY = -imageHeight + slideHeight;
 
       this.applyBounds({
         minX: -dragBoundaries,
         maxX: dragBoundaries,
-        minY: dynamicDragBoundaryMinY,
+        minY: -imageHeight + slideHeight,
         maxY: 0
       });
 

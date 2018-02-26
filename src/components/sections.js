@@ -8,7 +8,7 @@ import {
   removeClass,
   log
 } from 'utilities/helpers';
-import { getSetting } from 'utilities/orm';
+import { getSetting, getAdjSectionIndexes } from 'utilities/orm';
 import Section from 'components/section';
 
 /**
@@ -30,29 +30,31 @@ function Sections(prjData) {
   this.isNavLocked = false;
   this.instances = [];
   // Private variables for this constructor
-  var projectSlug = prjData.slug;
-  var $wrapper,
-    $projectSections,
-    $projectNav,
-    projectNavLinks = [];
+  var projectNavLinks = [];
+  var adjIndexes;
 
   // Create the dom elements
   this.createDom = function() {
-    $wrapper = createEl('div', { class: 'project-sections-wrapper' });
-    $projectSections = createEl('div', { class: 'project-sections' });
-    $projectNav = createEl('div', { class: ['project-nav', 'bullets'] });
+    var $wrapper = createEl('div', { class: 'project-sections-wrapper' });
+    var $sections = createEl('div', { class: 'project-sections' });
+    var $nav = createEl('div', { class: ['project-nav', 'bullets'] });
+    var $guide = createEl('div', {
+      class: 'project-guide',
+      innerHTML: '<p>Reveal</p>'
+    });
 
-    $wrapper.appendChild($projectSections);
-    $wrapper.appendChild($projectNav);
+    $wrapper.appendChild($guide);
+    $wrapper.appendChild($sections);
+    $wrapper.appendChild($nav);
 
     for (var i = 0; i < prjData.sections.length; i++) {
-      var sectionInstance = new Section(prjData.sections[i], projectSlug);
-      var $sectionContent = sectionInstance.createContentDom();
-      var $sectionNavItem = sectionInstance.createNavDom();
-      $projectSections.appendChild($sectionContent);
-      $projectNav.appendChild($sectionNavItem);
+      var sectionInstance = new Section(prjData, i, $guide);
+      var $content = sectionInstance.createContentDom();
+      var $navItem = sectionInstance.createNavDom();
+      $sections.appendChild($content);
+      $nav.appendChild($navItem);
       this.instances.push(sectionInstance);
-      projectNavLinks.push($sectionNavItem);
+      projectNavLinks.push($navItem);
     }
 
     return $wrapper;
@@ -79,23 +81,6 @@ function Sections(prjData) {
     }
   }
 
-  /**
-   * Find the adjacent section index
-   * @param  {string} direction - Previous or next
-   * @return {number} Adjacent index
-   */
-  function findAdjIndex(direction) {
-    if (direction == 'previous') {
-      return this.currentIndex == 0
-        ? prjData.sections.length - 1
-        : this.currentIndex - 1;
-    } else if (direction == 'next') {
-      return this.currentIndex == prjData.sections.length - 1
-        ? 0
-        : this.currentIndex + 1;
-    }
-  }
-
   // Add key events
   var keyEventsT = throttle(300, keyEvents.bind(this));
   $doc.addEventListener('keydown', keyEventsT);
@@ -116,18 +101,16 @@ function Sections(prjData) {
    * Change the url to the previous section
    */
   this.previous = function() {
-    var prevIndex = findAdjIndex.call(this, 'previous');
-    var sectionSlug = slugify(prjData.sections[prevIndex].name);
-    router.engine('/projects/' + projectSlug + '/' + sectionSlug);
+    var sectionSlug = slugify(prjData.sections[adjIndexes.previous].name);
+    router.engine('/projects/' + prjData.slug + '/' + sectionSlug);
   };
 
   /**
    * Change the url to the next section
    */
   this.next = function() {
-    var nextIndex = findAdjIndex.call(this, 'next');
-    var sectionSlug = slugify(prjData.sections[nextIndex].name);
-    router.engine('/projects/' + projectSlug + '/' + sectionSlug);
+    var sectionSlug = slugify(prjData.sections[adjIndexes.next].name);
+    router.engine('/projects/' + prjData.slug + '/' + sectionSlug);
   };
 
   /**
@@ -150,6 +133,8 @@ function Sections(prjData) {
     });
     // And change the currentIndex
     self.currentIndex = nextIndex;
+    // Store adjacent indexes
+    adjIndexes = getAdjSectionIndexes(prjData.name, nextIndex);
 
     // Cache the necessary elements
     var $allNavItems = projectNavLinks;

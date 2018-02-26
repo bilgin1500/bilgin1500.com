@@ -87,6 +87,7 @@ function ProjectWindow(prjData) {
   var $desc = createEl('h3', { innerText: prjData.desc });
   var l1 = createEl('div', { id: 'layer1', class: 'layer' });
   var l2 = createEl('div', { id: 'layer2', class: 'layer' });
+  var l3 = createEl('div', { id: 'layer3', class: 'layer' });
 
   var $prev = createEl('a', {
     href: prjData.prevPrjUrl,
@@ -109,12 +110,12 @@ function ProjectWindow(prjData) {
     innerText: 'Close'
   });
 
-  // Append the layers for transitions
-  $currWindow.appendChild(l1);
+  // Append the layers according to their z-index order
+  // Top is the z-index:4 bottom is the 1
+  $currWindow.appendChild(l3);
   $currWindow.appendChild(l2);
-
-  // Append the wrapper for sections to be able to select it in advance
   $currWindow.appendChild($projectWrapper);
+  $currWindow.appendChild(l1);
 
   // Straight: Append the project content during the transition animation
   // Reversed: Remove the elements inside the .project-wrapper
@@ -136,7 +137,7 @@ function ProjectWindow(prjData) {
 
   // Event callbacks
   function toogleClasses() {
-    toggleClass($doc.body, ['no-scroll', 'project-window']);
+    toggleClass($doc.body, ['no-scroll', 'project-window-opened']);
   }
 
   function destroyAll() {
@@ -144,7 +145,7 @@ function ProjectWindow(prjData) {
   }
 
   // The timeline itself
-  var t1 = TweenMax.set([l1, l2], {
+  var t1 = TweenMax.set([l1, l2, l3], {
     transformOrigin: '100% 0%',
     immediateRender: false
   });
@@ -160,17 +161,17 @@ function ProjectWindow(prjData) {
   });
 
   var t4 = TweenMax.set(l1, {
-    backgroundColor: prjData.theme.bg,
+    backgroundColor: prjData.theme.colors.spot1,
     immediateRender: false
   });
 
-  var t5 = TweenMax.to(l2, 0.8, {
+  var t5 = TweenMax.to(l2, 0.6, {
     scaleX: 0,
     ease: Circ.easeInOut
   });
 
-  var t6 = TweenMax.to(l1, 0.25, {
-    borderColor: prjData.theme.border,
+  var t6 = TweenMax.to(l3, 0.25, {
+    borderColor: prjData.theme.colors.spot1,
     borderWidth: 10
   });
 
@@ -182,7 +183,7 @@ function ProjectWindow(prjData) {
     .add(t3, '-=0.1')
     .add(t4)
     .add(manipulateDom)
-    .add(t5, '-=0.3')
+    .add(t5)
     .add(t6);
 
   // Public methods

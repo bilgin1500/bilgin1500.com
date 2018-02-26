@@ -38,7 +38,7 @@ Image.prototype._createDOM = function() {
     src: this.settings.transparentGif,
     alt: attr.alt || '',
     'data-src': attr.src,
-    'data-shadow': attr.isShadowed | false,
+    'data-shadow': attr.isShadowed ? 'true' : 'false',
     class: 'img'
   });
 
@@ -76,7 +76,9 @@ Image.prototype.load = function(onComplete) {
 
     // Does this image cast a shadow?
     var boxShadowProperty =
-      $img.getAttribute('data-shadow') == 1 ? self.settings.boxShadow : 'none';
+      $img.getAttribute('data-shadow') == 'true'
+        ? self.settings.boxShadow
+        : 'none';
 
     // After loading fade in the image, remove the svg loader
     // and load other images nearby

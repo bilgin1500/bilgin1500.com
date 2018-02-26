@@ -29,10 +29,11 @@ Video.prototype._createDom = function() {
     poster: videoPoster,
     preload: 'none',
     width: this.content.width,
-    height: this.content.height,
-    muted: true,
-    loop: true
+    height: this.content.height
   });
+
+  $video.muted = true;
+  $video.loop = true;
 
   // Create a div wrapper
   var $wrapper = createEl('div', { class: 'video-wrapper' });

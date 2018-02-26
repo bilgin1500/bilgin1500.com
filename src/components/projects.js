@@ -7,11 +7,7 @@ import {
   addClass,
   slugify
 } from 'utilities/helpers';
-import {
-  getProjectsByCategory,
-  getCategories,
-  setSetting
-} from 'utilities/orm';
+import { getProjectsByCat, getCategories, setSetting } from 'utilities/orm';
 import 'css/projects';
 
 // Template for category title
@@ -24,7 +20,7 @@ function templateProject(args) {
   return `<a href="/projects/${slugify(args.name)}" id="project-thumb-${slugify(
     args.name
   )}" class="project-item ${args.theme && args.theme.size} ${args.theme &&
-    args.theme.color}">
+    args.theme.thumbnail.fontColor}">
     <div class="project-visual"></div>
     <div class="project-desc">
       <h4>${args.name}</h4>
@@ -56,14 +52,14 @@ function listProjects(categoryName) {
   );
 
   // Iterate all projects in db, append them to the DOM
-  getProjectsByCategory(categoryName).forEach(function(projectData, i) {
+  getProjectsByCat(categoryName).forEach(function(projectData, i) {
     var projectSlug = slugify(projectData.name);
     projectData.thumbnail =
-      projectData.theme && projectData.theme.thumbnail
+      projectData.theme && projectData.theme.thumbnail.image
         ? require('../projects/' +
             projectSlug +
             '/' +
-            projectData.theme.thumbnail)
+            projectData.theme.thumbnail.image)
         : '';
 
     $items.insertAdjacentHTML('beforeend', templateProject(projectData));

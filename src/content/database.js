@@ -39,11 +39,16 @@ module.exports = {
           },
           theme: {
             size: 'large',
-            color: 'light',
-            bg: '#b9bcc5',
-            border: '#010a61',
-            thumbnail: 'skytankingovenon-thumb.png',
-            momentum: { speed: 0.4 }
+            momentum: { speed: 0.4 },
+            colors: {
+              light: '#b9bcc5',
+              spot1: '#010a61',
+              spot2: '#f02c2e'
+            },
+            thumbnail: {
+              image: 'skytankingovenon-thumb.png',
+              fontColor: 'light'
+            }
           },
           sections: [
             {
@@ -161,9 +166,16 @@ module.exports = {
           },
           theme: {
             size: 'large',
-            color: 'dark',
-            thumbnail: 'rolio.png',
-            momentum: { speed: 0.2 }
+            momentum: { speed: 0.2 },
+            colors: {
+              light: '#ccc',
+              spot1: '#ddd',
+              spot2: '#000'
+            },
+            thumbnail: {
+              image: 'rolio.png',
+              fontColor: 'dark'
+            }
           },
           sections: [
             {
@@ -213,10 +225,17 @@ module.exports = {
             date: '2017'
           },
           theme: {
-            color: 'dark',
             size: 'large',
-            thumbnail: 'sp-f3.png',
-            momentum: { speed: 0.4 }
+            momentum: { speed: 0.2 },
+            colors: {
+              light: '#ccc',
+              spot1: '#ddd',
+              spot2: '#000'
+            },
+            thumbnail: {
+              image: 'sp-f3.png',
+              fontColor: 'dark'
+            }
           },
           sections: []
         }

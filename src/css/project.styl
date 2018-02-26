@@ -13,7 +13,7 @@
   left 0
   background-color transparent
 
-.project-window
+.project-window-opened
   #project-window
     width 100%
   
@@ -23,19 +23,25 @@
     width 100%
     top 0
     left -100%
+    
+  #layer3
+    background-color transparent
+    left 0
     border-width 0
     border-style solid
     border-color #000
     box-sizing border-box
-    
-  #layer1
-    background-color darksalmon
-    z-index 1
-    
+    pointer-events none
+    z-index 4
+
   #layer2
     background-color #fff
     z-index 3
   
+  #layer1
+    background-color spotColor
+    z-index 1
+    
   .project-wrapper
     absoluteFull()
     z-index 2
@@ -46,6 +52,7 @@
       top 40px
       text-align right
       z-index 2
+      user-select none
       
       h2
         font-family AvenirRegular
@@ -59,6 +66,24 @@
         font-size fSmall
         margin-top 5px
         margin-bottom 0
+    
+    .project-guide
+      visibility hidden
+      position absolute
+      box-sizing border-box
+      width 100%
+      text-align center
+      z-index 1
+      
+      p
+        display inline-block
+        font-size fTiny
+        text-transform uppercase
+        letter-spacing 0.1em
+        background-color #000
+        color rgba(255,255,255,0.75)
+        padding 5px 10px
+        border-radius 6px
 
     .project-sections
       absoluteFull()
@@ -71,14 +96,17 @@
         &.active
           display block
         
-        > .section-inner-wrapper
+        .section-content-wrapper
           position relative
-          width calc(100% - 160px)
+          //width calc(100% - 160px)
           max-width 800px
-          height calc(100% - 240px)
+          //height 100%
           margin 0 auto
-          top 120px
           box-sizing border-box
+          //overflow hidden
+          width calc(100% - 160px)
+          height calc(100% - 240px)
+          top 120px
           /*@media screen and (min-width: tablet)
             top 20%
             height 70%
