@@ -32,7 +32,7 @@ Info.prototype._createDOM = function() {
     var $title = createEl('h4');
     var $text = createEl('p');
     $title.innerText = this.content[i].title;
-    $text.innerText = this.content[i].text;
+    $text.innerHTML = this.content[i].text;
     $wrapper.appendChild($title);
     $wrapper.appendChild($text);
   }

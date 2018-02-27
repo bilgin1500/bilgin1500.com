@@ -4,9 +4,15 @@ import loaderIcon from 'images/loader-tail-spin.svg';
 /*
  * Image constructor
  * @param  {object} attr - <img> attributes
+ *                         src
+ *                         alt
+ *                         caption
+ *                         shadow
  */
 function Image(attr) {
   this.isLoaded = false;
+  this.isShadowed =
+    isUndefined(attr.shadow) || attr.shadow == false ? false : true;
   this.attributes = attr;
   this._createDOM();
 }
@@ -27,18 +33,14 @@ Image.prototype.settings = {
  * Creates wrapper, image and loader DOM elements
  */
 Image.prototype._createDOM = function() {
-  var attr = this.attributes;
-
   var $wrapper = createEl('div', {
-    id: attr.id ? attr.id : createId(),
+    id: this.attributes.id ? this.attributes.id : createId(),
     class: 'img-wrapper'
   });
 
   var $image = createEl('img', {
     src: this.settings.transparentGif,
-    alt: attr.alt || '',
-    'data-src': attr.src,
-    'data-shadow': attr.isShadowed ? 'true' : 'false',
+    alt: this.attributes.alt || '',
     class: 'img'
   });
 
@@ -75,10 +77,7 @@ Image.prototype.load = function(onComplete) {
     TweenMax.set($img, { autoAlpha: 0 });
 
     // Does this image cast a shadow?
-    var boxShadowProperty =
-      $img.getAttribute('data-shadow') == 'true'
-        ? self.settings.boxShadow
-        : 'none';
+    var boxShadowProperty = this.isShadowed ? self.settings.boxShadow : 'none';
 
     // After loading fade in the image, remove the svg loader
     // and load other images nearby
@@ -101,9 +100,7 @@ Image.prototype.load = function(onComplete) {
     };
 
     // Load the image
-    $img.setAttribute('src', $img.getAttribute('data-src'));
-    // And remove the data-src
-    $img.removeAttribute('data-src');
+    $img.setAttribute('src', this.attributes.src);
   }
 };
 

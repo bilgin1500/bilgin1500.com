@@ -5,7 +5,8 @@ import {
   createEl,
   removeClass,
   addClass,
-  slugify
+  slugify,
+  buildMediaUrl
 } from 'utilities/helpers';
 import { getProjectsByCat, getCategories, setSetting } from 'utilities/orm';
 import 'css/projects';
@@ -19,15 +20,11 @@ function templateTitle(args) {
 function templateProject(args) {
   return `<a href="/projects/${slugify(args.name)}" id="project-thumb-${slugify(
     args.name
-  )}" class="project-item ${args.theme && args.theme.size} ${args.theme &&
-    args.theme.thumbnail.fontColor}">
+  )}" class="project-item ${args.theme && args.theme.thumbnail.fontColor}">
     <div class="project-visual"></div>
     <div class="project-desc">
       <h4>${args.name}</h4>
       <p>${args.desc}</p>
-      <div class="tags">
-        <span>${args.meta.tags.join('</span><span>')}</span>
-      </div>
     </div>
   </a>`;
 }
@@ -54,13 +51,6 @@ function listProjects(categoryName) {
   // Iterate all projects in db, append them to the DOM
   getProjectsByCat(categoryName).forEach(function(projectData, i) {
     var projectSlug = slugify(projectData.name);
-    projectData.thumbnail =
-      projectData.theme && projectData.theme.thumbnail.image
-        ? require('../projects/' +
-            projectSlug +
-            '/' +
-            projectData.theme.thumbnail.image)
-        : '';
 
     $items.insertAdjacentHTML('beforeend', templateProject(projectData));
 
@@ -68,14 +58,22 @@ function listProjects(categoryName) {
     var $projectVisual = $projectItem.querySelector('.project-visual');
 
     // Create Image instance
-    var imgInstance = new Image({
-      src: projectData.thumbnail,
-      alt: projectData.name
-    });
-    $projectVisual.appendChild(imgInstance.elements.wrapper);
+    if (
+      !isUndefined(projectData.theme.thumbnail) &&
+      !isUndefined(projectData.theme.thumbnail.image)
+    ) {
+      var imgInstance = new Image({
+        src: buildMediaUrl({
+          project: projectSlug,
+          name: projectData.theme.thumbnail.image
+        }),
+        alt: projectData.name
+      });
+      $projectVisual.appendChild(imgInstance.elements.wrapper);
 
-    // Cache Image instance
-    imgInstanceCache.push(imgInstance);
+      // Cache Image instance
+      imgInstanceCache.push(imgInstance);
+    }
 
     //new Momentum($projectItem).start();
   });

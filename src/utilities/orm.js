@@ -1,4 +1,4 @@
-import { slugify } from 'utilities/helpers';
+import { slugify, isUndefined } from 'utilities/helpers';
 import data from 'content/database';
 
 /**
@@ -171,8 +171,6 @@ function getCategories() {
 function getIntroContent() {
   return getPage('intro').content;
 }
-
-// globals
 
 export {
   getInfo,

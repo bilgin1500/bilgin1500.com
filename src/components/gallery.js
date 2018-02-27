@@ -13,7 +13,8 @@ import {
   getHeight,
   getWidth,
   isUndefined,
-  slugify
+  slugify,
+  buildMediaUrl
 } from 'utilities/helpers';
 import 'css/gallery';
 
@@ -77,26 +78,13 @@ Gallery.prototype._createSlide = function(index, source) {
     $caption,
     $captionTitle,
     $captionText,
-    slideSource,
     swipeDirection;
-
-  slideSource = require('../projects/' +
-    this.projectSlug +
-    '/' +
-    source.source);
-
-  // Does this image cast a shadow?
-  var isShadowed =
-    isUndefined(source.shadow) ||
-    (!isUndefined(source.shadow) && source.shadow == true)
-      ? true
-      : false;
 
   // Create the image instance and cache returning wrapper and image elements
   var imgInstance = new Image({
-    src: slideSource,
+    src: buildMediaUrl({ project: this.projectSlug, name: source.source }),
     alt: source.alt || source.caption || '',
-    isShadowed: isShadowed
+    shadow: source.shadow
   });
   var $wrapper = imgInstance.elements.wrapper;
   var $image = imgInstance.elements.image;
@@ -151,7 +139,7 @@ Gallery.prototype._createSlide = function(index, source) {
       });
 
       // Let the user sense that the image is pressed
-      if (isShadowed) {
+      if (imgInstance.isShadowed) {
         TweenMax.to($image, 0.5, {
           boxShadow: imgInstance.settings.boxShadowMore
         });
@@ -163,7 +151,7 @@ Gallery.prototype._createSlide = function(index, source) {
     },
     onRelease: function() {
       // Release the image's hover
-      if (isShadowed) {
+      if (imgInstance.isShadowed) {
         TweenMax.to($image, 0.5, {
           boxShadow: imgInstance.settings.boxShadow
         });

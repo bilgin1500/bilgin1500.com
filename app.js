@@ -33,7 +33,15 @@ docReady().then(function() {
     fontAvenirHeavy.load()
   ]).then(function() {
     var $logoWrapper = createEl('h1', { id: 'logo' });
-    var $logo = createEl('a', { href: '/' });
+    var $logo = createEl('a', {
+      href: '/',
+      innerHTML:
+        '<span>' +
+        getInfo('title') +
+        '</span><span>' +
+        getInfo('subtitle') +
+        '</span>'
+    });
     var $wrapper = createEl('div', { id: 'content-wrapper' });
     var $app = document.getElementById('app');
 
@@ -42,7 +50,6 @@ docReady().then(function() {
       $wrapper.appendChild(require('components/' + pageSlug).default);
     }
 
-    $logo.innerHTML = getInfo('title');
     $logoWrapper.appendChild($logo);
     $app.appendChild($logoWrapper);
     $app.appendChild($menu);

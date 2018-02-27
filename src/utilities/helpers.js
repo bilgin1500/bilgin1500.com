@@ -365,6 +365,38 @@ function getDocScrollY() {
     : ($doc.documentElement || $doc.body.parentNode || $doc.body).scrollTop;
 }
 
+/**
+ * Build the cloudinary url to fetch the media files
+ * @param  {object} img - File settings
+ *                        project: Project's name
+ *                        name: File's name
+ *                        transformation: Transformation settings (w_300,h_200)
+ *                        extension: Desired file extension
+ * @return {string} The remote image url
+ */
+function buildMediaUrl(img) {
+  var setting = getSetting('cloudinary');
+  var protocol = setting.protocol;
+  var baseUrl = setting.baseUrl;
+  var baseFolder = setting.baseFolder;
+  var baseExtension = setting.baseExtension;
+  var imgName = img.name;
+  var prjName = img.project;
+  var imgTrans = isUndefined(img.trans) ? '' : img.trans + '/';
+  var imgExt = isUndefined(img.estension) ? baseExtension : img.estension;
+  return (
+    protocol +
+    baseUrl +
+    imgTrans +
+    baseFolder +
+    prjName +
+    '/' +
+    imgName +
+    '.' +
+    imgExt
+  );
+}
+
 export {
   $win,
   $doc,
@@ -383,5 +415,6 @@ export {
   removeClass,
   toggleClass,
   clearInnerHTML,
-  getDocScrollY
+  getDocScrollY,
+  buildMediaUrl
 };

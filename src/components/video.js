@@ -1,4 +1,4 @@
-import { createEl, slugify } from 'utilities/helpers';
+import { createEl, slugify, buildMediaUrl } from 'utilities/helpers';
 import 'css/video';
 
 /**
@@ -18,15 +18,12 @@ function Video(sectionData, projectSlug, section) {
  * Creates the <video> element
  */
 Video.prototype._createDom = function() {
-  // Poster image for video
-  var videoPoster = require('../projects/' +
-    this.projectSlug +
-    '/' +
-    this.content.poster);
-
   // Create <video> tag
   var $video = createEl('video', {
-    poster: videoPoster,
+    poster: buildMediaUrl({
+      project: this.projectSlug,
+      name: this.content.poster
+    }),
     preload: 'none',
     width: this.content.width,
     height: this.content.height
@@ -41,15 +38,13 @@ Video.prototype._createDom = function() {
 
   // Append the sources
   for (var i = 0; i < this.content.sources.length; i++) {
-    var videoSource = require('../projects/' +
-      this.projectSlug +
-      '/' +
-      this.content.sources[i].source);
-
     $video.appendChild(
       createEl('source', {
-        src: videoSource,
-        type: 'video/' + this.content.sources[i].type
+        src: buildMediaUrl({
+          project: this.projectSlug,
+          name: this.content.sources[i].source
+        }),
+        type: 'video/' + this.content.sources[i].source
       })
     );
   }

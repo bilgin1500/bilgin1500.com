@@ -1,11 +1,9 @@
 # bilgin1500.com
 
 ## Intro
-
-Hi there! I'm Bilgin Özkan, a creative soul with a main focus on web design and development. Over the years I had the great opportunity to work for some of the best brands and products in Turkey such as Türkiye İş Bankası, Nike, Ikea, Babylon, Pozitif, Hürriyet and Enka Kültür Sanat. Currently I am partner and Digital Design Lead at [Rolakosta][1], a boutique design studio with a multidisciplinary approach specialized in branding, cultural projects and new media content.
+I'm Bilgin Özkan, a creative soul with a main focus on web design and development. Over the years I had the great opportunity to work for some of the best brands and products in Turkey such as Türkiye İş Bankası, Nike, Ikea, Babylon, Pozitif, Hürriyet and Enka Kültür Sanat. Currently I am partner and Digital Design Lead at [Rolakosta][1], a boutique design studio with a multidisciplinary approach specialized in branding, cultural projects and new media content.
 
 ## Projects 
-
 Below you can find my selected projects.
 
 ### Rolio
@@ -20,9 +18,9 @@ Altough these people are not familiar with any of the content management tools a
 #### Results
 Rolio is used for many of our customers ([burakozkan.info](http://www.burakozkan.info), [artwalkistanbul.com](http://www.artwalkistanbul.com), [utkudervent.com](http://www.utkudervent.com)) at [Rolakosta][1]. Rolio's vision in the near future is to make its way to Wordpress Theme Directory and gain some recognition and feedback on [GitHub][2]
 
-#### About
+#### Meta
 * Wordpress Theme Development
-* Personal Project
+* Agency: Personal Project
 * [Rolio on GitHub][2]
 * 2016 - 2017
 
@@ -38,13 +36,13 @@ At the core of this project I simply wanted to gather the disorganized content a
 #### Results
 This is a work in progress but the end product will be an intelligent system to regularly discover new local artists, collect their disorganized data (including audio samples and events), organize it and make it all available in a single website. Nevertheless I accomplished what I was aiming at first place: to become familiar with the latest web technologies like React, GraphQL and Apollo API and to design a visual system for a product.
 
-#### About
+#### Meta
 * WIP
 * Node.js
 * GraphQL
 * React
 * Design Systems
-* Personal Project
+* Agency: Personal Project
 * RMP on GitHub
 * 2017 - 2018
 
@@ -60,19 +58,20 @@ After careful examination of the Skytanking website and detailed briefing proces
 #### Results
 The light and modern design of the website gained very positive feedback from the users and the companies involved in the process. Thanks to the user-friendly Wordpress panel we have integrated the website is getting more content updates than before which makes it more alive than its counterparts.
 
-#### About
+#### Meta
 * Commercial Project
 * Wordpress Integration
 * Responsive
+* Agency: Rolakosta
 * Skytankingovenon.com
 * 2017
-* Responsible for: 
+* Roles: 
     * Art Direcion
     * Front-end Development
     * Wordpress Integration
 
 ### Şirin Pancaroğlu
-An interconnected system built for the individual artist
+Personal Website of Turkish Harpist Şirin Pancaroğlu
 
 #### Problem
 When Şirin Pancaroğlu, the internationally acclaimed Turkish harpist contacted Rolakosta she had a clear vision about what she should expect from us and from the current digital tools: First she wanted to be able to easily document every project she is involved with all the assets like photographs, audio files and texts. Second she wanted to be able to regularly reach her audience through newsletters and social media using only one panel and don't want to waste much of her valuable time with technical stuff and changing panels or web sites.
@@ -83,15 +82,16 @@ At first we spared some time to build the right information structure. Because o
 #### Results
 At Rolakosta we always believed that the individual artist should take the control of her digital presence and be able to do the basics of digital marketing without any hustle or pain. In this project we created an interconnected system managed by a single Wordpress panel so that our client can easily organize her projects, manage the newsletters, post to her social media accounts and engage with her audience. Since its release in 2015 the website became a fine example for what an individual artist alone can achieve with its own data, appreciated and mentioned in various programs and articles.
 
-#### About
+#### Meta
 * Commercial Project
 * Wordpress Integration
 * Mailchimp Integration
 * Responsive
+* Agency: Rolakosta
 * Sirinpancaroglu.com
 * Time Interval: 2015 - 2016 - 2017 - 2018
-* Responsible for: 
-    * UX and UI Design
+* Roles: 
+    * UI Design
     * Front-end Development
     * Wordpress Integration
     * Mailchimp Integration
@@ -108,27 +108,62 @@ The project started with detailed user and data analysis. We found out that the 
 #### Results
 Projects are online at İş Bankası intranet platform and the tools we developed are serving all the employees on their daily routines. The style guides we developed are still used in both printed materials and digital products of these departments.
 
-#### About
+#### Meta
 * Commercial Project
 * Cross-browser compatibilitiy
 * Time Interval: 2016 - 2017
-* Responsible for: 
-    * UX and UI Design
+* Agency: Rolakosta
+* Roles: 
+    * UI Design
     * Front-end Development
 
-### Cappadox Festival
-Designing a digital experience 
+### Cappadox
+Designing a digital festival experience 
+
+#### About
+From 2013 to 2016 at Rolakosta we had the great opportunity to work with [Pozitif](http://www.pozitif.com/) in a great variety of digital products from their smallest festival microsites to their biggest flagship websites. In all these projects, we helped them build entertaining and colorful digital products to engage with their young and energetic audience. Me and my team at Rolakosta wireframed, prototyped, designed and developed websites, created motion graphics and gave consultancy services for more than 10 projects for 3 years we worked together.
 
 #### Problem
+For their new music and arts festival, held in the lunar landscape of Cappadocia in South-East Turkey we collaborated with Pozitif to design and develop festival's online presence. The main goal was to engage with festival audience in a different user experience reflecting the festival's mood and style by making the content exploration funny. Secondly we had to make 
+
 #### Design
+Having received the design assets from [Foxall](http://foxallstudio.com/) first we built a microsite to help the marketing team gather some information from early bird customers using questionnaires and email subscriptions which eventually helped them to shape the festival's program. Due to the short amount of time we worked close with our client and as they progressed with the festival content we simultaneously injected it in the ongoing design process and iterated constantly. The final website is a responsive single page application backed by the festival's data and authentication APIs and showcasing an experimental UX approach by embracing the drag, scroll and mouse wheel.
+
 #### Results
+The festival and its website with their unique styles attracked a lot of attention from the audience. In a short amount of time and little marketing effort hundreds of people attended the questionnaires and helped the team to shape the festival. Nearly 90% of the festival's attenders created a user on the website, booked the events and made their programs. The mobile friendly website also helped the attenders to grab the latest news and announcements during the festival time. 
+
+#### Meta
+* Commercial Project
+* Tags: API Integration, Responsive
+* Agency: Rolakosta
+* Time Interval: 2015
+* Roles: 
+    * UI Design
+    * Front-end Development
 
 ### Babylon
-Organizing entertainment
+Redesigning the face of a music and culture platform
+
+#### About
+Founded by Pozitif in 1999 to host the very best of progressive good music in the heart of Istanbul, Babylon transformed the city’s music scene and became a hub for international and local music culture. Its online platform, babylon.com.tr is the digital arts and culture platform that welcomes you to the vibrant world of Babylon where it offers music-centric news, exclusive content on Babylon artists and positive vibrations from across the globe with its distinct blog, festive radio and exciting event calendar.
 
 #### Problem
+In 2013 the Babylon team decided to redesign the digital outlook of the platform and revitalize it with a younger and vibrant identity. We teamed up with the internal development team to change the platform from the ground up with 3 sharp objectives: Take advantage of the new web technologies, be optimized for search engines and expand the content (with lots of new sections) while designing a better UX.
+
 #### Design
+Kalabalık bir içerik ekibi tarafından sık güncellenecek bu yeni platformda farklı kategorilere ait içeriklerin ilk bakışta ayrışabilmesi, bu içerikler ile ilgili tarih, yazar, ve fiyat gibi meta bilgilere hızlı ulaşılabilmesi ve tüm bu kalabalık içeriğin bir arada bir harmoni içerisinde durabilmesi için önem sırasına göre belirlenecek farklı boyutlardaki kutuları yerleştirebileceğimiz bir grid yapısı oluşturduk. Kutular bizim içeriklere açılan kapılarımız olarak konumlandılar ve her bir kutu içerisine de gerektiğinde gözükecek şekilde o içeriğe ait meta bilgileri gizledik. With countless iterations and Bu temel sistemi kullanarak ve bir yandan da geliştirerek platformun tüm gereksinimlerine çözüm üretecek tasarımlar geliştirdik. Yayın sonrası alınan başarılı sonuçların ardından yeni bir kararla radyo player ve kaynak bağımsız (Youtube, Vimeo, Soundcloud vb.) sitedeki tüm medya içeriğini oynatabilecek bir medya player'ın entegrasyonuna karar verilmişken ekonomik ve yönetimsel sorunlardan kaynaklı projenin geliştirilmesine ara verilmiştir. Bu süreç zarfında ortaya çıkan ama yarım kalan Versiyon 2 kod adlı çalışmaya da portfolyomda yer verilmiştir.
+
 #### Results
+Bir etkinlik takvimi sayfasından bir eğlence ve kültür platformuna dönüşen sitenin yenilenen yüzü ile öncelikle bounce rate oranları %80 bandından %55'lere kadar düştü ve zengin multimedya içeriği sayesinde kullanıcıların platformda geçirdikleri süre 3 katına kadar yükseldi. Kullanıcılar artık katıldıkları bir etkinliğin fotoğraflarından, Babylon TV'nin zengin video arşivine, müzik sahnesi ile ilgili haberlerden kapsamlı etkinlik takvimine birbiri ile bağlantılı tüm bu içeriğe tek bir çatı altından kolayca ulaşabiliyorlar.
+
+#### Meta
+* Commercial Project
+* Tags: API Integration, Responsive
+* Agency: Rolakosta
+* Time Interval: 2013-2016
+* Roles: 
+    * UI Design
+    * Front-end Development
 
 ### Kobe Takes Every Advantage
 Launch of Nike Basketball Turkey’s Facebook page
@@ -142,14 +177,15 @@ The campaign was called “Kobe takes every advantage”. It was a great example
 #### Results
 After a very successful launch (40k new users in one day) this Facebook App and its administration panel was also reapplied by Nike Greece team to support Kobe’s Athens visit. I was responsible for all the ideation, creative direction and interaction design of this project.
 
-#### About
+#### Meta
 * Commercial Project
 * Cross-browser compatibilitiy
 * Time Interval: 2011
-* Responsible for: 
+* Agency: Grey Worldwide Istanbul
+* Roles: 
     * Ideation
     * Creative Direction
-    * Interaction Design
+    * Interaction and UI Design
 
 ## More About Me
 
@@ -160,23 +196,30 @@ Thank you for scrolling this far. Let me try to introduce myself a little bit mo
 * Responsive design
 * Motion principles
 * Illustration
-* Design Systems
+* Approach: Design Systems and modular 
 
 *Technical*
-* Javascript
+* Javascript: Node 
 * Node.js
-* React
-* GraphQL
-* Post-processing CSS
-* GSAP: Make it alive
+* Semantic HTML
+* Frameworks: Backbone, React
+* Data: Json, MongoDb, GraphQL
+* Pre-processing CSS: Stylus
+* Post-processing CSS: Postcss, Autoprefixer
+* Web animations: GSAP
 * Cross-browser compatibilitiy
-* Build tools
-* SVG
+* Build tools: Grunt, WEbpack
+* SVG: Svg.js
+* Testing
+* Approach: microjs.com
 
 *Software*
 * Sketch
 * Sublime Text
 * Adobe Creative Suite
+    * Photoshop
+    * Illustrator
+    * After Effects 
 * GitKraken
 * Chrome Dev Tools
 

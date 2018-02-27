@@ -57,15 +57,22 @@ p
   a
     color #000
     font-family AvenirRegular
-    font-size fSmall
+    font-size fNormal
     text-align center
     text-decoration none
     display block
     line-height 1em
     padding 5px 10px
     transition background-color 150ms,box-shadow 300ms
+    span
+      display block
+      text-align left
+      &:last-child
+        font-size fMini
+        color rgba(0,0,0,0.35)
+        margin-top 5px
   @media screen and (min-width: tablet)
-    top 60px
+    top 40px
     left 40px
     
 #content-wrapper

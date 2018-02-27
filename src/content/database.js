@@ -1,7 +1,7 @@
 module.exports = {
   info: {
-    title: 'bilgin1500.com',
-    subtitle: 'Welcome',
+    title: 'Bilgin Özkan',
+    subtitle: 'Designer & Developer',
     description:
       'Portfolio website of Bilgin Özkan, designer and developer from Istanbul.',
     socialAccounts: [
@@ -17,7 +17,14 @@ module.exports = {
     idCounter: 0,
     separatorMain: '—',
     separatorProject: '‹',
-    projectWindowId: 'project-window'
+    projectWindowId: 'project-window',
+    projectThumbnailRatio: 1.5,
+    cloudinary: {
+      protocol: 'http://',
+      baseUrl: 'res.cloudinary.com/bilginozkan/image/upload/',
+      baseFolder: 'projects/',
+      baseExtension: 'png'
+    }
   },
   pages: [
     {
@@ -31,6 +38,7 @@ module.exports = {
         {
           name: 'Skytanking Ovenon Website',
           desc: 'Website design and development for Skytanking Ovenon',
+          active: false,
           meta: {
             category: 'Commercial Work',
             tags: ['Wordpress Integration', 'Responsive'],
@@ -38,15 +46,13 @@ module.exports = {
             date: '2017'
           },
           theme: {
-            size: 'large',
-            momentum: { speed: 0.4 },
             colors: {
               light: '#b9bcc5',
               spot1: '#010a61',
               spot2: '#f02c2e'
             },
             thumbnail: {
-              image: 'skytankingovenon-thumb.png',
+              image: 'thumbnail',
               fontColor: 'light'
             }
           },
@@ -77,87 +83,55 @@ module.exports = {
               type: 'gallery',
               content: [
                 {
-                  source: 'skytankingovenon_brief.png',
+                  source: 'brief',
                   caption: '',
                   alt: 'Briefing',
                   shadow: false
                 },
                 {
-                  source: 'skytankingovenon_wireframe_1.png',
+                  source: 'wireframe1',
                   caption:
                     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed facilisis ligula nec diam eleifend laoreet luctus id neque. Sed id metus id lacus molestie sagittis nec sit amet odio. Sed cursus eros pretium mauris posuere aliquam.',
                   alt: 'Wireframe 1'
                 },
                 {
-                  source: 'skytankingovenon_wireframe_2.png',
+                  source: 'wireframe2',
                   caption:
                     'Nec diam eleifend laoreet luctus id neque. Sed id metus id lacus molestie sagittis nec sit amet odio. Sed cursus eros pretium mauris posuere aliquam.',
                   alt: 'Wireframe 2'
                 },
                 {
-                  source: 'skytankingovenon_design_1.png',
-                  caption: '',
+                  source: 'design1',
                   alt: 'Design Draft 1'
                 },
                 {
-                  source: 'skytankingovenon_design_2.jpg',
-                  caption: '',
+                  source: 'design2',
                   alt: 'Design Draft 2'
                 },
                 {
-                  source: 'skytankingovenon_home.png',
-                  caption: '',
+                  source: 'home',
                   alt: 'Final Design of the Home Page'
                 },
                 {
-                  source: 'skytankingovenon_list.png',
-                  caption: '',
+                  source: 'list',
                   alt: 'Final Design of Listing Pages'
                 },
                 {
-                  source: 'skytankingovenon_single.png',
-                  caption: '',
+                  source: 'single',
                   alt: 'Final Design of a Single Page'
                 },
                 {
-                  source: 'skytankingovenon_single_extended.png',
-                  caption: '',
+                  source: 'single2',
                   alt: 'Final Design of a Single Extended Page'
                 }
               ]
-            },
-            {
-              name: 'Desktop',
-              type: 'video',
-              source: 'https://player.vimeo.com/video/252621827',
-              content: {
-                poster: 'video-poster.png',
-                width: 640,
-                height: 400,
-                sources: [
-                  { type: 'mp4', source: 'SampleVideo_720x480_2mb.mp4' },
-                  { type: 'webm', source: 'SampleVideo_720x480_2mb.webm' }
-                ]
-              }
-            },
-            {
-              name: 'Mobile',
-              type: 'video',
-              content: {
-                poster: 'video-poster.png',
-                width: 320,
-                height: 240,
-                sources: [
-                  { type: 'mp4', source: 'video.mp4' },
-                  { type: 'webm', source: 'video.webm' }
-                ]
-              }
             }
           ]
         },
         {
           name: 'Rolio',
-          desc: 'A minimal Wordpress theme for the creative individual ',
+          desc: 'A minimal Wordpress theme for the creative individual',
+          active: false,
           meta: {
             category: 'Personal Project',
             tags: ['Wordpress Theme Development'],
@@ -165,33 +139,17 @@ module.exports = {
             date: '2016 - 2017'
           },
           theme: {
-            size: 'large',
-            momentum: { speed: 0.2 },
             colors: {
-              light: '#ccc',
-              spot1: '#ddd',
+              light: '#fff',
+              spot1: '#bfe0d5',
               spot2: '#000'
             },
             thumbnail: {
-              image: 'rolio.png',
+              image: 'thumbnail',
               fontColor: 'dark'
             }
           },
           sections: [
-            {
-              name: 'Gallery',
-              type: 'gallery',
-              content: [
-                {
-                  source: '1.jpg',
-                  caption: 'Here I try to accomplish the best design learnings',
-                  alt: 'What an alternative text',
-                  width: 300,
-                  height: 100
-                },
-                { source: '2.png' }
-              ]
-            },
             {
               name: 'About',
               type: 'info',
@@ -212,32 +170,156 @@ module.exports = {
                     'Rolio is used for many of our customers ([burakozkan.info](http://www.burakozkan.info), [artwalkistanbul.com](http://www.artwalkistanbul.com), [utkudervent.com](http://www.utkudervent.com)) at [Rolakosta][1]. Rolio&apos;s vision in the near future is to make its way to Wordpress Theme Directory and gain some recognition and feedback on [GitHub][2]'
                 }
               ]
+            },
+            {
+              name: 'Gallery',
+              type: 'gallery',
+              content: [
+                { source: 'after-installation' },
+                { source: 'layouts' },
+                { source: 'mobile' },
+                { source: 'artwalk' },
+                { source: 'utkudervent' },
+                { source: 'burakozkan' }
+              ]
             }
           ]
         },
         {
           name: 'Şirin Pancaroğlu Website',
           desc: 'Personal Website of Turkish Harpist Şirin Pancaroğlu',
+          active: false,
           meta: {
             category: 'Commercial Work',
-            tags: ['Wordpress Integration', 'Responsive'],
+            tags: [
+              'Wordpress Integration',
+              'Mailchimp Integration',
+              'Responsive'
+            ],
             links: [{ Website: 'http://sirinpancaroglu.com' }],
-            date: '2017'
+            date: '2015 - 2018',
+            agency: 'Rolakosta',
+            roles: [
+              'UX and UI Design',
+              'Front-end Development',
+              'Wordpress and Mailchimp Integration'
+            ]
           },
           theme: {
-            size: 'large',
-            momentum: { speed: 0.2 },
             colors: {
-              light: '#ccc',
-              spot1: '#ddd',
-              spot2: '#000'
+              light: '#fffaf5',
+              spot1: '#56524f',
+              spot2: '#dba841'
             },
             thumbnail: {
-              image: 'sp-f3.png',
+              image: 'thumbnail',
               fontColor: 'dark'
             }
           },
-          sections: []
+          sections: [
+            {
+              name: 'About',
+              type: 'info',
+              content: [
+                {
+                  title: 'Problem',
+                  text:
+                    'When Şirin Pancaroğlu, the internationally acclaimed Turkish harpist contacted Rolakosta she had a clear vision about what she should expect from us and from the current digital tools: First she wanted to be able to easily document every project she is involved with all the assets like photographs, audio files and texts. Second she wanted to be able to regularly reach her audience through newsletters and social media using only one panel and don&apos;t want to waste much of her valuable time with technical stuff and changing panels or web sites.'
+                },
+                {
+                  title: 'Design',
+                  text:
+                    'At first we spared some time to build the right information structure. Because of the complexity of our client&apos;s massive data it was a necessary process to be finished on paper before beginning any digital sketching or wireframing. With a minimal visual design and some basic interaction we finished the design process and allocated most of our time to build the best administrative panel experience. After we&apos;ve finalized the information architecture it became obvious that we should get some help from the great Advanced Custom Fields plugin in order to customize the panel according to our client&apos;s needs such as related album information or flag a content to be included in the next newsletter.'
+                },
+                {
+                  title: 'Results',
+                  text:
+                    'At Rolakosta we always believed that the individual artist should take the control of her digital presence and be able to do the basics of digital marketing without any hustle or pain. In this project we created an interconnected system managed by a single Wordpress panel so that our client can easily organize her projects, manage the newsletters, post to her social media accounts and engage with her audience. Since its release in 2015 the website became a fine example for what an individual artist alone can achieve with its own data, appreciated and mentioned in various programs and articles.'
+                }
+              ]
+            },
+            {
+              name: 'Gallery',
+              type: 'gallery',
+              content: [
+                { source: 'home' },
+                { source: 'biography' },
+                { source: 'projects' },
+                { source: 'project' },
+                { source: 'project2' },
+                { source: 'album' },
+                { source: 'videos' },
+                { source: 'events' },
+                { source: 'contact' }
+              ]
+            }
+          ]
+        },
+        {
+          name: 'Cappadox',
+          desc: 'Designing a digital festival experience ',
+          meta: {
+            category: 'Commercial Work',
+            tags: ['API Integration', 'Responsive'],
+            links: [{ Website: 'http://sirinpancaroglu.com' }],
+            agency: 'Rolakosta',
+            date: '2015',
+            roles: ['UX and UI Design', 'Front-end Development']
+          },
+          theme: {
+            colors: {
+              light: '#f6ece3',
+              spot1: '#20214e',
+              spot2: '#fad936'
+            },
+            thumbnail: {
+              image: 'thumbnail',
+              fontColor: 'light'
+            }
+          },
+          sections: [
+            {
+              name: 'About',
+              type: 'info',
+              content: [
+                {
+                  title: 'Background',
+                  text:
+                    'From 2013 to 2016 at Rolakosta we had the great opportunity to work with <a target="_blank" href="http://www.pozitif.com/">Pozitif</a> in a great variety of digital products from their smallest festival microsites to their biggest flagship websites. In all these projects, we helped them build entertaining and colorful digital products to engage with their young and energetic audience. Me and my team at Rolakosta wireframed, prototyped, designed and developed websites, created motion graphics and gave consultancy services for more than 10 projects for 3 years we worked together.'
+                },
+                {
+                  title: 'Problem',
+                  text:
+                    'For their new music and arts festival, held in the lunar landscape of Cappadocia in South-East Turkey we collaborated with Pozitif to design and develop festival&apos;s online presence. The main goal was to engage with festival audience in a different user experience reflecting the festival&apos;s mood and style by making the content exploration funny. Secondly we had to make...'
+                },
+                {
+                  title: 'Design',
+                  text:
+                    'Having received the design assets from <a href="http://foxallstudio.com/">Foxall</a> first we built a microsite to help the marketing team gather some information from early bird customers using questionnaires and email subscriptions which eventually helped them to shape the festival&apos;s program. Due to the short amount of time we worked close with our client and as they progressed with the festival content we simultaneously injected it in the ongoing design process and iterated constantly. The final website is a responsive single page application backed by the festival&apos;s data and authentication APIs and showcasing an experimental UX approach by embracing the drag, scroll and mouse wheel.'
+                },
+                {
+                  title: 'Results',
+                  text:
+                    'The festival and its website with their unique styles attracked a lot of attention from the audience. In a short amount of time and little marketing effort hundreds of people attended the questionnaires and helped the team to shape the festival. Nearly 90% of the festival&apos;s attenders created a user on the website, booked the events and made their programs. The mobile friendly website also helped the attenders to grab the latest news and announcements during the festival time. '
+                }
+              ]
+            },
+            {
+              name: 'Gallery',
+              type: 'gallery',
+              content: [
+                { source: 'structure' },
+                { source: 'welcome', shadow: true },
+                { source: 'events', shadow: true },
+                { source: 'events-category', shadow: true },
+                { source: 'event-detail', shadow: true },
+                { source: 'calendar', shadow: true },
+                { source: 'calendar2', shadow: true },
+                { source: 'my-calendar', shadow: true },
+                { source: 'mobile' }
+              ]
+            }
+          ]
         }
       ]
     },
