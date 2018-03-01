@@ -19,6 +19,8 @@ Hi there 👋 My name is Bilgin Özkan, I am a visual designer & front-end devel
 
 The project is using NPM for dependency management and can be built using Webpack. The shortest way to start the website on your local machine is to build it with Webpack `npm run build` and run the website on webpack-dev-server with `npm start`
 
+:point_up: ** Extra Membership plugins of GSAP are not included in the repo. To be able to compile the project '_ThrowPropsPlugin_' and '_DrawSVGPlugin_' should be included in the src/vendors folder. 
+
 ## Notes
 
 This section is my notebook and it's constantly changing.

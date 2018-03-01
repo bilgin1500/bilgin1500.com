@@ -3,6 +3,7 @@ import Image from 'utilities/image';
 import {
   isUndefined,
   createEl,
+  createPage,
   removeClass,
   addClass,
   slugify,
@@ -62,11 +63,15 @@ function createProjectItem(prjData) {
 
 /**
  * Creates this page's elements
- * @param  {string} pageSlug - Slug for this page, created by the app.js
+ * @param  {object} page - Object containing page data
+ *                        name: Name of the page
+ *                        slug: Slug for this page, created by the app.js
  * @return {element} The page wrapper
  */
-function createPageDom(pageSlug) {
-  var $page = createEl('div', { id: pageSlug });
+function createDom(page) {
+  var page = createPage(page);
+  var $page = page.page;
+  var $pageContent = page.content;
 
   // Create empty cache element
   imgInstanceCache = [];
@@ -77,7 +82,7 @@ function createPageDom(pageSlug) {
   // List and append single project items
   for (var i = 0; i < projects.length; i++) {
     var $projectItem = createProjectItem(projects[i]);
-    $page.appendChild($projectItem);
+    $pageContent.appendChild($projectItem);
   }
 
   // Save instances
@@ -87,4 +92,4 @@ function createPageDom(pageSlug) {
   return $page;
 }
 
-export default createPageDom;
+export default createDom;

@@ -27,7 +27,8 @@ module.exports = {
       ThrowPropsPlugin: path.resolve(
         __dirname,
         'src/vendors/ThrowPropsPlugin.js'
-      )
+      ),
+      DrawSVGPlugin: path.resolve(__dirname, 'src/vendors/DrawSVGPlugin.js')
     }
   },
   module: {

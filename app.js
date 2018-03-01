@@ -5,6 +5,7 @@ import 'gsap';
 import 'gsap/Draggable';
 import 'ScrollToPlugin';
 import 'ThrowPropsPlugin';
+import 'DrawSVGPlugin';
 
 // Other injections
 import FontFaceObserver from 'fontfaceobserver';
@@ -45,9 +46,13 @@ docReady().then(function() {
     var $wrapper = createEl('div', { id: 'content-wrapper' });
     var $app = document.getElementById('app');
 
-    for (var i = 0; i < getPages().length; i++) {
-      var pageSlug = slugify(getPages()[i].name);
-      $wrapper.appendChild(require('components/' + pageSlug).default(pageSlug));
+    var pages = getPages();
+
+    for (var i = 0; i < pages.length; i++) {
+      var pageName = pages[i].name;
+      var pageSlug = slugify(pageName);
+      var createDom = require('components/page-' + pageSlug).default;
+      $wrapper.appendChild(createDom({ name: pageName, slug: pageSlug }));
     }
 
     $logoWrapper.appendChild($logo);

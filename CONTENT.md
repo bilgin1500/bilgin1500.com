@@ -191,46 +191,47 @@ After a very successful launch (40k new users in one day) this Facebook App and 
 Thank you for scrolling this far. Let me try to introduce myself a little bit more by showing you some of my home-cooked tables, charts and gifs. If you'd like to contact me the answer is <bilgin1500@gmail.com>.
  
 *Design Approach*
-* Simplicity
-* Responsive design
-* Motion principles
-* Illustration
-* Approach: Design Systems and modular 
+* Balanced: A user-focused and data-driven design can perform well but lack the abilities to engage with its users in a deeper level. On the contrary, an aesthetically good looking digital product will always be perceived as more valuable and having more qualities but can be ineffective and far away fron its user's needs. Good design always comes from striking the right balance between data, empathy and intuition.
+* Modular: A system, whether a visual design or software subdived into smaller parts is reusable, flexible, scalable and easy for others to participate.
+* Adaptive: A successful user interface should be able to adapt itself to all the different platforms it is being used on. It should be responsive to the screen sizes and be able to degrade or enhance its features for different type of clients.
+* Dynamic: Meaningful and well arranged motion ties all the elements of an interface together and creates a continuity among the user's journey which makes the experience more pleasent and easier to understand.  
 
 *Technical Skills*
-* Javascript 
-    * Why?: My primary programming language. I'am using JS from front-end to backend and loving its multi-paradigm nature where I as a self-thought developer can have the chance to learn different approaches like OOP or functional programming.
-    * Libraries & frameworks: When not rushing to strict deadlines I am a vanilla JS dev who loves to harness the power of [micro libraries](http://microjs.com), powerful utilities and big frameworks when needed. I have experience in Backbone and React. 
-    * Next gen: I love to study JS Design Patterns, learn next generation features as the language evolves (with using compilers like [Babel](https://babeljs.io/)) and extend my knowledge on [Web APIs](https://developer.mozilla.org/en-US/docs/Web/API).
+* JavaScript 
+    * Why: My primary programming language. I'am using JS from front-end to backend and loving its multi-paradigm nature where I as a self-thought developer can have the chance to learn different approaches like OOP and functional programming.
+    * How: When not rushing to strict deadlines I'm a vanilla JS dev who loves to harness the power of [micro libraries](http://microjs.com) but never I never hesitate to use powerful utilities ([Underscore](http://underscorejs.org/), [Lodash](https://lodash.com/)), feature-rich packages ([jQuery](https://jquery.com/)) and big frameworks ([Backbone](backbonejs.org), [React](https://reactjs.org)) when needed.
+    * Roadmap: I love to study [JS Design Patterns](https://addyosmani.com/resources/essentialjsdesignpatterns/book/), [new paradigms](https://opensource.com/article/17/6/functional-javascript) and [source codes](http://backbonejs.org/docs/backbone.html), learn next generation features as the language evolves (with using compilers like [Babel](https://babeljs.io/)) and extend my knowledge of [Web APIs](https://developer.mozilla.org/en-US/docs/Web/API).
     * Cross-browser compatibility: I frequently use [Can I Use](http://www.caniuse.com) database to support my target browsers.
     * APIs: When working on [RMP](/projects/rmp)'s crawler I studied and worked on various social media APIs like Facebook, Twitter, Google, Spotify and Musicbrainz thus I have a great knowledge how these RESTful APIs work. In [RMP](/projects/rmp) project I also developed an API driven architecture where all of my business logic and data layer is seperated from the clients using it. Using [GraphQL](http://graphql.org/) in this project on the API layer significantly reduced my work load as I only developed one endpoint and one version of the API. 
     * Testing: Though being very new on test-driven development and unit testing practices I had the opportunity to use and practice [Nightmare.js](http://www.nightmarejs.org/), [Nightwatch.js](http://nightwatchjs.org/) and [cheerio](https://github.com/cheeriojs/cheerio) in my side projects thus I am very capable of doing browser automations and tests.
 * Server-side scripting
-    * Background: In the early days of my programming career I first learned Classic ASP and even finished big [projects](http://isimetiketleri.com/ "One of them is isimetiketleri.com, an e-commerce website where people can customize and buy name labels.") using it. 
+    * Background: In the early days of my programming career I first learned Classic ASP and even finished big [projects](http://isimetiketleri.com/ "One of them is still alive at isimetiketleri.com, an e-commerce website where people can customize and buy name labels.") using it. 
     * Now: Having choosed Wordpress as my primary content management tool I began to study PHP and now I have good working knowledge of it.
-    * Future: I'm also working on my server-side Javascript capabilities and to know better the mechanisms of Node.js platform. While working on my side project [RMP](/projects/rmp) I used Node as my web platform and Express as my application framework. 
+    * Future: I'm also working on my server-side JavaScript capabilities and to know better the mechanisms of Node.js platform. While working on my side project [RMP](/projects/rmp) I used Node as my web platform and Express as my application framework. 
 * HTML
-    * Semantic
+    * Semantics: In the age of web components
 * Data
-    * Mysql
+    * Relational databases:  
     * GraphQL
-    * knex, bookshelf
-* Styling
+    * Tools: [Knex](http://knexjs.org/) (SQL query builder in JavaScript) and [Bookshelf](http://bookshelfjs.org/) (An ORM for MySql built on the Knex.js), [Apollo](https://www.apollographql.com/) (A GraphQL API), [Sequel Pro](https://www.sequelpro.com/) (Mac database management tool)
+* Style & Motion
     * Pre-processing CSS: Stylus
     * Post-processing CSS: Postcss, Autoprefixer
-    * Web animations: GSAP
+    * Methodology: 
+    * Web animations: GSAP and CSS animation
     * SVG: Svg.js
 
 * Tools & Software
     * Code Editor: I am using Sublime Text 3 packed with [Prettier](https://prettier.io) for code formatting, [SublimeLinter](http://www.sublimelinter.com) for linting and [eslint](https://eslint.org) and [SFTP](https://wbond.net/sublime_packages/sftp) for file transfers.
     * Terminal: iTerm and Oh My Zsh
     * Design: As an old and pro Creative Suite user I used Photoshop, Illustrator, After Effects and even Dreamweaver and Flash a lot in the past. Today they are still helping me with my raster works (Photoshop), animations (After Effects) or vector illustrations (Illustrator). But with the evolving 
-    * Dependency Management: For now I use primarily npm for browser and server Javascript, tried [Bower](https://bower.io/) for front-end package management and loved it and I'm curious about [Yarn](https://yarnpkg.com/) and will test it soon.
+    * Dependency Management: For now I use primarily npm for browser and server JavaScript, tried [Bower](https://bower.io/) for front-end package management and loved it and I'm curious about [Yarn](https://yarnpkg.com/) and will test it soon.
     * Version control: Using [GitKraken](https://www.gitkraken.com/) for now while working on my command line skills.
     * Automation: My build automation journey began with [Grunt](https://gruntjs.com) which I used as a task runner for almost every project. When I was learning React I met with [Webpack](http://webpack.js.org) and its approach to asset management which suited better than a task manager to all of my JS heavy web applications.
 
 *Other than that*
 * Open-source
+* Up-to-date: [Smashing Magazine](smashingmagazine.com), [MDN](https://developer.mozilla.org/), [Web Fundamentals](https://developers.google.com/web/)
 * Role playing and Pathfinder (Storytelling, Game system)
 * Comics (Drawing, )
 * Cinema Arthouse (Film culture, )
