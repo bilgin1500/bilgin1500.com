@@ -6,14 +6,15 @@ import 'css/info';
 
 /**
  * Info constructor
- * @param  {object} sectionData from database
- * @param  {string} projectSlug
- * @param  {object} section - Parent section
+ * @param  {object} prjData - Data from database
+ * @param  {number} index - Current section index
+ * @param  {object} section - Parent section's instance
  */
-function Info(sectionData, projectSlug, section) {
+function Info(prjData, index, section) {
   this.isActive = false;
   this.elasticEase = Elastic.easeOut.config(1, 0.75);
-  this.content = sectionData.content;
+  this.content = prjData.sections[index].content;
+  this.meta = prjData.meta;
   this._parentDraggable = section.draggable;
   this._parentSectionWrapper = section.wrapper;
   this._createDOM();
@@ -26,18 +27,54 @@ function Info(sectionData, projectSlug, section) {
  * appends it to the Info instance's element property
  */
 Info.prototype._createDOM = function() {
-  var $wrapper = createEl('div', { class: 'info' });
+  var $info = createEl('div', { class: 'info' });
+  var $infoWrapper = createEl('div', { class: 'info-wrapper' });
+  var $metaWrapper = createEl('div', { class: 'meta-wrapper' });
+  var $metaContent = createEl('p');
+  var $metaTitle = createEl('h4', { innerText: 'Info' });
 
+  // Parse the meta section {prjData.meta}
+  var meta = this.meta;
+
+  var cat = meta.category;
+  var tags = meta.tags;
+
+  var date =
+    meta.date.indexOf('-') > -1
+      ? ' between ' + meta.date.replace('-', 'and')
+      : ' in ' + meta.date;
+
+  var agency = !isUndefined(meta.agency)
+    ? ` for <a href="${meta.agency.url}" target="_blank">${meta.agency
+        .name}</a>`
+    : '';
+
+  var parts = !isUndefined(meta.parts)
+    ? `<br/>My parts in this project were ${meta.parts
+        .join(', ')
+        .replace(/,([^,]*)$/, ' and ' + '$1')}.`
+    : '';
+
+  var links = meta.links;
+
+  var sentence = cat + date + agency + '.' + parts;
+  $metaContent.insertAdjacentHTML('afterbegin', sentence);
+
+  // Parse the info section {prjData.sections[i].type == 'info'}
   for (var i = 0; i < this.content.length; i++) {
-    var $title = createEl('h4');
-    var $text = createEl('p');
-    $title.innerText = this.content[i].title;
-    $text.innerHTML = this.content[i].text;
-    $wrapper.appendChild($title);
-    $wrapper.appendChild($text);
+    var $title = createEl('h4', { innerText: this.content[i].title });
+    var $text = createEl('p', { innerHTML: this.content[i].text });
+
+    $infoWrapper.appendChild($title);
+    $infoWrapper.appendChild($text);
   }
 
-  this.element = $wrapper;
+  $metaWrapper.appendChild($metaTitle);
+  $metaWrapper.appendChild($metaContent);
+  $info.appendChild($metaWrapper);
+  $info.appendChild($infoWrapper);
+
+  this.element = $info;
 };
 
 /**

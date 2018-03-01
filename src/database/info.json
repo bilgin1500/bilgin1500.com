@@ -1,0 +1,11 @@
+{
+  "title": "Bilgin Özkan",
+  "subtitle": "Designer & Developer",
+  "description": "Portfolio website of Bilgin Özkan, designer and developer from Istanbul.",
+  "socialAccounts": [
+    ["GitHub", "https://github.com/bilgin1500/"],
+    ["LinkedIn", "https://www.linkedin.com/in/ozkanbilgin/"],
+    ["Twitter", "https://twitter.com/bilgin1500"]
+  ],
+  "copyright": "&copy;{year} Bilgin Özkan"
+}

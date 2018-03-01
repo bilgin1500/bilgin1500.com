@@ -8,88 +8,83 @@ import {
   slugify,
   buildMediaUrl
 } from 'utilities/helpers';
-import { getProjectsByCat, getCategories, setSetting } from 'utilities/orm';
+import { getProjects, setSetting } from 'utilities/orm';
 import 'css/projects';
 
-// Template for category title
-function templateTitle(args) {
-  return `<h3>${args.title}</h3>`;
-}
+var imgInstanceCache, momentumCache;
 
-// Template for single project showcase
-function templateProject(args) {
-  return `<a href="/projects/${slugify(args.name)}" id="project-thumb-${slugify(
-    args.name
-  )}" class="project-item ${args.theme && args.theme.thumbnail.fontColor}">
-    <div class="project-visual"></div>
-    <div class="project-desc">
-      <h4>${args.name}</h4>
-      <p>${args.desc}</p>
-    </div>
-  </a>`;
-}
+/**
+ * Create single project item's dom
+ * @param  {object} prjData - Project data from database
+ * @return {element} The project item
+ */
+function createProjectItem(prjData) {
+  var projectSlug = slugify(prjData.name);
 
-// Create elements and cache them
-var $wrapper = createEl('div', { id: 'projects' });
-
-// Cache all the images to control the loading process in the near future
-var imgInstanceCache = [];
-
-// Function wrapper to list and append projects by category
-function listProjects(categoryName) {
-  // Create a wrapper for this category
-  var $items = createEl('div', {
-    class: 'project-items ' + categoryName.toLowerCase().replace(/\s/g, '-')
+  // Create project item's inner elements
+  var $projectItem = createEl('a', {
+    href: '/projects/' + projectSlug,
+    id: 'project-thumb-' + projectSlug,
+    class: ['project-item', prjData.theme && prjData.theme.thumbnail.fontColor]
   });
+  var $projectVisual = createEl('div', { class: 'project-visual' });
+  var $projectHead = createEl('div', { class: 'project-head' });
+  var $projectTitle = createEl('h4', { innerText: prjData.name });
+  var $projectDesc = createEl('p', { innerText: prjData.desc });
 
-  // Category title
-  $wrapper.insertAdjacentHTML(
-    'beforeend',
-    templateTitle({ title: categoryName })
-  );
+  // Create Image instance
+  if (
+    !isUndefined(prjData.theme.thumbnail) &&
+    !isUndefined(prjData.theme.thumbnail.image)
+  ) {
+    var imgInstance = new Image({
+      src: buildMediaUrl({
+        project: slugify(prjData.name),
+        name: prjData.theme.thumbnail.image
+      }),
+      alt: prjData.name
+    });
+    $projectVisual.appendChild(imgInstance.elements.wrapper);
 
-  // Iterate all projects in db, append them to the DOM
-  getProjectsByCat(categoryName).forEach(function(projectData, i) {
-    var projectSlug = slugify(projectData.name);
+    // Cache Image instance
+    imgInstanceCache.push(imgInstance);
+  }
 
-    $items.insertAdjacentHTML('beforeend', templateProject(projectData));
+  //new Momentum($projectItem).start();
 
-    var $projectItem = $items.lastChild;
-    var $projectVisual = $projectItem.querySelector('.project-visual');
-
-    // Create Image instance
-    if (
-      !isUndefined(projectData.theme.thumbnail) &&
-      !isUndefined(projectData.theme.thumbnail.image)
-    ) {
-      var imgInstance = new Image({
-        src: buildMediaUrl({
-          project: projectSlug,
-          name: projectData.theme.thumbnail.image
-        }),
-        alt: projectData.name
-      });
-      $projectVisual.appendChild(imgInstance.elements.wrapper);
-
-      // Cache Image instance
-      imgInstanceCache.push(imgInstance);
-    }
-
-    //new Momentum($projectItem).start();
-  });
-
-  $wrapper.appendChild($items);
+  // Append everything and return
+  $projectHead.appendChild($projectTitle);
+  $projectHead.appendChild($projectDesc);
+  $projectItem.appendChild($projectVisual);
+  $projectItem.appendChild($projectHead);
+  return $projectItem;
 }
 
-// Save momentum cache
-setSetting('momentumCache', []);
+/**
+ * Creates this page's elements
+ * @param  {string} pageSlug - Slug for this page, created by the app.js
+ * @return {element} The page wrapper
+ */
+function createPageDom(pageSlug) {
+  var $page = createEl('div', { id: pageSlug });
 
-// Save img instance cache
-setSetting('imageInstanceCache', imgInstanceCache);
+  // Create empty cache element
+  imgInstanceCache = [];
+  momentumCache = [];
+  // Cache all projects
+  var projects = getProjects();
 
-// List projects
-for (var i = 0; i < getCategories().length; i++) {
-  listProjects(getCategories()[i]);
+  // List and append single project items
+  for (var i = 0; i < projects.length; i++) {
+    var $projectItem = createProjectItem(projects[i]);
+    $page.appendChild($projectItem);
+  }
+
+  // Save instances
+  setSetting('momentumCache', momentumCache);
+  setSetting('imageInstanceCache', imgInstanceCache);
+
+  return $page;
 }
 
-export default $wrapper;
+export default createPageDom;

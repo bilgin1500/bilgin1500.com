@@ -3,7 +3,7 @@ var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-var database = require('./src/content/database');
+var info = require('./src/database/info');
 var outputFolder = 'dist';
 var publicPath = '/';
 
@@ -19,7 +19,8 @@ module.exports = {
     alias: {
       utilities: path.resolve(__dirname, 'src/utilities/'),
       components: path.resolve(__dirname, 'src/components/'),
-      content: path.resolve(__dirname, 'src/content/'),
+      templates: path.resolve(__dirname, 'src/templates/'),
+      database: path.resolve(__dirname, 'src/database/'),
       images: path.resolve(__dirname, 'src/images/'),
       css: path.resolve(__dirname, 'src/css/'),
       ScrollToPlugin: 'gsap/src/uncompressed/plugins/ScrollToPlugin.js',
@@ -27,18 +28,6 @@ module.exports = {
         __dirname,
         'src/vendors/ThrowPropsPlugin.js'
       )
-      /*
-      DrawSVGPlugin: path.resolve(__dirname, 'src/vendors/DrawSVGPlugin.js'),
-      MorphSVGPlugin: path.resolve(__dirname, 'src/vendors/MorphSVGPlugin.js'),
-      Physics2DPlugin: path.resolve(
-        __dirname,
-        'src/vendors/Physics2DPlugin.js'
-      ),
-      PhysicsPropsPlugin: path.resolve(
-        __dirname,
-        'src/vendors/PhysicsPropsPlugin.js'
-      ),
-      SplitText: path.resolve(__dirname, 'src/vendors/SplitText.js')*/
     }
   },
   module: {
@@ -82,9 +71,9 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: database.info.title,
-      description: database.info.description,
-      template: 'src/content/index.html',
+      title: info.title,
+      description: info.description,
+      template: 'src/templates/index.html',
       favNormal: '/src/images/favicon-16x16.png',
       favRetina: '/src/images/favicon-32x32.png'
     }),

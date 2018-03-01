@@ -3,14 +3,14 @@ import 'css/video';
 
 /**
  * Video constructor
- * @param  {object} sectionData from database
- * @param  {string} projectSlug
- * @param  {object} section - Parent section
+ * @param  {object} prjData - Data from database
+ * @param  {number} index - Current section index
+ * @param  {object} section - Parent section's instance
  */
-function Video(sectionData, projectSlug, section) {
+function Video(prjData, index, section) {
   this.isActive = false;
-  this.content = sectionData.content;
-  this.projectSlug = projectSlug;
+  this.content = prjData.sections[index].content;
+  this.projectSlug = prjData.slug;
   this._createDom();
 }
 
@@ -42,7 +42,8 @@ Video.prototype._createDom = function() {
       createEl('source', {
         src: buildMediaUrl({
           project: this.projectSlug,
-          name: this.content.sources[i].source
+          name: this.content.source,
+          extension: this.content.sources[i].source
         }),
         type: 'video/' + this.content.sources[i].source
       })

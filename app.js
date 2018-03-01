@@ -47,7 +47,7 @@ docReady().then(function() {
 
     for (var i = 0; i < getPages().length; i++) {
       var pageSlug = slugify(getPages()[i].name);
-      $wrapper.appendChild(require('components/' + pageSlug).default);
+      $wrapper.appendChild(require('components/' + pageSlug).default(pageSlug));
     }
 
     $logoWrapper.appendChild($logo);

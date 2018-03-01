@@ -1,5 +1,19 @@
 import { slugify, isUndefined } from 'utilities/helpers';
-import data from 'content/database';
+import info from 'database/info';
+import settings from 'database/settings';
+// Pages
+import pageAboutMe from 'database/page-about-me';
+import pageIntro from 'database/page-intro';
+import pageProjects from 'database/page-projects';
+import pageSketchbook from 'database/page-sketchbook';
+// Projects
+import projectCappadox from 'database/project-cappadox';
+import projectRolio from 'database/project-rolio';
+import projectSirin from 'database/project-sirin-pancaroglu-website';
+import projectSky from 'database/project-skytankingovenon-website';
+// Order
+var pages = [pageIntro, pageProjects, pageAboutMe, pageSketchbook];
+var projects = [projectCappadox, projectRolio, projectSirin, projectSky];
 
 /**
  * Grabs a specific info from db
@@ -7,7 +21,7 @@ import data from 'content/database';
  * @return {string/number/boolean} 
  */
 function getInfo(property) {
-  return data.info[property];
+  return info[property];
 }
 
 /**
@@ -16,7 +30,7 @@ function getInfo(property) {
  * @return {string/number/boolean}
  */
 function getSetting(property) {
-  return data.settings[property];
+  return settings[property];
 }
 
 /**
@@ -25,7 +39,7 @@ function getSetting(property) {
  * @return {string/number/boolean} The value we've set
  */
 function setSetting(property, value) {
-  data.settings[property] = value;
+  settings[property] = value;
   return value;
 }
 
@@ -34,7 +48,7 @@ function setSetting(property, value) {
  * @return {array} Pages array
  */
 function getPages() {
-  return data.pages;
+  return pages;
 }
 
 /**
@@ -53,16 +67,17 @@ function getPage(name) {
  * @return {array} Array of projects
  */
 function getProjects() {
-  return getPage('projects').list;
+  return projects;
 }
 
 /**
+ * DEPRECATED
  * Returns filtered projects by given category name
  * @param  {string} catName - Name of the category
  * @return {array} Array of projects
  */
 function getProjectsByCat(catName) {
-  return getPage('projects').list.filter(function(project) {
+  return getProjects().filter(function(project) {
     return project.meta.category.toLowerCase() == catName.toLowerCase();
   });
 }
@@ -150,6 +165,7 @@ function getAdjSectionIndexes(projectBy, sectionBy) {
 }
 
 /**
+ * DEPRECATED
  * Returns all (unique) project category names as an array
  * and reverses it so that it begins with the 'Personal Projects'
  * @return {array} of string (category names) 
@@ -169,7 +185,7 @@ function getCategories() {
  * @return {string}
  */
 function getIntroContent() {
-  return getPage('intro').content;
+  return pageIntro.content;
 }
 
 export {

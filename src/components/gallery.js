@@ -20,18 +20,22 @@ import 'css/gallery';
 
 /**
  * Gallery constructor
- * @param  {object} sectionData from database
- * @param  {string} projectSlug
- * @param  {object} section - Parent section
+ * @param  {object} prjData - Data from database
+ * @param  {number} index - Current section index
+ * @param  {object} section - Parent section's instance
  */
-function Gallery(sectionData, projectSlug, section) {
-  this.projectSlug = projectSlug;
-  this.baseUrl = '/projects/' + projectSlug + '/' + slugify(sectionData.name);
+function Gallery(prjData, index, section) {
+  this.projectSlug = prjData.slug;
+  this.baseUrl =
+    '/projects/' +
+    this.projectSlug +
+    '/' +
+    slugify(prjData.sections[index].name);
   this.isActive = false;
   this.isNavLocked = false;
   this.currentIndex = null;
   this.elasticEase = Elastic.easeOut.config(1, 0.75);
-  this.slides = sectionData.content;
+  this.slides = prjData.sections[index].content;
   this._createDom();
   this._addEvents();
 }

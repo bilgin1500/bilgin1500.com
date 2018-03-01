@@ -1,0 +1,47 @@
+{
+  "name": "",
+  "desc": "",
+  "meta": {
+    "category": "",
+    "tags": [],
+    "links": [
+      {
+        "name": "",
+        "url": ""
+      }
+    ],
+    "date": ""
+  },
+  "theme": {
+    "colors": {
+      "light": "",
+      "spot1": "",
+      "spot2": ""
+    },
+    "thumbnail": {
+      "image": "",
+      "fontColor": ""
+    }
+  },
+  "sections": [
+    {
+      "name": "About",
+      "type": "info",
+      "content": [
+        {
+          "title": "",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "name": "Gallery",
+      "type": "gallery",
+      "content": [
+        {
+          "source": ""
+        }
+      ]
+    }
+  ]
+}

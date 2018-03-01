@@ -1,0 +1,92 @@
+{
+  "name": "Şirin Pancaroğlu Website",
+  "desc": "Personal Website of Turkish Harpist Şirin Pancaroğlu",
+  "meta": {
+    "category": "Commercial Work",
+    "tags": [
+      "Wordpress Integration",
+      "Mailchimp Integration",
+      "Responsive Design"
+    ],
+    "links": [
+      {
+        "name": "Website",
+        "url": "http://sirinpancaroglu.com"
+      }
+    ],
+    "date": "2015 - 2018",
+    "agency": {
+      "name": "Rolakosta",
+      "url": "http://www.rolakosta.com"
+    },
+    "parts": [
+      "UI Design",
+      "Front-end Development",
+      "Wordpress & Mailchimp Integration"
+    ]
+  },
+  "theme": {
+    "colors": {
+      "light": "#fffaf5",
+      "spot1": "#56524f",
+      "spot2": "#dba841"
+    },
+    "thumbnail": {
+      "image": "thumbnail",
+      "fontColor": "dark"
+    }
+  },
+  "sections": [
+    {
+      "name": "About",
+      "type": "info",
+      "content": [
+        {
+          "title": "Problem",
+          "text": "When Şirin Pancaroğlu, the internationally acclaimed Turkish harpist contacted Rolakosta she had a clear vision about what she should expect from us and from the current digital tools: First she wanted to be able to easily document every project she is involved with all the assets like photographs, audio files and texts. Second she wanted to be able to regularly reach her audience through newsletters and social media using only one panel and don&apos;t want to waste much of her valuable time with technical stuff and changing panels or web sites."
+        },
+        {
+          "title": "Design",
+          "text": "At first we spared some time to build the right information structure. Because of the complexity of our client&apos;s massive data it was a necessary process to be finished on paper before beginning any digital sketching or wireframing. With a minimal visual design and some basic interaction we finished the design process and allocated most of our time to build the best administrative panel experience. After we&apos;ve finalized the information architecture it became obvious that we should get some help from the great Advanced Custom Fields plugin in order to customize the panel according to our client&apos;s needs such as related album information or flag a content to be included in the next newsletter."
+        },
+        {
+          "title": "Results",
+          "text": "At Rolakosta we always believed that the individual artist should take the control of her digital presence and be able to do the basics of digital marketing without any hustle or pain. In this project we created an interconnected system managed by a single Wordpress panel so that our client can easily organize her projects, manage the newsletters, post to her social media accounts and engage with her audience. Since its release in 2015 the website became a fine example for what an individual artist alone can achieve with its own data, appreciated and mentioned in various programs and articles."
+        }
+      ]
+    },
+    {
+      "name": "Gallery",
+      "type": "gallery",
+      "content": [
+        {
+          "source": "home"
+        },
+        {
+          "source": "biography"
+        },
+        {
+          "source": "projects"
+        },
+        {
+          "source": "project"
+        },
+        {
+          "source": "project2"
+        },
+        {
+          "source": "album"
+        },
+        {
+          "source": "videos"
+        },
+        {
+          "source": "events"
+        },
+        {
+          "source": "contact"
+        }
+      ]
+    }
+  ]
+}

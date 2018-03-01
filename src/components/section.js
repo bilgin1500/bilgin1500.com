@@ -47,13 +47,13 @@ function Section(prjData, index, $guide) {
   // the instances' APIs
   switch (sectionData.type) {
     case 'video':
-      this.contentInstance = new Video(sectionData, prjData.slug, this);
+      this.contentInstance = new Video(prjData, index, this);
       break;
     case 'gallery':
-      this.contentInstance = new Gallery(sectionData, prjData.slug, this);
+      this.contentInstance = new Gallery(prjData, index, this);
       break;
     case 'info':
-      this.contentInstance = new Info(sectionData, prjData.slug, this);
+      this.contentInstance = new Info(prjData, index, this);
       break;
   }
 
