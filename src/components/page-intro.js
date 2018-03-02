@@ -1,5 +1,5 @@
-import { createEl, createPage } from 'utilities/helpers';
-import { getIntroContent } from 'utilities/orm';
+import { createEl, createPageContainer } from 'utilities/helpers';
+import { getPageContent } from 'utilities/orm';
 import 'css/intro';
 
 /**
@@ -10,13 +10,12 @@ import 'css/intro';
  * @return {element} The page wrapper
  */
 function createDom(page) {
-  var page = createPage(page);
-  var $page = page.page;
-  var $pageContent = page.content;
+  var page = createPageContainer(page);
+  var $page = page.$page;
+  var $pageContent = page.$content;
 
-  var $introText = createEl('p');
-  $introText.innerHTML = getIntroContent();
-  $pageContent.appendChild($introText);
+  // Get and append page content
+  $pageContent.innerHTML = getPageContent('Intro');
 
   return $page;
 }

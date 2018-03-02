@@ -3,13 +3,13 @@ import Image from 'utilities/image';
 import {
   isUndefined,
   createEl,
-  createPage,
+  createPageContainer,
   removeClass,
   addClass,
   slugify,
   buildMediaUrl
 } from 'utilities/helpers';
-import { getProjects, setSetting } from 'utilities/orm';
+import { getPageContent, getProjects, setSetting } from 'utilities/orm';
 import 'css/projects';
 
 var imgInstanceCache, momentumCache;
@@ -69,15 +69,19 @@ function createProjectItem(prjData) {
  * @return {element} The page wrapper
  */
 function createDom(page) {
-  var page = createPage(page);
-  var $page = page.page;
-  var $pageContent = page.content;
+  var page = createPageContainer(page);
+  var $page = page.$page;
+  var $pageContent = page.$content;
 
   // Create empty cache element
   imgInstanceCache = [];
   momentumCache = [];
+
   // Cache all projects
   var projects = getProjects();
+
+  // Get and append page content
+  $pageContent.innerHTML = getPageContent('Projects');
 
   // List and append single project items
   for (var i = 0; i < projects.length; i++) {

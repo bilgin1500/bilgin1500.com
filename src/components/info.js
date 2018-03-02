@@ -44,20 +44,20 @@ Info.prototype._createDOM = function() {
       ? ' between ' + meta.date.replace('-', 'and')
       : ' in ' + meta.date;
 
-  var agency = !isUndefined(meta.agency)
-    ? ` for <a href="${meta.agency.url}" target="_blank">${meta.agency
+  var client = !isUndefined(meta.client)
+    ? ` for <a href="${meta.client.url}" target="_blank">${meta.client
         .name}</a>`
     : '';
 
-  var parts = !isUndefined(meta.parts)
-    ? `<br/>My parts in this project were ${meta.parts
+  var roles = !isUndefined(meta.roles)
+    ? `<br/>My roles in this project were ${meta.roles
         .join(', ')
         .replace(/,([^,]*)$/, ' and ' + '$1')}.`
     : '';
 
   var links = meta.links;
 
-  var sentence = cat + date + agency + '.' + parts;
+  var sentence = cat + date + client + '.' + roles;
   $metaContent.insertAdjacentHTML('afterbegin', sentence);
 
   // Parse the info section {prjData.sections[i].type == 'info'}

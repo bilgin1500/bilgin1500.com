@@ -1,19 +1,16 @@
 import { slugify, isUndefined } from 'utilities/helpers';
 import info from 'database/info';
 import settings from 'database/settings';
-// Pages
-import pageAboutMe from 'database/page-about-me';
-import pageIntro from 'database/page-intro';
-import pageProjects from 'database/page-projects';
-import pageSketchbook from 'database/page-sketchbook';
+import pages from 'database/pages';
+
 // Projects
-import projectCappadox from 'database/project-cappadox';
-import projectRolio from 'database/project-rolio';
-import projectSirin from 'database/project-sirin-pancaroglu-website';
-import projectSky from 'database/project-skytankingovenon-website';
-// Order
-var pages = [pageIntro, pageProjects, pageAboutMe, pageSketchbook];
-var projects = [projectCappadox, projectRolio, projectSirin, projectSky];
+var projects = pages
+  .filter(function(page) {
+    return page.name == 'Projects';
+  })[0]
+  .list.map(function(prjSlug) {
+    return require('database/' + prjSlug);
+  });
 
 /**
  * Grabs a specific info from db
@@ -60,6 +57,15 @@ function getPage(name) {
   return getPages().filter(function(page) {
     return slugify(page.name) == slugify(name);
   })[0];
+}
+
+/**
+ * Grabs a specific page's content
+ * @param  {string} name -  Name of the page
+ * @return {string} Content property of the page object
+ */
+function getPageContent(name) {
+  return getPage(name).content;
 }
 
 /**
@@ -180,20 +186,13 @@ function getCategories() {
   ).reverse();
 }
 
-/**
- * Grabs intro's content
- * @return {string}
- */
-function getIntroContent() {
-  return pageIntro.content;
-}
-
 export {
   getInfo,
   getSetting,
   setSetting,
   getPages,
   getPage,
+  getPageContent,
   getProjects,
   getProjectsByCat,
   getProject,
@@ -201,6 +200,5 @@ export {
   getSection,
   findSectionIndex,
   getAdjSectionIndexes,
-  getCategories,
-  getIntroContent
+  getCategories
 };

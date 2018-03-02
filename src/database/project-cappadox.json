@@ -2,14 +2,14 @@
   "name": "Cappadox",
   "desc": "Designing a digital festival experience ",
   "meta": {
-    "category": "Commercial Work",
+    "category": "Commercial Project",
     "tags": ["API Integration", "Responsive Design"],
-    "agency": {
+    "client": {
       "name": "Rolakosta",
       "url": "http://www.rolakosta.com"
     },
     "date": "2015",
-    "parts": ["UX and UI Design", "Front-end Development"]
+    "roles": ["UI Designer", "Front-end Developer"]
   },
   "theme": {
     "colors": {
@@ -28,20 +28,20 @@
       "type": "info",
       "content": [
         {
-          "title": "Background",
-          "text": "From 2013 to 2016 at Rolakosta we had the great opportunity to work with <a target=\"_blank\" href=\"http://www.pozitif.com/\">Pozitif</a> in a great variety of digital products from their smallest festival microsites to their biggest flagship websites. In all these projects, we helped them build entertaining and colorful digital products to engage with their young and energetic audience. Me and my team at Rolakosta wireframed, prototyped, designed and developed websites, created motion graphics and gave consultancy services for more than 10 projects for 3 years we worked together."
+          "title": "About",
+          "text": "From 2013 to 2016 at Rolakosta we had the great opportunity to work with <a rel=\"external\" href=\"http://www.pozitif.com/\">Pozitif</a> – Turkey’s leading integrated entertainment company in a great variety of digital products from their smallest festival microsites to their biggest flagship websites. In all these projects, we helped them build entertaining and colorful digital products to engage with their young and energetic audience. My team and I at Rolakosta wireframed, prototyped, designed and developed websites, created motion graphics and gave consultancy services for more than 10 projects for 3 years we worked together."
         },
         {
           "title": "Problem",
-          "text": "For their new music and arts festival, held in the lunar landscape of Cappadocia in South-East Turkey we collaborated with Pozitif to design and develop festival&apos;s online presence. The main goal was to engage with festival audience in a different user experience reflecting the festival&apos;s mood and style by making the content exploration funny. Secondly we had to make..."
+          "text": "For their new music and arts festival, held in the lunar landscape of Cappadocia in South-East Turkey we collaborated with Pozitif to design and develop festival's online presence. Our goals were to engage with the festival audience in a different user experience reflecting the festival's mood and style, offer easy access to festival information and to make festival life easier for attendees by designing tools like program organizer."
         },
         {
           "title": "Design",
-          "text": "Having received the design assets from <a href=\"http://foxallstudio.com/\">Foxall</a> first we built a microsite to help the marketing team gather some information from early bird customers using questionnaires and email subscriptions which eventually helped them to shape the festival&apos;s program. Due to the short amount of time we worked close with our client and as they progressed with the festival content we simultaneously injected it in the ongoing design process and iterated constantly. The final website is a responsive single page application backed by the festival&apos;s data and authentication APIs and showcasing an experimental UX approach by embracing the drag, scroll and mouse wheel."
+          "text": "Having received the design assets from <a href=\"http://foxallstudio.com/\" rel=\"external\">Foxall</a> first we built a microsite to help the marketing team gather some information from early bird customers, using questionnaires and email subscriptions which eventually helped them shape the festival's program. Due to the short amount of time, we worked closely with our client and as they progressed with the festival content we simultaneously injected it into the ongoing design process and iterated constantly. The final website is a responsive single page application backed by the festival's data and authentication APIs and showcasing an experimental UX approach by embracing the drag, scroll and mouse wheel."
         },
         {
           "title": "Results",
-          "text": "The festival and its website with their unique styles attracked a lot of attention from the audience. In a short amount of time and little marketing effort hundreds of people attended the questionnaires and helped the team to shape the festival. Nearly 90% of the festival&apos;s attenders created a user on the website, booked the events and made their programs. The mobile friendly website also helped the attenders to grab the latest news and announcements during the festival time. "
+          "text": "The festival and its website with their unique styles attracted a lot of attention from the audience. In a short amount of time and little marketing effort, hundreds of people attended the questionnaires and helped the team shape the festival. Nearly 90% of the festival's participants registered on the website, booked the events and made their programs. The mobile-friendly website also helped the participants grab the latest news and announcements during the festival time."
         }
       ]
     },
@@ -50,38 +50,47 @@
       "type": "gallery",
       "content": [
         {
-          "source": "structure"
+          "source": "structure",
+          "alt": "Navigation and design elements"
         },
         {
           "source": "welcome",
-          "shadow": true
-        },
-        {
-          "source": "events",
-          "shadow": true
+          "shadow": true,
+          "alt": "Home page"
         },
         {
           "source": "events-category",
-          "shadow": true
+          "shadow": true,
+          "alt": "Events home page"
+        },
+        {
+          "source": "events",
+          "shadow": true,
+          "alt": "Events list"
         },
         {
           "source": "event-detail",
-          "shadow": true
+          "shadow": true,
+          "alt": "Event detail"
         },
         {
           "source": "calendar",
-          "shadow": true
+          "shadow": true,
+          "alt": "Calendar and filters"
         },
         {
           "source": "calendar2",
-          "shadow": true
+          "shadow": true,
+          "alt": "Calendar and filters - Scrolled"
         },
         {
           "source": "my-calendar",
-          "shadow": true
+          "shadow": true,
+          "alt": "My Calendar"
         },
         {
-          "source": "mobile"
+          "source": "mobile",
+          "alt": "Responsive design"
         }
       ]
     }

@@ -1,0 +1,75 @@
+{
+  "name": "ENKA Culture and Arts",
+  "desc": "Front-end development for ENKA Foundation",
+  "meta": {
+    "category": "Commercial Project",
+    "tags": ["Design Guidance", "Wordpress Integration", "Responsive Design"],
+    "links": [
+      {
+        "name": "Website",
+        "url": "http://enkasanat.org"
+      }
+    ],
+    "date": "2015 - 2016",
+    "client": {
+      "name": "Rolakosta",
+      "url": "http://www.rolakosta.com"
+    },
+    "roles": ["Front-end Developer", "Wordpress Developer"]
+  },
+  "theme": {
+    "colors": {
+      "light": "#fff",
+      "spot1": "#33d0cd",
+      "spot2": "#d8d8d8"
+    },
+    "thumbnail": {
+      "image": "thumbnail",
+      "fontColor": "dark"
+    }
+  },
+  "sections": [
+    {
+      "name": "About",
+      "type": "info",
+      "content": [
+        {
+          "title": "About",
+          "text": "The <a href=\"http://www.enka.com/sustainability/home/society/enka-foundation/\" rel=\"external\">ENKA Foundation</a> was established in 1983 to uphold and advance <a href=\"http://www.enka.com/\" rel=\"external\">ENKA</a>'s core philosophy and cultural values. Part of this foundation, ENKA Culture & Arts' activities range from the traditional to the contemporary, from the alternative to the popular, from Western to Eastern schools of art. "
+        },
+        {
+          "title": "Problem",
+          "text": "In 2015 the design agency <a href=\"http://www.frittatadesigns.com/\" rel=\"external\">Frit Ta Ta</a> contacted <a href=\"http://www.rolakosta.com/\" rel=\"external\">us</a> to help them designing and developing the new website of ENKA Culture and Arts. Back then they just redesigned the <a href=\"http://www.frittatadesigns.com/works/enka\" rel=\"external\">identity</a> and wanted the website to be in align with this new fresh look."
+        },
+        {
+          "title": "Design",
+          "text": "We guided the agency throughout the design process and together created a beautiful example of a corporate website strictly in line with its identity. Since the requirements of the project were different than a basic web site's information architecture, we wanted to build a content management system flexible enough. Thus, we used and heavily customized Wordpress to be able to support season-based categorization of the events (they take place only 3 times a year) and an extensive amount of archive material."
+        },
+        {
+          "title": "Results",
+          "text": "After migrating to Wordpress, making the website responsive and enhancing the user experience the overall results were impressive. After 1 year of its launch the bounce rates are as low as 20% and users, coming to the website only to look for an event are staying as long as 4 minutes on the website and almost surfing all the events of that season."
+        }
+      ]
+    },
+    {
+      "name": "Gallery",
+      "type": "gallery",
+      "content": [
+        {
+          "source": "home",
+          "alt": "Home page",
+          "shadow": true
+        },
+        {
+          "source": "single",
+          "alt": "A single event page",
+          "shadow": true
+        },
+        {
+          "source": "mobile",
+          "alt": "Responsive design"
+        }
+      ]
+    }
+  ]
+}

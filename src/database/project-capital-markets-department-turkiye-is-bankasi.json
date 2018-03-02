@@ -1,0 +1,73 @@
+{
+  "name": "Capital Markets Department, Türkiye İş Bankası",
+  "desc": "Rebranding and digital product design for Capital Markets Department of Türkiye İş Bankası",
+  "meta": {
+    "category": "Commercial Project",
+    "client": "Rolakosta",
+    "tags": ["Cross-browser compatibility", "Responsive Design"],
+    "date": "2016 - 2017",
+    "roles": ["Digital Design Lead", "Front-end Developer"]
+  },
+  "theme": {
+    "colors": {
+      "light": "#f5f5f5",
+      "spot1": "#1f1d49",
+      "spot2": "#189dc1"
+    },
+    "thumbnail": {
+      "image": "thumbnail",
+      "fontColor": "light"
+    }
+  },
+  "sections": [
+    {
+      "name": "About",
+      "type": "info",
+      "content": [
+        {
+          "title": "Problem",
+          "text": "Between 2015 and 2017 at Rolakosta we had the great chance to develop 2 big platforms for internal departments of Türkiye İş Bankası - Turkey's largest bank. One of these projects is the redesign and development of the intranet platform for their Capital Markets Department and the goal was to reach their employees with friendlier UX, raise the usage of the internal tools like bond yield calculation and encourage people to read and share the valuable content they’re providing on their platforms."
+        },
+        {
+          "title": "Design",
+          "text": "The project started with a detailed user and data analysis. We found out that the content was hard to read and share, navigation was unfriendly and calculation tools were not working correctly. On top, the design was not attractive to the users. Based on these results we developed brand new visual style guides for these platforms with clear layouts, easy to read typography, colorful illustrations with warm color pallets. We also improved the navigation by developing tools such as search suggestions, document sub-navigation based on the table of contents, user reading history, and reading mode ability."
+        },
+        {
+          "title": "Results",
+          "text": "Projects are being used at İş Bankası intranet platform and the tools we developed are serving all the employees in their daily routines. The style guides we developed are still used in both printed materials and digital products of these departments."
+        }
+      ]
+    },
+    {
+      "name": "Gallery",
+      "type": "gallery",
+      "content": [
+        {
+          "source": "home",
+          "alt": "Home page",
+          "shadow": true
+        },
+        {
+          "source": "list",
+          "alt": "Article list",
+          "shadow": true
+        },
+        {
+          "source": "article",
+          "alt": "A single article",
+          "shadow": true
+        },
+        {
+          "source": "eurobond-calculation",
+          "alt": "JS-heavy bond yield calculator",
+          "shadow": true
+        },
+        {
+          "source": "calc-tool",
+          "alt": "Discount calculator",
+          "shadow": true
+        }
+      ]
+    }
+  ]
+}

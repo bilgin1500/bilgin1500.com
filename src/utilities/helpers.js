@@ -46,6 +46,7 @@ var slugify = function(text) {
     è: 'e',
     é: 'e',
     ê: 'e',
+    ı: 'i',
     î: 'i',
     ï: 'i',
     ì: 'i',
@@ -398,21 +399,21 @@ function buildMediaUrl(img) {
 }
 
 /**
- * Creates a page wrapper
+ * Creates a page container
  * @param  {object} page - Object containing page data
  *                        name: Name of the page
  *                        slug: Slug of this page
  * @return {object} The page wrapper and content element
  */
-function createPage(page) {
+function createPageContainer(page) {
   var $page = createEl('div', { id: page.slug, class: 'page' });
   var $pageTitle = createEl('h2', { innerText: page.name });
   var $pageContent = createEl('div', { class: 'page-content' });
   $page.appendChild($pageTitle);
   $page.appendChild($pageContent);
   return {
-    page: $page,
-    content: $pageContent
+    $page: $page,
+    $content: $pageContent
   };
 }
 
@@ -436,5 +437,5 @@ export {
   clearInnerHTML,
   getDocScrollY,
   buildMediaUrl,
-  createPage
+  createPageContainer
 };

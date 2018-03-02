@@ -1,4 +1,4 @@
-import { createEl, createPage } from 'utilities/helpers';
+import { createEl, createPageContainer } from 'utilities/helpers';
 import 'css/sketchbook';
 
 /**
@@ -9,9 +9,9 @@ import 'css/sketchbook';
  * @return {element} The page wrapper
  */
 function createDom(page) {
-  var page = createPage(page);
-  var $page = page.page;
-  var $pageContent = page.content;
+  var page = createPageContainer(page);
+  var $page = page.$page;
+  var $pageContent = page.$content;
 
   return $page;
 }

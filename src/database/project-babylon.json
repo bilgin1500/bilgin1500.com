@@ -1,0 +1,171 @@
+{
+  "name": "Babylon",
+  "desc": "Turning into a music and culture platform",
+  "meta": {
+    "category": "Commercial Project",
+    "tags": ["API Integration", "Responsive Design"],
+    "client": {
+      "name": "Rolakosta",
+      "url": "http://www.rolakosta.com"
+    },
+    "date": "2013 - 2016",
+    "roles": ["UI Designer", "Front-end Developer"]
+  },
+  "theme": {
+    "colors": {
+      "light": "#e7ecce",
+      "spot1": "#32ac66",
+      "spot2": "#000"
+    },
+    "thumbnail": {
+      "image": "thumbnail",
+      "fontColor": "light"
+    }
+  },
+  "sections": [
+    {
+      "name": "About",
+      "type": "info",
+      "content": [
+        {
+          "title": "About",
+          "text": "Founded by <a rel=\"external\" href=\"http://www.pozitif.com/\">Pozitif</a> in 1999 to host the very best of progressive good music in the heart of Istanbul, Babylon transformed the city’s music scene and became a hub for international and local music culture. Its online platform, babylon.com.tr is the digital arts and culture platform that welcomes you to the vibrant world of Babylon where it offers music-centric news, exclusive content on Babylon artists and positive vibrations from across the globe with its distinct blog, festive radio and exciting event calendar."
+        },
+        {
+          "title": "Problem",
+          "text": "In 2013 the Babylon team decided to redesign the digital outlook of the platform and revitalize it with a younger and vibrant identity. We teamed up with the internal development team to change the platform from the ground up with 3 sharp objectives: Take advantage of the new web technologies, be optimized for search engines and expand the content (with lots of new sections) while designing a better UX."
+        },
+        {
+          "title": "Design",
+          "text": "As the new platform would have an extensive amount of content, there was a clear need to visually harmonize, differentiate and categorize the content and provide easy and quick access to metadata such as event date, post author, and ticket price. Thus, we created a grid structure to be used with 2D content boxes which were color-coded as per category type and had different sizes according to the importance level of the content. Metadata under each box would be revealed once hovered. Using the grid and box structure we created a lot of layout variations meeting all the needs of the platform. After launching the redesigned website the average user's session duration (the time he is spending on our website) almost doubled which immediately led Babylon Team to decide to invest more in the content. We began to work on version 2 and iterated new ideas to extend our content base. One of the ideas was to integrate Babylon's own radio station and its ecosystem with an extensive media player into the site. After a rough design process these ideas were mainly developed privately in the browser but due to economic reasons never made their ways to live. This version of Babylon website can also be seen in my portfolio."
+        },
+        {
+          "title": "Results",
+          "text": "In a couple of months, the nightclub website with a single (and popular) event calendar turned to a hub of music and culture packed full of blog posts, news, events, videos and media galleries. The results were impressive as the bounce rate dropped from 80% to almost 55% and average session duration of a single user almost tripled."
+        }
+      ]
+    },
+    {
+      "name": "Gallery",
+      "type": "gallery",
+      "content": [
+        {
+          "source": "process",
+          "alt": "Work in progress: Ideation and wireframe"
+        },
+        {
+          "source": "process-2",
+          "alt": "Work in progress: Content Boxes"
+        },
+        {
+          "source": "process-early-home",
+          "alt": "One of the early prototypes",
+          "shadow": true
+        },
+        {
+          "source": "events",
+          "alt": "Events home page",
+          "shadow": true
+        },
+        {
+          "source": "calendar",
+          "alt": "Events calendar",
+          "shadow": true
+        },
+        {
+          "source": "radio",
+          "alt": "Radio home page",
+          "shadow": true
+        },
+        {
+          "source": "tv",
+          "alt": "Single video page",
+          "shadow": true
+        },
+        {
+          "source": "interactive",
+          "alt": "Prototypes for radio player and magazine reader"
+        },
+        {
+          "source": "tablet",
+          "alt": "Adaptive tablet screens",
+          "shadow": true
+        },
+        {
+          "source": "mobile",
+          "alt": "Adaptive mobile screens",
+          "shadow": true
+        },
+        {
+          "source": "404",
+          "alt": "404",
+          "shadow": true
+        },
+        {
+          "source": "home",
+          "alt": "Final design of the home page"
+        },
+        {
+          "source": "v2-home",
+          "alt": "v2: Home",
+          "shadow": true
+        },
+        {
+          "source": "v2-events",
+          "alt": "v2: Events",
+          "shadow": true
+        },
+        {
+          "source": "v2-calendar",
+          "alt": "v2: Calendar",
+          "shadow": true
+        },
+        {
+          "source": "v2-detail",
+          "alt": "v2: Single post page",
+          "shadow": true
+        },
+        {
+          "source": "v2-featured",
+          "alt": "v2: Featured section home",
+          "shadow": true
+        },
+        {
+          "source": "v2-gallery",
+          "alt": "v2: An inline gallery",
+          "shadow": true
+        },
+        {
+          "source": "v2-list",
+          "alt": "v2: Full-width listing",
+          "shadow": true
+        },
+        {
+          "source": "v2-places",
+          "alt": "v2: Places and venues home",
+          "shadow": true
+        },
+        {
+          "source": "v2-store",
+          "alt": "v2: Store",
+          "shadow": true
+        },
+        {
+          "source": "v2-video-playlist",
+          "alt": "v2: Vide playlist",
+          "shadow": true
+        },
+        {
+          "source": "v2-media-player",
+          "alt": "v2: Radio & media player prototype",
+          "shadow": true
+        },
+        {
+          "source": "v2-media-player-2",
+          "alt": "v2: Radio prgram revealed",
+          "shadow": true
+        }
+      ]
+    }
+  ]
+}
