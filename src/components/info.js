@@ -46,18 +46,45 @@ Info.prototype._createDOM = function() {
 
   var client = !isUndefined(meta.client)
     ? ` for <a href="${meta.client.url}" target="_blank">${meta.client
-        .name}</a>`
+        .name}</a>. `
     : '';
 
   var roles = !isUndefined(meta.roles)
     ? `<br/>My roles in this project were ${meta.roles
         .join(', ')
-        .replace(/,([^,]*)$/, ' and ' + '$1')}.`
+        .replace(/,([^,]*)$/, ' and ' + '$1')}. `
     : '';
 
-  var links = meta.links;
+  var links = '';
 
-  var sentence = cat + date + client + '.' + roles;
+  function buildName(name) {
+    if (name == 'Website') {
+      return 'website';
+    } else {
+      return name + ' page';
+    }
+  }
+
+  if (!isUndefined(meta.links)) {
+    if (meta.links.length > 1) {
+      links = `You can visit project's `;
+      for (var i = 0; i < meta.links.length; i++) {
+        links += `${buildName(meta.links[i].name)} <a href="${meta.links[i]
+          .url}" rel="external">here</a>`;
+        if (i !== meta.links.length - 1) {
+          links += ` and `;
+        } else {
+          links += `.`;
+        }
+      }
+    } else {
+      links = `You can visit project's ${buildName(
+        meta.links[0].name
+      )} <a href="${meta.links[0].url}" rel="external">here.`;
+    }
+  }
+
+  var sentence = cat + date + client + roles + links;
   $metaContent.insertAdjacentHTML('afterbegin', sentence);
 
   // Parse the info section {prjData.sections[i].type == 'info'}

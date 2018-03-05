@@ -1,53 +1,62 @@
 @import "assets/layout"
 @import "assets/fonts"
-@import "assets/colors"
+json('../database/settings.json')
 
 #projects
-  margin 30px 0
-
-  .project-item 
-    position relative
-    display block
-    width 100%
-    margin-top 20px
-    z-index 2
-    text-decoration none
-    width 100%
-    &.dark
-      color rgba(0,0,0,0.75)
-    &.light
-      color rgba(255,255,255,0.75)
-          
-    .project-visual
-      
-      .img-wrapper
-        background-color #eee
-        padding-bottom 66.66%
-        
-        .img
-          position absolute
-        
-        .loader
-          position absolute
-          top 50%
-          left 50%
-          margin-left -19px
-          margin-top -19px
-
-    .project-head 
-      position absolute
-      top 0
-      bottom 0
-      padding 20px
+  .page-content
+    //flex()
+    
+    .project-item 
+      position relative
+      display block
       width 100%
-      box-sizing border-box
-      
-      h4
-        margin 0
-        font-size fNormal
-        margin-bottom 5px
+      margin-bottom 50px
+      z-index 2
+      text-decoration none
+      &:last-child
+        margin-bottom 0
+      @media screen and (min-width: tablet)
+        margin-bottom 100px
+            
+      .project-visual
+        //width 50%
         
-      p
-        margin 0
-        font-size fSmall
+        .img-wrapper
+          background-color #eee
+          padding-bottom 66.66%
+          
+          .img
+            position absolute
+          
+          .loader
+            position absolute
+            top 50%
+            left 50%
+            margin-left -19px
+            margin-top -19px
+
+      .project-head 
+        position relative
+        margin-top -30px
+        padding-left 20px
+        color #000
+        z-index 1
+        
+        h3
+          margin 0
+          font-family AvenirHeavy
+          font-size fHuge
+          font-weight normal
+          line-height fSmall
+          letter-spacing -0.03em
+          @media screen and (min-width: tablet)
+            font-size fGargantuan
+          @media screen and (min-width: desktop)
+            font-size fColossal
+          
+        p
+          margin 0
+          margin-top 5px
+          margin-left 10px
+          font-size fSmall
 

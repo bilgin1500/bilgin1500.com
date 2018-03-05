@@ -1,4 +1,4 @@
-import { getDocScrollY } from 'utilities/helpers';
+import { getDocScrollY, isUndefined } from 'utilities/helpers';
 
 /**
  * Adds momentum to an element. Updates on every RAF tick.
@@ -8,8 +8,12 @@ import { getDocScrollY } from 'utilities/helpers';
 var Momentum = function(el, options) {
   // Cache defaults
   var self = this;
-  var speed = options && options.speed ? options.speed : 0.4;
-  var friction = options && options.friction ? options.friction : 0.08;
+  var speed =
+    !isUndefined(options) && !isUndefined(options.speed) ? options.speed : 0.4;
+  var friction =
+    !isUndefined(options) && !isUndefined(options.friction)
+      ? options.friction
+      : 0.08;
 
   // Store old deltaY for further calculations
   self.deltaY = 0;

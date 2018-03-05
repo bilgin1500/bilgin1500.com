@@ -26,10 +26,6 @@
       "light": "#b9bcc5",
       "spot1": "#010a61",
       "spot2": "#f02c2e"
-    },
-    "thumbnail": {
-      "image": "thumbnail",
-      "fontColor": "light"
     }
   },
   "sections": [
@@ -57,40 +53,47 @@
       "content": [
         {
           "source": "brief",
-          "alt": "Briefing",
-          "shadow": false
+          "alt": "Briefing"
         },
         {
           "source": "wireframe1",
-          "alt": "Wireframe I"
+          "alt": "Wireframe I",
+          "shadow": true
         },
         {
           "source": "wireframe2",
-          "alt": "Wireframe II"
+          "alt": "Wireframe II",
+          "shadow": true
         },
         {
           "source": "design1",
-          "alt": "Design draft I"
+          "alt": "Design draft I",
+          "shadow": true
         },
         {
           "source": "design2",
-          "alt": "Design draft II"
+          "alt": "Design draft II",
+          "shadow": true
         },
         {
           "source": "home",
-          "alt": "Final design of the home page"
+          "alt": "Final design of the home page",
+          "shadow": true
         },
         {
           "source": "list",
-          "alt": "Final design of listing pages"
+          "alt": "Final design of listing pages",
+          "shadow": true
         },
         {
           "source": "single",
-          "alt": "Final design of a single page"
+          "alt": "Final design of a single page",
+          "shadow": true
         },
         {
           "source": "single2",
-          "alt": "Final design of a single extended page"
+          "alt": "Final design of a single extended page",
+          "shadow": true
         }
       ]
     }

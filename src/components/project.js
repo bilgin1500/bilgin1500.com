@@ -13,7 +13,9 @@ import {
   setSetting,
   getSetting
 } from 'utilities/orm';
+import events from 'utilities/events';
 import Sections from 'components/sections';
+import closeIcon from 'images/close.svg';
 import 'css/project';
 
 var sectionsInstance;
@@ -25,6 +27,7 @@ var defaultOpenings;
  *     slug: Project's slug
  *     open: Opens the window
  *     close: Closes the window
+ *     onEnd: onEnd callback
  * @param {object} project - Project data from database
  * @param {object} defaults - With which page to open the project. {section,slide}
  */
@@ -55,8 +58,10 @@ function Project(project, defaults) {
     windowInstance.open();
   };
 
-  this.close = function() {
-    windowInstance.close();
+  // onEnd: After project window is closed onEnd will trigger
+  // It comes from the router and used for the prev/next prj. navigation
+  this.close = function(onEnd) {
+    windowInstance.close(onEnd);
     sectionsInstance.removeEvents();
     setSetting('projectInstance', undefined);
     setSetting('sectionsInstance', undefined);
@@ -71,6 +76,8 @@ function Project(project, defaults) {
  * @param {object} prjData - Project data from database
  */
 function ProjectWindow(prjData) {
+  var self = this;
+
   // The main window
   var $currWindow = $doc.getElementById(getSetting('projectWindowId'));
 
@@ -93,21 +100,39 @@ function ProjectWindow(prjData) {
     href: prjData.prevPrjUrl,
     title: 'Previous Project: ' + prjData.prevPrjName + ' [P]',
     class: 'prev',
-    innerText: 'Previous'
+    innerText: 'Previous',
+    rel: 'prev'
   });
 
   var $next = createEl('a', {
     href: prjData.nextPrjUrl,
     title: 'Previous Project: ' + prjData.nextPrjName + ' [N]',
     class: 'prev',
-    innerText: 'Next'
+    innerText: 'Next',
+    rel: 'next'
   });
 
   var $close = createEl('a', {
     href: '/projects/',
     title: 'Close Project [ESC]',
-    class: 'close',
-    innerText: 'Close'
+    class: 'close'
+  });
+  var $closeImg = createEl('img', {
+    src: closeIcon,
+    alt: 'Close Project [ESC]'
+  });
+  $close.appendChild($closeImg);
+
+  // Close button hover animation
+  var hoverAnim = TweenMax.to($close, 0.15, {
+    paused: true,
+    rotation: 135
+  });
+  $close.addEventListener('mouseover', function() {
+    hoverAnim.play();
+  });
+  $close.addEventListener('mouseout', function() {
+    hoverAnim.reverse();
   });
 
   // Append the layers according to their z-index order
@@ -117,82 +142,121 @@ function ProjectWindow(prjData) {
   $currWindow.appendChild($projectWrapper);
   $currWindow.appendChild(l1);
 
-  // Straight: Append the project content during the transition animation
-  // Reversed: Remove the elements inside the .project-wrapper
-  function manipulateDom() {
-    if (timeline.reversed()) {
-      clearInnerHTML($projectWrapper);
-    } else {
-      $projectHelperNav.appendChild($prev);
-      $projectHelperNav.appendChild($next);
-      $projectHelperNav.appendChild($close);
-      $projectHead.appendChild($title);
-      $projectHead.appendChild($desc);
-      $projectHead.appendChild($projectHelperNav);
-      $projectWrapper.appendChild($projectHead);
-      $projectWrapper.appendChild(sectionsInstance.createDom());
-      sectionsInstance.goto(defaultOpenings.section, defaultOpenings.slide);
-    }
-  }
-
-  // Event callbacks
-  function toogleClasses() {
-    toggleClass($doc.body, ['no-scroll', 'project-window-opened']);
-  }
-
-  function destroyAll() {
-    clearInnerHTML($currWindow);
-  }
-
-  // The timeline itself
-  var t1 = TweenMax.set([l1, l2, l3], {
-    transformOrigin: '100% 0%',
-    immediateRender: false
-  });
-
-  var t2 = TweenMax.to(l1, 0.4, {
-    xPercent: 100,
-    ease: Circ.easeInOut
-  });
-
-  var t3 = TweenMax.to(l2, 0.4, {
-    xPercent: 100,
-    ease: Circ.easeInOut
-  });
-
-  var t4 = TweenMax.set(l1, {
-    backgroundColor: prjData.theme.colors.spot1,
-    immediateRender: false
-  });
-
-  var t5 = TweenMax.to(l2, 0.6, {
-    scaleX: 0,
-    ease: Circ.easeInOut
-  });
-
-  var t6 = TweenMax.to(l3, 0.25, {
-    borderColor: prjData.theme.colors.spot1,
-    borderWidth: 10
-  });
-
-  var timeline = new TimelineMax({ paused: true })
-    .eventCallback('onReverseComplete', destroyAll)
-    .add(toogleClasses)
-    .add(t1)
-    .add(t2)
-    .add(t3, '-=0.1')
-    .add(t4)
-    .add(manipulateDom)
-    .add(t5)
-    .add(t6);
+  /**
+   * This project opening/closing animation is a beautiful example 
+   * of how complex yet elegant a GSAP timeline can become 
+   * Repeat: 0 ( start/closed) - 1 (ends/opened) - 0 (reversed/closed)
+   */
+  var prjOpenCloseAnim = new TimelineMax({ paused: true })
+    // This will fire on on [0]-1-0
+    .eventCallback('onStart', function() {
+      events.publish('project.onStart');
+    })
+    // Disable body scrolling and note to myself: delete project-window-opened
+    .add(function() {
+      toggleClass($doc.body, ['no-scroll', 'project-window-opened']);
+    })
+    // At first we'll set the defaults for the layers
+    .set([l1, l2, l3], {
+      transformOrigin: '100% 0%',
+      display: 'block',
+      immediateRender: false
+    })
+    // A gate for other functions to hook to
+    .add(function() {
+      events.publish('project.onLayer1Start');
+    })
+    // Slide the layer1
+    .to(l1, 0.4, {
+      xPercent: 100,
+      ease: Circ.easeInOut
+    })
+    // A gate for other functions to hook to
+    .add(function() {
+      events.publish('project.onLayer2Start');
+    }, '-=0.1')
+    // Slide the layer2
+    .to(
+      l2,
+      0.4,
+      {
+        xPercent: 100,
+        ease: Circ.easeInOut
+      },
+      '-=0.1'
+    )
+    // While layer2 is blocking the vision change the background color behind
+    .set(l1, {
+      backgroundColor: prjData.theme.colors.spot1,
+      immediateRender: false
+    })
+    // When layer2 blocks the vision manipulate the DOM behind:
+    // Straight: Append the project content during the transition animation
+    // Reversed: Remove the elements inside the .project-wrapper
+    .add(function() {
+      if (prjOpenCloseAnim.reversed()) {
+        clearInnerHTML($projectWrapper);
+      } else {
+        $projectHelperNav.appendChild($prev);
+        $projectHelperNav.appendChild($next);
+        $projectHelperNav.appendChild($close);
+        $projectHead.appendChild($title);
+        $projectHead.appendChild($desc);
+        $projectHead.appendChild($projectHelperNav);
+        $projectWrapper.appendChild($projectHead);
+        $projectWrapper.appendChild(sectionsInstance.createDom());
+        sectionsInstance.goto(
+          defaultOpenings.section,
+          defaultOpenings.slide,
+          true
+        );
+      }
+    })
+    // A gate for other functions to hook to
+    .add(function() {
+      events.publish('project.onContentRevealBegin', {
+        isReversed: prjOpenCloseAnim.reversed()
+      });
+    })
+    // Slide the layer2 out: Everything reveals
+    .to(l2, 0.6, {
+      scaleX: 0,
+      ease: Circ.easeInOut
+    })
+    // Final touch: Borders
+    .to(l3, 0.25, {
+      borderColor: prjData.theme.colors.spot1,
+      borderWidth: 10
+    })
+    // This will fire on 0-[1]-0
+    .eventCallback('onComplete', function() {
+      events.publish('project.onReady');
+    })
+    // This will fire on 0-1-[0]
+    .eventCallback('onReverseComplete', function() {
+      events.publish('project.onEnd');
+      clearInnerHTML($currWindow);
+      // Fire the onEnd callback set by this.close method
+      if (!isUndefined(self.onEnd)) {
+        self.onEnd();
+      }
+    });
 
   // Public methods
   this.open = function() {
-    timeline.play();
+    prjOpenCloseAnim.play();
   };
 
-  this.close = function() {
-    timeline.reverse();
+  // Parameter onEnd comes from project.close()
+  this.close = function(onEnd) {
+    // https://greensock.com/forums/topic/9182-detect-reverse-start-event/?do=findComment&comment=36992
+    events.publish('project.onReverseStart');
+
+    // Begin the reversing
+    prjOpenCloseAnim.reverse();
+
+    // Make the onEnd callback reachable
+    this.onEnd = onEnd;
   };
 }
 

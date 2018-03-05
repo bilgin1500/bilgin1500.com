@@ -3,7 +3,10 @@
   "desc": "Rebranding and digital product design for Capital Markets Department of Türkiye İş Bankası",
   "meta": {
     "category": "Commercial Project",
-    "client": "Rolakosta",
+    "client": {
+      "name": "Rolakosta",
+      "url": "http://www.rolakosta.com"
+    },
     "tags": ["Cross-browser compatibility", "Responsive Design"],
     "date": "2016 - 2017",
     "roles": ["Digital Design Lead", "Front-end Developer"]
@@ -13,10 +16,6 @@
       "light": "#f5f5f5",
       "spot1": "#1f1d49",
       "spot2": "#189dc1"
-    },
-    "thumbnail": {
-      "image": "thumbnail",
-      "fontColor": "light"
     }
   },
   "sections": [

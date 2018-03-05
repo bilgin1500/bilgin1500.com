@@ -5,7 +5,6 @@ import router from 'utilities/router';
 import {
   $win,
   $doc,
-  log,
   createEl,
   removeClass,
   addClass,
@@ -193,9 +192,6 @@ Gallery.prototype._createSlide = function(index, source) {
         }
         resetDragToStartPos.play();
       }
-
-      // Log the interaction and finish with the interaction
-      log('[IX] Gallery swiped to the ' + dragSwipeDir);
     }
   });
 

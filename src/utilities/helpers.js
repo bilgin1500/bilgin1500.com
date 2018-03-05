@@ -175,13 +175,12 @@ var createEl = function(type, attributes) {
 
       if (key == 'innerText' || key == 'innerHTML') {
         $el[key] = val;
-        break;
-      }
-
-      if (typeof val == 'string') {
-        $el.setAttribute(key, val);
-      } else if (Array.isArray(val)) {
-        $el.setAttribute(key, val.join(' '));
+      } else {
+        if (typeof val == 'string') {
+          $el.setAttribute(key, val);
+        } else if (Array.isArray(val)) {
+          $el.setAttribute(key, val.join(' '));
+        }
       }
     }
   }
@@ -379,29 +378,20 @@ function buildMediaUrl(img) {
   var setting = getSetting('cloudinary');
   var protocol = setting.protocol;
   var baseUrl = setting.baseUrl;
-  var baseFolder = setting.baseFolder;
+  var baseProjectsFolder = setting.baseProjectsFolder;
   var baseExtension = setting.baseExtension;
   var imgName = img.name;
-  var prjName = img.project;
+  var prjFolder = img.project ? baseProjectsFolder + img.project + '/' : '';
   var imgTrans = isUndefined(img.trans) ? '' : img.trans + '/';
   var imgExt = isUndefined(img.estension) ? baseExtension : img.estension;
-  return (
-    protocol +
-    baseUrl +
-    imgTrans +
-    baseFolder +
-    prjName +
-    '/' +
-    imgName +
-    '.' +
-    imgExt
-  );
+  return protocol + baseUrl + imgTrans + prjFolder + imgName + '.' + imgExt;
 }
 
 /**
  * Creates a page container
  * @param  {object} page - Object containing page data
  *                        name: Name of the page
+ *                        content: Content of the page
  *                        slug: Slug of this page
  * @return {object} The page wrapper and content element
  */
@@ -409,8 +399,14 @@ function createPageContainer(page) {
   var $page = createEl('div', { id: page.slug, class: 'page' });
   var $pageTitle = createEl('h2', { innerText: page.name });
   var $pageContent = createEl('div', { class: 'page-content' });
+
   $page.appendChild($pageTitle);
   $page.appendChild($pageContent);
+
+  if (!isUndefined(page.content)) {
+    $pageContent.innerHTML = page.content;
+  }
+
   return {
     $page: $page,
     $content: $pageContent

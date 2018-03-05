@@ -1,5 +1,4 @@
 import { createEl, createPageContainer } from 'utilities/helpers';
-import { getPageContent } from 'utilities/orm';
 import 'css/intro';
 
 /**
@@ -13,9 +12,6 @@ function createDom(page) {
   var page = createPageContainer(page);
   var $page = page.$page;
   var $pageContent = page.$content;
-
-  // Get and append page content
-  $pageContent.innerHTML = getPageContent('Intro');
 
   return $page;
 }

@@ -9,17 +9,23 @@
       "url": "http://www.rolakosta.com"
     },
     "date": "2013 - 2016",
-    "roles": ["UI Designer", "Front-end Developer"]
+    "roles": ["UI Designer", "Front-end Developer"],
+    "links": [
+      {
+        "name": "Website",
+        "url": "http://babylon.com.tr"
+      },
+      {
+        "name": "Version 2",
+        "url": "#"
+      }
+    ]
   },
   "theme": {
     "colors": {
-      "light": "#e7ecce",
-      "spot1": "#32ac66",
+      "light": "#fff",
+      "spot1": "#acc80d",
       "spot2": "#000"
-    },
-    "thumbnail": {
-      "image": "thumbnail",
-      "fontColor": "light"
     }
   },
   "sections": [
@@ -104,7 +110,13 @@
         {
           "source": "home",
           "alt": "Final design of the home page"
-        },
+        }
+      ]
+    },
+    {
+      "name": "Gallery: Version 2",
+      "type": "gallery",
+      "content": [
         {
           "source": "v2-home",
           "alt": "v2: Home",

@@ -1,0 +1,21 @@
+{
+  "title": "Other than that",
+  "list": [
+    {
+      "name": "Following",
+      "content": "<p><a href=\"https://smashingmagazine.com\" rel=\"external\">Smashing Magazine</a>, <a href=\"https://developer.mozilla.org/\" rel=\"external\">MDN</a> and <a href=\"https://developers.google.com/web/\" rel=\"external\">Web Fundamentals</a></p>"
+    },
+    {
+      "name": "Inspired by",
+      "content": "<p>Great <a href=\"https://www.dwell.com/\" rel=\"external\">architecture</a> and <a href=\"https://www.instagram.com/cabinlove\" rel=\"external\">cozy places</a></p>"
+    },
+    {
+      "name": "Interested in",
+      "content": "<p>Graphic novels, fantasy literature</p>"
+    },
+    {
+      "name": "Playing",
+      "content": "<p><a href=\"http://paizo.com/\" rel=\"external\">Pathfinder</a></p>"
+    }
+  ]
+}

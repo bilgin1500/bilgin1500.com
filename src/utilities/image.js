@@ -4,10 +4,10 @@ import loaderIcon from 'images/loader-tail-spin.svg';
 /*
  * Image constructor
  * @param  {object} attr - <img> attributes
- *                         src
- *                         alt
- *                         caption
- *                         shadow
+ *                         id: Image ID
+ *                         alt: Alternative tex
+ *                         src: Source
+ *                         shadow: Does it cast a shadow?
  */
 function Image(attr) {
   this.isLoaded = false;

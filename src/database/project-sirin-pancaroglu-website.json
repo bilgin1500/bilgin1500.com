@@ -23,13 +23,9 @@
   },
   "theme": {
     "colors": {
-      "light": "#fffaf5",
-      "spot1": "#56524f",
-      "spot2": "#dba841"
-    },
-    "thumbnail": {
-      "image": "thumbnail",
-      "fontColor": "dark"
+      "light": "#e3e3e3",
+      "spot1": "#b78122",
+      "spot2": "#110f22"
     }
   },
   "sections": [

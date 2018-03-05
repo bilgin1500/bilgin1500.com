@@ -9,17 +9,13 @@
     },
     "tags": ["Cross-browser compatibility"],
     "date": "2011",
-    "roles": ["Ideation", "Creative Director", "Front-end Developer"]
+    "roles": ["Creative Director", "Design Lead", "Technical Lead"]
   },
   "theme": {
     "colors": {
-      "light": "#fff",
-      "spot1": "#000",
-      "spot2": "#000"
-    },
-    "thumbnail": {
-      "image": "thumbnail",
-      "fontColor": "light"
+      "light": "#e9ecf2",
+      "spot1": "#4f2582",
+      "spot2": "#d8a82e"
     }
   },
   "sections": [
@@ -46,41 +42,54 @@
       "type": "gallery",
       "content": [
         {
-          "source": "brief",
-          "alt": "Briefing",
-          "shadow": false
+          "source": "wireframe",
+          "alt": "Diagrams and wireframes",
+          "shadow": true
         },
         {
-          "source": "wireframe1",
-          "alt": "Wireframe I"
+          "source": "admin1",
+          "alt": "Admin: Login",
+          "shadow": true
         },
         {
-          "source": "wireframe2",
-          "alt": "Wireframe II"
+          "source": "admin2",
+          "alt": "Admin: Tournament database",
+          "shadow": true
         },
         {
-          "source": "design1",
-          "alt": "Design draft I"
+          "source": "admin3",
+          "alt": "Admin: Activity Management",
+          "shadow": true
         },
         {
-          "source": "design2",
-          "alt": "Design draft II"
+          "source": "admin4",
+          "alt": "Admin: #askkobe Moderation",
+          "shadow": true
         },
         {
-          "source": "home",
-          "alt": "Final design of the home page"
+          "source": "n1",
+          "alt": "Nike Basketball FB Fan Page Splash",
+          "shadow": true
         },
         {
-          "source": "list",
-          "alt": "Final design of listing pages"
+          "source": "n2",
+          "alt": "Take The Court tournament splash",
+          "shadow": true
         },
         {
-          "source": "single",
-          "alt": "Final design of a single page"
+          "source": "n3",
+          "alt": "Tournament registration",
+          "shadow": true
         },
         {
-          "source": "single2",
-          "alt": "Final design of a single extended page"
+          "source": "n4",
+          "alt": "Follow Kobe Live tab",
+          "shadow": true
+        },
+        {
+          "source": "n5",
+          "alt": "#asskobe tab",
+          "shadow": true
         }
       ]
     }

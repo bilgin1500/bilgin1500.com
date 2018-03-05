@@ -3,14 +3,8 @@ import info from 'database/info';
 import settings from 'database/settings';
 import pages from 'database/pages';
 
-// Projects
-var projects = pages
-  .filter(function(page) {
-    return page.name == 'Projects';
-  })[0]
-  .list.map(function(prjSlug) {
-    return require('database/' + prjSlug);
-  });
+// For caching
+var projects, abouts;
 
 /**
  * Grabs a specific info from db
@@ -69,10 +63,25 @@ function getPageContent(name) {
 }
 
 /**
- * Grabs all projects from db
+ * Grabs a specific page's list
+ * @param  {string} name -  Name of the page
+ * @return {string} List property of the page object
+ */
+function getPageList(name) {
+  return getPage(name).list;
+}
+
+/**
+ * Grabs all projects from db, cache and serve them
  * @return {array} Array of projects
  */
 function getProjects() {
+  if (!Array.isArray(projects)) {
+    projects = getPageList('Projects').map(function(prjSlug) {
+      return require('database/' + prjSlug);
+    });
+  }
+
   return projects;
 }
 
@@ -186,6 +195,20 @@ function getCategories() {
   ).reverse();
 }
 
+/**
+ * Grabs all abouts from db, cache and serve them
+ * @return {array} Array of abouts
+ */
+function getAbouts() {
+  if (!Array.isArray(abouts)) {
+    abouts = getPageList('About Me').map(function(aboutSlug) {
+      return require('database/' + aboutSlug);
+    });
+  }
+
+  return abouts;
+}
+
 export {
   getInfo,
   getSetting,
@@ -193,6 +216,7 @@ export {
   getPages,
   getPage,
   getPageContent,
+  getPageList,
   getProjects,
   getProjectsByCat,
   getProject,
@@ -200,5 +224,6 @@ export {
   getSection,
   findSectionIndex,
   getAdjSectionIndexes,
-  getCategories
+  getCategories,
+  getAbouts
 };

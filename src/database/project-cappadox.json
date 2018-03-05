@@ -16,10 +16,6 @@
       "light": "#f6ece3",
       "spot1": "#20214e",
       "spot2": "#fad936"
-    },
-    "thumbnail": {
-      "image": "thumbnail",
-      "fontColor": "light"
     }
   },
   "sections": [

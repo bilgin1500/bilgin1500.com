@@ -18,10 +18,6 @@
       "light": "#fff",
       "spot1": "#bfe0d5",
       "spot2": "#000"
-    },
-    "thumbnail": {
-      "image": "thumbnail",
-      "fontColor": "dark"
     }
   },
   "sections": [

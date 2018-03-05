@@ -1,7 +1,11 @@
 @import "assets/fonts"
-@import "assets/colors"
+json('../database/settings.json')
 @import "assets/layout"
 @import "assets/bulleted"
+
+.project-window-opened
+  #project-window
+    width 100%
 
 #project-window
   display block
@@ -12,12 +16,9 @@
   top 0
   left 0
   background-color transparent
-
-.project-window-opened
-  #project-window
-    width 100%
-  
+    
   .layer
+    display none
     position absolute
     height 100%
     width 100%
@@ -66,6 +67,10 @@
         font-size fSmall
         margin-top 5px
         margin-bottom 0
+        max-width 200px
+        line-height fBigger
+        @media screen and (min-width: tablet)
+          max-width none
     
     .project-guide
       visibility hidden
@@ -98,19 +103,12 @@
         
         .section-content-wrapper
           position relative
-          //width calc(100% - 160px)
           max-width 800px
-          //height 100%
           margin 0 auto
           box-sizing border-box
-          //overflow hidden
           width calc(100% - 160px)
           height calc(100% - 240px)
           top 120px
-          /*@media screen and (min-width: tablet)
-            top 20%
-            height 70%
-            width calc(100% - 240px)*/
             
     .project-nav
       position absolute
@@ -131,3 +129,18 @@
         text-decoration none
         letter-spacing 0.01em
         margin-left 5px
+        &:hover
+          text-decoration underline
+        
+      .close
+        position fixed
+        top 40px
+        left 36px
+        transform-origin center
+        margin 0
+        &:hover
+          text-decoration none
+        img
+          display block
+          width 24px
+          height 24px

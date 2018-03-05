@@ -1,4 +1,4 @@
-import { createEl, slugify, log } from 'utilities/helpers';
+import { createEl, slugify } from 'utilities/helpers';
 import { getSetting, getAdjSectionIndexes, getSection } from 'utilities/orm';
 import Gallery from 'components/gallery';
 import Video from 'components/video';
@@ -173,9 +173,6 @@ function attachDraggable(prjData, $section, $guide, prevSection, nextSection) {
         } else {
           resetDragToStartPos.play();
         }
-
-        // Log the interaction
-        log('[IX] Section swiped to the ' + dragSwipeDir);
       } else {
         resetDragToStartPos.play();
       }

@@ -2,11 +2,12 @@ import router from 'utilities/router';
 import throttle from 'throttle-debounce/throttle';
 import {
   $doc,
+  log,
   createEl,
   slugify,
   addClass,
   removeClass,
-  log
+  isUndefined
 } from 'utilities/helpers';
 import { getSetting, getAdjSectionIndexes } from 'utilities/orm';
 import Section from 'components/section';
@@ -115,10 +116,11 @@ function Sections(prjData) {
 
   /**
    * Change the section visually (slide, nav etc.)
-   * @param  {object} name -  The name of the section to be changed
+   * @param  {object} name - The name of the section to be changed
    * @param  {number} slideNo - The instance page (gallery slide etc.) to be changed
+   * @param  {object} immediatelyRender - On the first opening the section change should be done quickly without animations.
    */
-  this.goto = function(name, slideNo) {
+  this.goto = function(name, slideNo, immediatelyRender) {
     var self = this;
 
     // Performance check for slide changes
@@ -203,7 +205,8 @@ function Sections(prjData) {
       yPercentNext = percent;
     }
 
-    var sectionTransitionSec = 0.5;
+    var sectionTransitionSec =
+      !isUndefined(immediatelyRender) && immediatelyRender == true ? 0.01 : 0.5;
 
     // When there's a previous ('current' in this context)
     // section available first tween it out

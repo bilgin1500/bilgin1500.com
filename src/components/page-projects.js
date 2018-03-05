@@ -9,7 +9,7 @@ import {
   slugify,
   buildMediaUrl
 } from 'utilities/helpers';
-import { getPageContent, getProjects, setSetting } from 'utilities/orm';
+import { getProjects, getSetting, setSetting } from 'utilities/orm';
 import 'css/projects';
 
 var imgInstanceCache, momentumCache;
@@ -26,32 +26,34 @@ function createProjectItem(prjData) {
   var $projectItem = createEl('a', {
     href: '/projects/' + projectSlug,
     id: 'project-thumb-' + projectSlug,
-    class: ['project-item', prjData.theme && prjData.theme.thumbnail.fontColor]
+    class: 'project-item'
   });
   var $projectVisual = createEl('div', { class: 'project-visual' });
   var $projectHead = createEl('div', { class: 'project-head' });
-  var $projectTitle = createEl('h4', { innerText: prjData.name });
-  var $projectDesc = createEl('p', { innerText: prjData.desc });
+  var $projectTitle = createEl('h3', {
+    innerText: prjData.name,
+    style: 'color:' + prjData.theme.colors.spot1
+  });
+  var $projectDesc = createEl('p', {
+    innerText: prjData.desc,
+    style: 'color:' + prjData.theme.colors.spot2
+  });
 
   // Create Image instance
-  if (
-    !isUndefined(prjData.theme.thumbnail) &&
-    !isUndefined(prjData.theme.thumbnail.image)
-  ) {
-    var imgInstance = new Image({
-      src: buildMediaUrl({
-        project: slugify(prjData.name),
-        name: prjData.theme.thumbnail.image
-      }),
-      alt: prjData.name
-    });
-    $projectVisual.appendChild(imgInstance.elements.wrapper);
+  var imgInstance = new Image({
+    src: buildMediaUrl({
+      project: slugify(prjData.name),
+      name: getSetting('thumbnailImageFileName')
+    }),
+    alt: prjData.name
+  });
+  $projectVisual.appendChild(imgInstance.elements.wrapper);
 
-    // Cache Image instance
-    imgInstanceCache.push(imgInstance);
-  }
+  // Cache Image instance
+  imgInstanceCache.push(imgInstance);
 
-  //new Momentum($projectItem).start();
+  /*new Momentum($projectTitle, { speed: 0.025 }).start();
+  new Momentum($projectDesc, { speed: 0.035 }).start();*/
 
   // Append everything and return
   $projectHead.appendChild($projectTitle);
@@ -79,9 +81,6 @@ function createDom(page) {
 
   // Cache all projects
   var projects = getProjects();
-
-  // Get and append page content
-  $pageContent.innerHTML = getPageContent('Projects');
 
   // List and append single project items
   for (var i = 0; i < projects.length; i++) {
