@@ -1,5 +1,6 @@
 import page from 'page';
 import Project from 'components/project';
+import loader from 'components/loader';
 import {
   getInfo,
   getSetting,
@@ -9,6 +10,11 @@ import {
   setSetting
 } from 'utilities/orm';
 import { $win, $doc, uppercase, isUndefined, slugify } from 'utilities/helpers';
+
+// We'll keep track of the loader's border.
+// For a successful animation timing
+// sometimes you end up doing some crazy shit.
+var isLoaderBorderOpen = false;
 
 var router = {
   // Which client-side router to use
@@ -56,8 +62,39 @@ var router = {
      */
     function routeHome(ctx, next) {
       router._changeTitle(getInfo('subtitle'));
-      router._scrollTo();
-      next();
+      router._scrollTo({
+        onEnd: function() {
+          next();
+          if (!isLoaderBorderOpen) {
+            loader.addBorders();
+            isLoaderBorderOpen = false;
+          }
+        }
+      });
+    }
+
+    /**
+     * Route pages
+     */
+    function routePages(ctx, next) {
+      var pageData = getPage(ctx.params.page);
+
+      if (!pageData) {
+        notFound();
+        next();
+      } else {
+        router._changeTitle(pageData.name);
+        router._scrollTo({
+          to: slugify(pageData.name),
+          onEnd: function() {
+            next();
+            if (!isLoaderBorderOpen) {
+              loader.addBorders();
+              isLoaderBorderOpen = false;
+            }
+          }
+        });
+      }
     }
 
     /**
@@ -107,7 +144,7 @@ var router = {
           slide: prjSlideNo
         });
         // Use the project instance's public method and open it
-        prjInstance.open();
+        prjInstance.open(next);
         // Save the instance for further interactions
         setSetting('projectInstance', prjInstance);
       }
@@ -125,22 +162,8 @@ var router = {
         // Project window is closed, open it
         openProject();
       }
-    }
 
-    /**
-     * Route pages
-     */
-    function routePages(ctx, next) {
-      var pageData = getPage(ctx.params.page);
-
-      if (!pageData) {
-        notFound();
-      } else {
-        router._changeTitle(pageData.name);
-        router._scrollTo({ to: slugify(pageData.name) });
-      }
-
-      next();
+      isLoaderBorderOpen = true;
     }
 
     /**
@@ -153,19 +176,22 @@ var router = {
     /**
      * Load projects' images on home page
      */
-    function loadProjectImages() {
-      for (var i = 0; i < getSetting('imageInstanceCache').length; i++) {
-        getSetting('imageInstanceCache')[i].load();
+    function loadProjectImages(ctx, next) {
+      for (var i = 0; i < getSetting('imageCacheForHome').length; i++) {
+        getSetting('imageCacheForHome')[i].load();
       }
+      next();
     }
 
     // Map'em all
-    router.engine('/', routeHome, loadProjectImages);
-    router.engine('/:page', routePages, loadProjectImages);
+    router.engine('/', routeHome, loadProjectImages, loader.destroy);
+    router.engine('/:page', routePages, loadProjectImages, loader.destroy);
     router.engine(
       '/projects/:project/:section?/:sectionSlideNo?',
-      routeProject
+      routeProject,
+      loader.destroy
     );
+
     router.engine();
   }
 };

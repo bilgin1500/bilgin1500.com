@@ -90,7 +90,7 @@ function createDom(page) {
 
   // Save instances
   setSetting('momentumCache', momentumCache);
-  setSetting('imageInstanceCache', imgInstanceCache);
+  setSetting('imageCacheForHome', imgInstanceCache);
 
   return $page;
 }

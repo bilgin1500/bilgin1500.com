@@ -12,7 +12,7 @@ import {
 import Momentum from 'utilities/momentum';
 import Image from 'utilities/image';
 import events from 'utilities/events';
-import { getAbouts, getSetting } from 'utilities/orm';
+import { getAbouts, getSetting, setSetting } from 'utilities/orm';
 import 'css/about';
 
 /**
@@ -33,7 +33,9 @@ function createDom(page) {
     alt: 'Photo'
   });
   var $photo = photoInstance.elements.wrapper;
-  photoInstance.load();
+  var imageCache = getSetting('imageCacheForHome');
+  imageCache.push(photoInstance);
+  setSetting('imageCacheForHome', imageCache);
   //new Momentum($photo, { speed: 0.05 }).start();
   $pageContent.appendChild($photo);
 
@@ -149,11 +151,12 @@ function createDom(page) {
         var tl = new TimelineMax({ paused: true });
 
         var t1 = TweenMax.to($listContent, 0.25, {
-          backgroundColor: getSetting('spotColor'),
-          borderColor: getSetting('spotColor')
+          backgroundColor: getSetting('spotColor')
         });
         var t2 = TweenMax.to($listContent, 0.25, {
           borderWidth: 10,
+          borderColor: getSetting('spotColor'),
+          backgroundColor: '#fff',
           boxShadow: '1px 1px 25px 1px rgba(0,0,0,0.25)'
         });
         var t3 = TweenMax.set($listText, {
@@ -166,7 +169,6 @@ function createDom(page) {
         var t6 = TweenMax.to($overlay, 0.25, { autoAlpha: 0.5 });
 
         tl
-          .add(t1)
           .add('boxReveal')
           .add(t2, 'boxReveal+=0.25')
           .add(t3)

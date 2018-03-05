@@ -37,19 +37,24 @@ p
 
 #app
   box-sizing border-box
+  overflow hidden
 
-  #layer-top
-    position fixed
-    height 100%
-    width 100%
-    left 0
-    z-index 102
-    box-sizing border-box
-    pointer-events none
-    background-color #fff
-    border-width 0
-    border-style solid
-    border-color spotColor
+.is-loading
+  #loader
+    pointer-events all
+
+#loader
+  position fixed
+  height 100%
+  width 100%
+  left 0
+  z-index 110
+  box-sizing border-box
+  pointer-events none
+  background-color #fff
+  border-width 0
+  border-style solid
+  border-color spotColor
 
 #content
   position relative

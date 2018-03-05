@@ -5,13 +5,15 @@ import 'gsap';
 import 'gsap/Draggable';
 import 'ScrollToPlugin';
 import 'ThrowPropsPlugin';
-import 'DrawSVGPlugin';
+import 'SplitText';
 
 // Other injections
 import FontFaceObserver from 'fontfaceobserver';
+import { getInfo, getSetting, getPages } from 'utilities/orm';
 import events from 'utilities/events';
 import router from 'utilities/router';
-import { getInfo, getSetting, getPages } from 'utilities/orm';
+import loader from 'components/loader';
+import logo from 'components/logo';
 import $header from 'components/header';
 import $footer from 'components/footer';
 import 'normalize.css';
@@ -43,11 +45,11 @@ docReady().then(function() {
     var $app = document.getElementById('app');
 
     // Create elements
-    var $layer = createEl('div', { id: 'layer-top', class: 'layer' });
     var $content = createEl('div', { id: 'content' });
 
     // Get all the pages
     var pages = getPages();
+
     // And append them to the content
     for (var i = 0; i < pages.length; i++) {
       var pageName = pages[i].name;
@@ -60,29 +62,16 @@ docReady().then(function() {
     }
 
     // Append content
-    $app.appendChild($layer);
+    $app.appendChild(loader.elements.wrapper);
+    $app.appendChild(logo.elements.wrapper);
     $app.appendChild($header);
     $app.appendChild($content);
     $app.appendChild($footer);
 
     // Initializations
-    router.init();
+    logo.type(['<b/>'], router.init);
 
-    // Open the curtains
-    TweenMax.to($layer, 0.25, {
-      borderWidth: 10,
-      backgroundColor: 'transparent'
-    });
-
-    // Curtains on project opening and closing
-    events.subscribe('project.onLayer2Start', function() {
-      TweenMax.set($layer, { borderWidth: 0 });
-    });
-    events.subscribe('project.onEnd', function() {
-      TweenMax.to($layer, 0.25, { borderWidth: 10 });
-    });
-
-    // Tell the world that lage is ready!
+    // Tell the world that page is ready!
     events.publish('page.ready');
 
     // Log the perf

@@ -13,7 +13,7 @@
     "baseProjectsFolder": "projects/",
     "baseExtension": "png"
   },
-  "imageInstanceCache": [],
+  "imageCacheForHome": [],
   "momentumCache": [],
   "thumbnailImageFileName": "thumbnail"
 }

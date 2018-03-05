@@ -38,7 +38,7 @@ for (var i = 0; i < getPages().length; i++) {
 
 // Append everything
 $logoWrapper.appendChild($logo);
-$header.appendChild($logoWrapper);
+//$header.appendChild($logoWrapper);
 $header.appendChild($menu);
 
 export default $header;

@@ -13,9 +13,9 @@ import {
   setSetting,
   getSetting
 } from 'utilities/orm';
+import loader from 'components/loader';
 import events from 'utilities/events';
 import Sections from 'components/sections';
-import closeIcon from 'images/close.svg';
 import 'css/project';
 
 var sectionsInstance;
@@ -27,7 +27,7 @@ var defaultOpenings;
  *     slug: Project's slug
  *     open: Opens the window
  *     close: Closes the window
- *     onEnd: onEnd callback
+ *     
  * @param {object} project - Project data from database
  * @param {object} defaults - With which page to open the project. {section,slide}
  */
@@ -54,14 +54,20 @@ function Project(project, defaults) {
   // Global variables for this file
   defaultOpenings = defaults;
 
-  this.open = function() {
-    windowInstance.open();
+  /**
+   * Public method to open the project and its window
+   * @param {function} onOpenEnd - Will fire after project is opened. It is used in router's next function. After opening the project we'll close the page loader
+   */
+  this.open = function(onOpenEnd) {
+    windowInstance.open(onOpenEnd);
   };
 
-  // onEnd: After project window is closed onEnd will trigger
-  // It comes from the router and used for the prev/next prj. navigation
-  this.close = function(onEnd) {
-    windowInstance.close(onEnd);
+  /**
+   * Public method to close the project and its window
+   * @param {function} onOpenEnd - Will fire after project is closed. It comes from the router and used for the prev/next prj. navigation
+   */
+  this.close = function(onCloseEnd) {
+    windowInstance.close(onCloseEnd);
     sectionsInstance.removeEvents();
     setSetting('projectInstance', undefined);
     setSetting('sectionsInstance', undefined);
@@ -73,6 +79,9 @@ function Project(project, defaults) {
  * Public properties and methods are:
  *     open: Opens the window
  *     close: Closes the window
+ *     onOpenEnd: Fires after project is opened and set by open method
+ *     onCloseEnd: Fires after project is closed and set by close method
+ *     
  * @param {object} prjData - Project data from database
  */
 function ProjectWindow(prjData) {
@@ -115,24 +124,8 @@ function ProjectWindow(prjData) {
   var $close = createEl('a', {
     href: '/projects/',
     title: 'Close Project [ESC]',
-    class: 'close'
-  });
-  var $closeImg = createEl('img', {
-    src: closeIcon,
-    alt: 'Close Project [ESC]'
-  });
-  $close.appendChild($closeImg);
-
-  // Close button hover animation
-  var hoverAnim = TweenMax.to($close, 0.15, {
-    paused: true,
-    rotation: 135
-  });
-  $close.addEventListener('mouseover', function() {
-    hoverAnim.play();
-  });
-  $close.addEventListener('mouseout', function() {
-    hoverAnim.reverse();
+    class: 'close',
+    innerText: 'Close'
   });
 
   // Append the layers according to their z-index order
@@ -148,10 +141,6 @@ function ProjectWindow(prjData) {
    * Repeat: 0 ( start/closed) - 1 (ends/opened) - 0 (reversed/closed)
    */
   var prjOpenCloseAnim = new TimelineMax({ paused: true })
-    // This will fire on on [0]-1-0
-    .eventCallback('onStart', function() {
-      events.publish('project.onStart');
-    })
     // Disable body scrolling and note to myself: delete project-window-opened
     .add(function() {
       toggleClass($doc.body, ['no-scroll', 'project-window-opened']);
@@ -162,18 +151,16 @@ function ProjectWindow(prjData) {
       display: 'block',
       immediateRender: false
     })
-    // A gate for other functions to hook to
-    .add(function() {
-      events.publish('project.onLayer1Start');
-    })
     // Slide the layer1
     .to(l1, 0.4, {
       xPercent: 100,
       ease: Circ.easeInOut
     })
-    // A gate for other functions to hook to
+    // Remove page loader's borders (z-index issue)
     .add(function() {
-      events.publish('project.onLayer2Start');
+      if (!prjOpenCloseAnim.reversed()) {
+        loader.removeBorders();
+      }
     }, '-=0.1')
     // Slide the layer2
     .to(
@@ -212,12 +199,6 @@ function ProjectWindow(prjData) {
         );
       }
     })
-    // A gate for other functions to hook to
-    .add(function() {
-      events.publish('project.onContentRevealBegin', {
-        isReversed: prjOpenCloseAnim.reversed()
-      });
-    })
     // Slide the layer2 out: Everything reveals
     .to(l2, 0.6, {
       scaleX: 0,
@@ -230,33 +211,37 @@ function ProjectWindow(prjData) {
     })
     // This will fire on 0-[1]-0
     .eventCallback('onComplete', function() {
-      events.publish('project.onReady');
+      // Fire the onOpenEnd callback set by this.close method
+      if (!isUndefined(self.onOpenEnd)) {
+        self.onOpenEnd();
+      }
     })
     // This will fire on 0-1-[0]
     .eventCallback('onReverseComplete', function() {
-      events.publish('project.onEnd');
+      // Remove page loader's borders (z-index issue)
+      loader.addBorders();
+      // Clear window's innerHTML
       clearInnerHTML($currWindow);
-      // Fire the onEnd callback set by this.close method
-      if (!isUndefined(self.onEnd)) {
-        self.onEnd();
+      // Fire the onCloseEnd callback set by this.close method
+      if (!isUndefined(self.onCloseEnd)) {
+        self.onCloseEnd();
       }
     });
 
   // Public methods
-  this.open = function() {
+  this.open = function(onOpenEnd) {
     prjOpenCloseAnim.play();
+
+    // Make the onOpenEnd callback reachable for the animation
+    this.onOpenEnd = onOpenEnd;
   };
 
-  // Parameter onEnd comes from project.close()
-  this.close = function(onEnd) {
-    // https://greensock.com/forums/topic/9182-detect-reverse-start-event/?do=findComment&comment=36992
-    events.publish('project.onReverseStart');
-
+  this.close = function(onCloseEnd) {
     // Begin the reversing
     prjOpenCloseAnim.reverse();
 
-    // Make the onEnd callback reachable
-    this.onEnd = onEnd;
+    // Make the onCloseEnd callback reachable for the animation
+    this.onCloseEnd = onCloseEnd;
   };
 }
 

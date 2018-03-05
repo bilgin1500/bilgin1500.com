@@ -28,7 +28,7 @@ module.exports = {
         __dirname,
         'src/vendors/ThrowPropsPlugin.js'
       ),
-      DrawSVGPlugin: path.resolve(__dirname, 'src/vendors/DrawSVGPlugin.js')
+      SplitText: path.resolve(__dirname, 'src/vendors/SplitText.js')
     }
   },
   module: {
