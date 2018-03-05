@@ -1,13 +1,9 @@
 @import "assets/fonts"
-@import "assets/colors"
+json('../database/settings.json')
 @import "assets/layout"
 
-html
-  background-color darksalmon
-  height 100%
-
 body 
-  background-color pageBackground
+  background-color #fff
   color rgba(0,0,0,0.8)
   font-family AvenirRegular
   -webkit-font-smoothing antialiased
@@ -40,42 +36,51 @@ p
       text-decoration none
 
 #app
-  border-width 10px 
-  border-style solid
-  border-color darksalmon
-  //border-image linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%) 20
   box-sizing border-box
+  overflow hidden
 
-#logo
+.is-loading
+  #loader
+    pointer-events all
+
+#loader
   position fixed
+  height 100%
+  width 100%
+  left 0
+  z-index 110
   box-sizing border-box
-  top 45px
-  left 20px
-  margin 0
-  font-size fNormal
-  z-index 101
-  a
-    color #000
-    font-family AvenirRegular
-    font-size fSmall
-    text-align center
-    text-decoration none
-    display block
-    line-height 1em
-    padding 5px 10px
-    transition background-color 150ms,box-shadow 300ms
-  @media screen and (min-width: tablet)
-    top 60px
-    left 40px
-    
-#content-wrapper
+  pointer-events none
+  background-color #fff
+  border-width 0
+  border-style solid
+  border-color spotColor
+
+#content
   position relative
   box-sizing border-box
-  padding 0 20px
+  padding 0 30px
   @media screen and (min-width: tablet)
-    padding 0 30px
+    padding 0 100px
   @media screen and (min-width: desktop)
     padding 0
-    width 60%
+    width 50%
     max-width 750px
-    margin-left 190px
+    margin 0 auto
+  .page
+    text-align center
+    > h2
+      font-size fTiny
+      text-transform uppercase
+      font-weight normal
+      letter-spacing 0.1em
+      margin 0 0 20px 0 
+      background-color spotColor
+      display inline-block
+      line-height 0
+      padding-bottom 10px
+      margin 50px auto
+      @media screen and (min-width: tablet)
+        margin 100px auto
+    .page-content
+      text-align left

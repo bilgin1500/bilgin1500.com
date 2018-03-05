@@ -1,42 +1,44 @@
 import page from 'page';
 import Project from 'components/project';
+import loader from 'components/loader';
 import {
   getInfo,
   getSetting,
   getPage,
   getProject,
-  getSection
+  getSection,
+  setSetting
 } from 'utilities/orm';
-import {
-  $win,
-  $doc,
-  log,
-  uppercase,
-  isUndefined,
-  slugify
-} from 'utilities/helpers';
+import { $win, $doc, uppercase, isUndefined, slugify } from 'utilities/helpers';
+
+// We'll keep track of the loader's border.
+// For a successful animation timing
+// sometimes you end up doing some crazy shit.
+var isLoaderBorderOpen = false;
 
 var router = {
   // Which client-side router to use
   engine: page,
 
   /**
-   * Scroll like a spa
+   * Scroll like a SPA
+   * @param {object} args - Argument passed in
+   *                      to: A ID to scroll to
+   *                      onEnd: Callback which fires after scroll is completed
    */
   _scrollTo: function(args) {
-    var to = args && args.to ? '#' + args.to : 0;
+    var to = !isUndefined(args) && !isUndefined(args.to) ? '#' + args.to : 0;
+    var prjInstance = getSetting('projectInstance');
 
-    if (Project.isOpen) {
-      if (args != undefined) {
-        to = '#project-thumb-' + slugify(Project.data.name);
-      }
-      Project.close();
+    if (!isUndefined(prjInstance)) {
+      prjInstance.close();
     }
 
     TweenMax.to($win, 0.5, {
-      scrollTo: to,
-      onStart: args && args.onstart,
-      onComplete: args && args.onComplete
+      scrollTo: { y: to, autoKill: false },
+      onComplete: function() {
+        if (!isUndefined(args) && !isUndefined(args.onEnd)) args.onEnd();
+      }
     });
   },
 
@@ -60,8 +62,39 @@ var router = {
      */
     function routeHome(ctx, next) {
       router._changeTitle(getInfo('subtitle'));
-      router._scrollTo();
-      next();
+      router._scrollTo({
+        onEnd: function() {
+          next();
+          if (!isLoaderBorderOpen) {
+            loader.addBorders();
+            isLoaderBorderOpen = false;
+          }
+        }
+      });
+    }
+
+    /**
+     * Route pages
+     */
+    function routePages(ctx, next) {
+      var pageData = getPage(ctx.params.page);
+
+      if (!pageData) {
+        notFound();
+        next();
+      } else {
+        router._changeTitle(pageData.name);
+        router._scrollTo({
+          to: slugify(pageData.name),
+          onEnd: function() {
+            next();
+            if (!isLoaderBorderOpen) {
+              loader.addBorders();
+              isLoaderBorderOpen = false;
+            }
+          }
+        });
+      }
     }
 
     /**
@@ -69,106 +102,96 @@ var router = {
      * @param  {object} ctx Url parameters: project/section/sectionSlideNo
      */
     function routeProject(ctx, next) {
-      // Current project
-      var thisProject = getProject(ctx.params.project);
+      // Current project and sections instances (if available!)
+      var prjInstance = getSetting('projectInstance');
+      var sectionsInstance = getSetting('sectionsInstance');
 
-      // If no project is found route to 404
-      if (!thisProject) {
+      // Current project's data using the url param
+      var prjData = getProject(ctx.params.project);
+
+      // If no project is found route to 404 exit
+      if (isUndefined(prjData)) {
         notFound();
         return;
       }
 
-      // Get the current section object
-      var thisSection = isUndefined(ctx.params.section)
+      // Get the current section object using the url param.
+      var prjSectionData = isUndefined(ctx.params.section)
         ? getSection(0, ctx.params.project)
         : getSection(ctx.params.section, ctx.params.project);
 
-      // The same with the section number. If no page number is specified
-      // then the page is the first page: 0
-      var sectionSlideNo = ctx.params.sectionSlideNo || 1;
+      // The same with the section number. Get it using the url param.
+      // If no page number is specified then the page is the first page: 0
+      var prjSlideNo = ctx.params.sectionSlideNo || 1;
 
       // Change the title to current project and section
       router._changeTitle(
-        uppercase(thisSection.name) +
+        uppercase(prjSectionData.name) +
           ' ' +
           getSetting('separatorProject') +
           ' ' +
-          thisProject.name
+          prjData.name
       );
 
-      // Setup the routing logic
-      if (Project.isOpen) {
-        // Same project
-        if (slugify(Project.data.name) == slugify(thisProject.name)) {
-          log(
-            "[ROUTE] Same project called, just change the section or section's slide"
-          );
-          Project.sections.goTo.call(Project, thisSection.name, sectionSlideNo);
+      /**
+       * Wrapper for project opening functions
+       * Returns nothing, just set up the project for us
+       */
+      function openProject() {
+        // Create a new project instance with derived data from url params
+        prjInstance = new Project(prjData, {
+          section: prjSectionData.name,
+          slide: prjSlideNo
+        });
+        // Use the project instance's public method and open it
+        prjInstance.open(next);
+        // Save the instance for further interactions
+        setSetting('projectInstance', prjInstance);
+      }
 
-          // Different project
+      // Setup the logic
+      if (!isUndefined(prjInstance)) {
+        // Same project called, just change the section or section's slide
+        if (prjInstance.slug == slugify(prjData.name)) {
+          sectionsInstance.goto(prjSectionData.name, prjSlideNo);
         } else {
-          log('[ROUTE] Different project called, change the project');
-          Project.close({
-            onComplete: function() {
-              router._scrollTo({
-                to: 'project-thumb-' + slugify(thisProject.name),
-                onComplete: function() {
-                  Project.open(
-                    thisProject.name,
-                    thisSection.name,
-                    sectionSlideNo
-                  );
-                }
-              });
-            }
-          });
+          // Different project called, close the current on and open the next one
+          prjInstance.close(openProject);
         }
       } else {
-        log('[ROUTE] Project window is closed, open it');
-        Project.open(thisProject.name, thisSection.name, sectionSlideNo);
-      }
-    }
-
-    /**
-     * Route pages
-     */
-    function routePages(ctx, next) {
-      var currentPage = getPage(ctx.params.page);
-
-      if (!currentPage) {
-        notFound();
-      } else {
-        router._changeTitle(currentPage.name);
-        router._scrollTo({ to: slugify(currentPage.name) });
+        // Project window is closed, open it
+        openProject();
       }
 
-      next();
+      isLoaderBorderOpen = true;
     }
 
     /**
      * 404
      */
     function notFound() {
-      log('[ROUTE] Ooops! Not found.');
       router.engine.redirect('/');
     }
 
     /**
      * Load projects' images on home page
      */
-    function loadProjectImages() {
-      for (var i = 0; i < getSetting('imageInstanceCache').length; i++) {
-        getSetting('imageInstanceCache')[i].load();
+    function loadProjectImages(ctx, next) {
+      for (var i = 0; i < getSetting('imageCacheForHome').length; i++) {
+        getSetting('imageCacheForHome')[i].load();
       }
+      next();
     }
 
     // Map'em all
-    router.engine('/', routeHome, loadProjectImages);
-    router.engine('/:page', routePages, loadProjectImages);
+    router.engine('/', routeHome, loadProjectImages, loader.destroy);
+    router.engine('/:page', routePages, loadProjectImages, loader.destroy);
     router.engine(
       '/projects/:project/:section?/:sectionSlideNo?',
-      routeProject
+      routeProject,
+      loader.destroy
     );
+
     router.engine();
   }
 };

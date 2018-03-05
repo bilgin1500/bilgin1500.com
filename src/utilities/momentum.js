@@ -1,4 +1,4 @@
-import { getDocScrollY } from 'utilities/helpers';
+import { getDocScrollY, isUndefined } from 'utilities/helpers';
 
 /**
  * Adds momentum to an element. Updates on every RAF tick.
@@ -7,20 +7,24 @@ import { getDocScrollY } from 'utilities/helpers';
  */
 var Momentum = function(el, options) {
   // Cache defaults
-  var _this = this;
-  var speed = options && options.speed ? options.speed : 0.4;
-  var friction = options && options.friction ? options.friction : 0.08;
+  var self = this;
+  var speed =
+    !isUndefined(options) && !isUndefined(options.speed) ? options.speed : 0.4;
+  var friction =
+    !isUndefined(options) && !isUndefined(options.friction)
+      ? options.friction
+      : 0.08;
 
   // Store old deltaY for further calculations
-  _this.deltaY = 0;
+  self.deltaY = 0;
 
   // Active flag
-  _this.active = false;
+  self.active = false;
 
   // Calculate new deltaY based on speed and friction
   var _calcDeltaY = function() {
     var newDeltaY = 0 - getDocScrollY() * speed;
-    return _this.deltaY - (_this.deltaY - newDeltaY) * friction;
+    return self.deltaY - (self.deltaY - newDeltaY) * friction;
   };
 
   // TweenLite object
@@ -35,7 +39,7 @@ var Momentum = function(el, options) {
   var _play = function() {
     var newDeltaY = _calcDeltaY();
     _motion(newDeltaY).play();
-    _this.deltaY = newDeltaY;
+    self.deltaY = newDeltaY;
   };
 
   /* 
@@ -45,18 +49,18 @@ var Momentum = function(el, options) {
   // Initialize this momentum by adding it to the RAF cycle
   var start = function() {
     TweenMax.ticker.addEventListener('tick', _play);
-    _this.active = true;
+    self.active = true;
   };
 
   // Destroy this momentum by removing it from the RAF cycle
   var stop = function() {
     TweenMax.ticker.removeEventListener('tick', _play);
-    _this.active = false;
+    self.active = false;
   };
 
   // Toggle the init/destroy methods
   var toggle = function() {
-    if (_this.active) {
+    if (self.active) {
       stop();
     } else {
       start();

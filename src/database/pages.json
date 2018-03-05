@@ -1,0 +1,29 @@
+[
+  {
+    "name": "Intro",
+    "content": "<p>Hi! I&rsquo;m Bilgin Özkan, a creative soul with a focus on web design and development. In the last couple of years I had the great opportunity to work for some of the best brands and products in Turkey such as Turkey’s largest bank Türkiye İş Bankası, Nike, Ikea, Turkey’s leading integrated entertainment company Pozitif, Turkey’s biggest publisher Hürriyet and Enka Foundation. Currently, I am the Founding Partner and Digital Design Lead at <a href=\"http://www.rolakosta.com\">Rolakosta</a>, a boutique design studio with a multidisciplinary approach specialized in branding, cultural projects, and new media content</p>"
+  },
+  {
+    "name": "Projects",
+    "list": [
+      "project-rolio",
+      "project-rola-music-project",
+      "project-skytankingovenon-website",
+      "project-sirin-pancaroglu-website",
+      "project-cappadox",
+      "project-enka-culture-and-arts",
+      "project-capital-markets-department-turkiye-is-bankasi",
+      "project-babylon",
+      "project-kobe-takes-every-advantage"
+    ]
+  },
+  {
+    "name": "About Me",
+    "content": "<p>With my beautiful wife and two boys I'm living in the crowded and historic İstanbul, Turkey (GMT+3). Currently I'm open for <strong>full-time remote</strong> jobs. You can say hi at <a href=\"mailto:bilgin1500@gmail.com\" rel=\"external\">bilgin1500@gmail.com</a>.</p>",
+    "list": ["about-design", "about-technical", "about-tools", "about-other"]
+  },
+  {
+    "name": "Sketchbook",
+    "content": "<p>Besides working hard for clients and personal projects, as a multidisciplinary designer, I also find myself experimenting with new stuff which sometimes also deserves a mention. This is the place dedicated to them.</p>"
+  }
+]

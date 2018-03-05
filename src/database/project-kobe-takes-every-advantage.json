@@ -1,0 +1,97 @@
+{
+  "name": "Kobe Takes Every Advantage",
+  "desc": "Launch of Nike Basketball Turkey’s Facebook page",
+  "meta": {
+    "category": "Commercial Project",
+    "client": {
+      "name": "Grey Istanbul",
+      "url": "http://grey.com/turkey"
+    },
+    "tags": ["Cross-browser compatibility"],
+    "date": "2011",
+    "roles": ["Creative Director", "Design Lead", "Technical Lead"]
+  },
+  "theme": {
+    "colors": {
+      "light": "#e9ecf2",
+      "spot1": "#4f2582",
+      "spot2": "#d8a82e"
+    }
+  },
+  "sections": [
+    {
+      "name": "About",
+      "type": "info",
+      "content": [
+        {
+          "title": "Problem",
+          "text": "While working as the Digital Creative Director at Grey Istanbul, WPP Group (2010 - 2012), I had the great opportunity to work for Nike. The project we did for the launch of Nike Basketball Turkey’s Facebook page - with the help of Kobe Bryant’s Istanbul visit - differ from all other campaigns we developed in terms of the effort we and Nike’s marketing team put. Nike Turkey was planning to launch the official Nike Basketball Facebook page to be the hub of their total marketing communication. They decided to merge this launch with Kobe Bryant’s Istanbul visit so that they could engage all the basketball lovers and make them join their new Facebook page."
+        },
+        {
+          "title": "Design",
+          "text": "The campaign was called “Kobe takes every advantage”. It was a great example of a holistic campaign (from event organization to celebrity engagement and media usage) hold together by the digital platform we created. Together with Nike, we planned a big basketball tournament called “Take the Court”, an after party and a tracking tool for Kobe’s visit where you can track him, watch the videos and ask questions, all LIVE! We designed and developed a complex Facebook App where players could build their teams and join the basketball tournament, follow the tournament results, track Kobe’s visit live on a map, watch him visit the Nike stores and basketball courts, watch him giving interviews at these stops and use Twitter to ask him questions."
+        },
+        {
+          "title": "Results",
+          "text": "After a very successful launch (40k new users in one day) this Facebook App and its administration panel were also reapplied by Nike Greece team to support Kobe’s Athens visit. I was responsible for all the ideation, creative direction and interaction design of this project."
+        }
+      ]
+    },
+    {
+      "name": "Gallery",
+      "type": "gallery",
+      "content": [
+        {
+          "source": "wireframe",
+          "alt": "Diagrams and wireframes",
+          "shadow": true
+        },
+        {
+          "source": "admin1",
+          "alt": "Admin: Login",
+          "shadow": true
+        },
+        {
+          "source": "admin2",
+          "alt": "Admin: Tournament database",
+          "shadow": true
+        },
+        {
+          "source": "admin3",
+          "alt": "Admin: Activity Management",
+          "shadow": true
+        },
+        {
+          "source": "admin4",
+          "alt": "Admin: #askkobe Moderation",
+          "shadow": true
+        },
+        {
+          "source": "n1",
+          "alt": "Nike Basketball FB Fan Page Splash",
+          "shadow": true
+        },
+        {
+          "source": "n2",
+          "alt": "Take The Court tournament splash",
+          "shadow": true
+        },
+        {
+          "source": "n3",
+          "alt": "Tournament registration",
+          "shadow": true
+        },
+        {
+          "source": "n4",
+          "alt": "Follow Kobe Live tab",
+          "shadow": true
+        },
+        {
+          "source": "n5",
+          "alt": "#asskobe tab",
+          "shadow": true
+        }
+      ]
+    }
+  ]
+}

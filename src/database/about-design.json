@@ -1,0 +1,21 @@
+{
+  "title": "Design Approach",
+  "list": [
+    {
+      "name": "Balanced",
+      "content": "<p>A user-focused and data-driven design can perform well but lack the abilities to engage with its users on a deeper level. On the contrary, an aesthetically good looking digital product will always be perceived as more valuable and having more qualities but can be ineffective and far away from its user's needs. Good design always comes from striking the right balance between data, empathy, and intuition.</p>"
+    },
+    {
+      "name": "Modular",
+      "content": "<p>A system, whether a visual design or software subdivided into smaller parts is reusable, flexible, scalable and easy for others to participate.</p>"
+    },
+    {
+      "name": "Adaptive",
+      "content": "<p>A successful user interface should be able to adapt itself to all the different platforms it is being used on. It should be responsive to the screen sizes and be able to degrade or enhance its features for a different type of clients.</p>"
+    },
+    {
+      "name": "Dynamic",
+      "content": "<p>Meaningful and well-arranged motion ties all the elements of an interface together and creates a continuity among the user's journey which makes the experience more pleasant and easier to understand.</p>"
+    }
+  ]
+}

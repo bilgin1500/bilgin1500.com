@@ -1,0 +1,93 @@
+{
+  "name": "Şirin Pancaroğlu Website",
+  "desc": "Personal Website of Turkish Harpist Şirin Pancaroğlu",
+  "meta": {
+    "category": "Commercial Project",
+    "tags": [
+      "Wordpress Integration",
+      "Mailchimp Integration",
+      "Responsive Design"
+    ],
+    "links": [
+      {
+        "name": "Website",
+        "url": "http://sirinpancaroglu.com"
+      }
+    ],
+    "date": "2015 - 2018",
+    "client": {
+      "name": "Rolakosta",
+      "url": "http://www.rolakosta.com"
+    },
+    "roles": ["UI Designer", "Front-end Developer", "Wordpress Developer"]
+  },
+  "theme": {
+    "colors": {
+      "light": "#e3e3e3",
+      "spot1": "#b78122",
+      "spot2": "#110f22"
+    }
+  },
+  "sections": [
+    {
+      "name": "About",
+      "type": "info",
+      "content": [
+        {
+          "title": "Problem",
+          "text": "When Şirin Pancaroğlu, the internationally acclaimed Turkish harpist contacted Rolakosta her expectations from our team and from the current digital tools were clear: First, she wanted to be able to easily document every project she is involved in, with all the assets like photographs, audio files, and texts. Secondly, she wanted to regularly reach her audience through newsletters and social media in a simple way, using a single panel without wasting time on technical complexity."
+        },
+        {
+          "title": "Design",
+          "text": "At first, we spared some time to build the right information structure. Because of the complexity of our client's massive data, it was a necessary process to be finished on paper, before any digital sketching or wireframing. With a minimal visual design and some basic interaction, we finished the design process and allocated most of our time to build the best administrative panel experience. After finalizing the information architecture, it became obvious that we should get some help from the great Advanced Custom Fields plugin to customize the panel according to our client's needs (e.g. related album information or flagging a content to be included in the next newsletter)."
+        },
+        {
+          "title": "Results",
+          "text": "Our primary objective has always been to equip the artist with the right tools to control her digital presence and do the basics of digital marketing in a simple way. Thus, in this project, we created an interconnected system managed by a single Wordpress panel so that our client can easily organize her projects, manage the newsletters, post to her social media accounts and engage with her audience. Since its release in 2015, the website became a fine example of what an individual artist alone can achieve with its own data, appreciated and mentioned in various programs and articles."
+        }
+      ]
+    },
+    {
+      "name": "Gallery",
+      "type": "gallery",
+      "content": [
+        {
+          "source": "home",
+          "alt": "Home page"
+        },
+        {
+          "source": "biography",
+          "alt": "Biography"
+        },
+        {
+          "source": "projects",
+          "alt": "Projects"
+        },
+        {
+          "source": "project",
+          "alt": "Single project"
+        },
+        {
+          "source": "project2",
+          "alt": "Single project II"
+        },
+        {
+          "source": "album",
+          "alt": "Album page"
+        },
+        {
+          "source": "videos",
+          "alt": "Video list"
+        },
+        {
+          "source": "events",
+          "alt": "Events"
+        },
+        {
+          "source": "contact",
+          "alt": "Contact"
+        }
+      ]
+    }
+  ]
+}

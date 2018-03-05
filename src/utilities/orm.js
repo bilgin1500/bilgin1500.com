@@ -1,5 +1,10 @@
-import { slugify } from 'utilities/helpers';
-import data from 'content/database';
+import { slugify, isUndefined } from 'utilities/helpers';
+import info from 'database/info';
+import settings from 'database/settings';
+import pages from 'database/pages';
+
+// For caching
+var projects, abouts;
 
 /**
  * Grabs a specific info from db
@@ -7,7 +12,7 @@ import data from 'content/database';
  * @return {string/number/boolean} 
  */
 function getInfo(property) {
-  return data.info[property];
+  return info[property];
 }
 
 /**
@@ -16,7 +21,7 @@ function getInfo(property) {
  * @return {string/number/boolean}
  */
 function getSetting(property) {
-  return data.settings[property];
+  return settings[property];
 }
 
 /**
@@ -25,7 +30,7 @@ function getSetting(property) {
  * @return {string/number/boolean} The value we've set
  */
 function setSetting(property, value) {
-  data.settings[property] = value;
+  settings[property] = value;
   return value;
 }
 
@@ -34,7 +39,7 @@ function setSetting(property, value) {
  * @return {array} Pages array
  */
 function getPages() {
-  return data.pages;
+  return pages;
 }
 
 /**
@@ -49,20 +54,45 @@ function getPage(name) {
 }
 
 /**
- * Grabs all projects from db
- * @return {array} Array of projects
+ * Grabs a specific page's content
+ * @param  {string} name -  Name of the page
+ * @return {string} Content property of the page object
  */
-function getProjects() {
-  return getPage('projects').list;
+function getPageContent(name) {
+  return getPage(name).content;
 }
 
 /**
+ * Grabs a specific page's list
+ * @param  {string} name -  Name of the page
+ * @return {string} List property of the page object
+ */
+function getPageList(name) {
+  return getPage(name).list;
+}
+
+/**
+ * Grabs all projects from db, cache and serve them
+ * @return {array} Array of projects
+ */
+function getProjects() {
+  if (!Array.isArray(projects)) {
+    projects = getPageList('Projects').map(function(prjSlug) {
+      return require('database/' + prjSlug);
+    });
+  }
+
+  return projects;
+}
+
+/**
+ * DEPRECATED
  * Returns filtered projects by given category name
  * @param  {string} catName - Name of the category
  * @return {array} Array of projects
  */
-function getProjectsByCategory(catName) {
-  return getPage('projects').list.filter(function(project) {
+function getProjectsByCat(catName) {
+  return getProjects().filter(function(project) {
     return project.meta.category.toLowerCase() == catName.toLowerCase();
   });
 }
@@ -102,17 +132,55 @@ function findProjectIndex(name) {
  * @return {object} Single section object
  */
 function getSection(sectionBy, projectBy) {
-  var thisProject = getProject(projectBy);
+  var project = getProject(projectBy);
   if (typeof sectionBy == 'string') {
-    return thisProject.sections.filter(function(section) {
+    return project.sections.filter(function(section) {
       return slugify(section.name) == slugify(sectionBy);
     })[0];
   } else if (typeof sectionBy == 'number') {
-    return thisProject.sections[sectionBy];
+    return project.sections[sectionBy];
   }
 }
 
 /**
+ * Finds a specific section's index number
+ * @param  {string} sectionName - The section name to search for
+ * @param  {string/number} projectBy - The project which contains the section
+ * @return {number} Index number 
+ */
+function findSectionIndex(sectionName, projectBy) {
+  var project = getProject(projectBy);
+  return project.sections.findIndex(function(section) {
+    return slugify(section.name) === slugify(sectionName);
+  });
+}
+
+/**
+ * Find the adjacent section indexes
+ * @param  {string/number} projectBy - Which project
+ * @param  {string/number} sectionBy - Which section
+ * @return {object} Adjacent indexes in an object: {previous,next}
+ */
+function getAdjSectionIndexes(projectBy, sectionBy) {
+  var project = getProject(projectBy);
+  var sections = project.sections;
+  var sectionIndex;
+
+  if (typeof sectionBy == 'string') {
+    sectionIndex = findSectionIndex(sectionBy, projectBy);
+  } else if (typeof sectionBy == 'number') {
+    sectionIndex = sectionBy;
+  }
+
+  return {
+    previous:
+      sectionIndex == 0 ? project.sections.length - 1 : sectionIndex - 1,
+    next: sectionIndex == project.sections.length - 1 ? 0 : sectionIndex + 1
+  };
+}
+
+/**
+ * DEPRECATED
  * Returns all (unique) project category names as an array
  * and reverses it so that it begins with the 'Personal Projects'
  * @return {array} of string (category names) 
@@ -128,14 +196,18 @@ function getCategories() {
 }
 
 /**
- * Grabs intro's content
- * @return {string}
+ * Grabs all abouts from db, cache and serve them
+ * @return {array} Array of abouts
  */
-function getIntroContent() {
-  return getPage('intro').content;
-}
+function getAbouts() {
+  if (!Array.isArray(abouts)) {
+    abouts = getPageList('About Me').map(function(aboutSlug) {
+      return require('database/' + aboutSlug);
+    });
+  }
 
-// globals
+  return abouts;
+}
 
 export {
   getInfo,
@@ -143,11 +215,15 @@ export {
   setSetting,
   getPages,
   getPage,
+  getPageContent,
+  getPageList,
   getProjects,
-  getProjectsByCategory,
+  getProjectsByCat,
   getProject,
   findProjectIndex,
   getSection,
+  findSectionIndex,
+  getAdjSectionIndexes,
   getCategories,
-  getIntroContent
+  getAbouts
 };

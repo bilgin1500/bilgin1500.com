@@ -4,9 +4,15 @@ import loaderIcon from 'images/loader-tail-spin.svg';
 /*
  * Image constructor
  * @param  {object} attr - <img> attributes
+ *                         id: Image ID
+ *                         alt: Alternative tex
+ *                         src: Source
+ *                         shadow: Does it cast a shadow?
  */
 function Image(attr) {
   this.isLoaded = false;
+  this.isShadowed =
+    isUndefined(attr.shadow) || attr.shadow == false ? false : true;
   this.attributes = attr;
   this._createDOM();
 }
@@ -27,18 +33,14 @@ Image.prototype.settings = {
  * Creates wrapper, image and loader DOM elements
  */
 Image.prototype._createDOM = function() {
-  var attr = this.attributes;
-
   var $wrapper = createEl('div', {
-    id: attr.id ? attr.id : createId(),
+    id: this.attributes.id ? this.attributes.id : createId(),
     class: 'img-wrapper'
   });
 
   var $image = createEl('img', {
     src: this.settings.transparentGif,
-    alt: attr.alt || '',
-    'data-src': attr.src,
-    'data-shadow': attr.isShadowed | false,
+    alt: this.attributes.alt || '',
     class: 'img'
   });
 
@@ -63,26 +65,25 @@ Image.prototype._createDOM = function() {
  * @param  {function} onComplete - Callback function
  */
 Image.prototype.load = function(onComplete) {
-  var _this = this;
+  var self = this;
 
   // Find the image and loader inside the wrapper
-  var $img = _this.elements.image,
-    $loader = _this.elements.loader;
+  var $img = self.elements.image,
+    $loader = self.elements.loader;
 
   // If the image is not loaded yet
-  if (!_this.isLoaded) {
+  if (!self.isLoaded) {
     // Set opacity to zero
     TweenMax.set($img, { autoAlpha: 0 });
 
     // Does this image cast a shadow?
-    var boxShadowProperty =
-      $img.getAttribute('data-shadow') == 1 ? _this.settings.boxShadow : 'none';
+    var boxShadowProperty = this.isShadowed ? self.settings.boxShadow : 'none';
 
     // After loading fade in the image, remove the svg loader
     // and load other images nearby
     $img.onload = function() {
       // Loaded now
-      _this.isLoaded = true;
+      self.isLoaded = true;
 
       // Fade in the image and append the shadow
       TweenMax.to($img, 1, {
@@ -93,15 +94,13 @@ Image.prototype.load = function(onComplete) {
           TweenMax.set($loader, { autoAlpha: 0 });
         },
         onComplete: function() {
-          if (!isUndefined(onComplete)) onComplete.call(_this);
+          if (!isUndefined(onComplete)) onComplete.call(self);
         }
       });
     };
 
     // Load the image
-    $img.setAttribute('src', $img.getAttribute('data-src'));
-    // And remove the data-src
-    $img.removeAttribute('data-src');
+    $img.setAttribute('src', this.attributes.src);
   }
 };
 

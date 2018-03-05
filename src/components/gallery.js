@@ -5,7 +5,6 @@ import router from 'utilities/router';
 import {
   $win,
   $doc,
-  log,
   createEl,
   removeClass,
   addClass,
@@ -13,30 +12,31 @@ import {
   getHeight,
   getWidth,
   isUndefined,
-  slugify
+  slugify,
+  buildMediaUrl
 } from 'utilities/helpers';
 import 'css/gallery';
 
 /**
  * Gallery constructor
- * @param  {object} sectionData - content: Section content from the database
- *                                name: Section name from the database 
- *                                type: Section type (this Constructor)
- *                                _draggable: This sections's Draggable instance
- *                                _projectName: Parent project's name
- *                                _wrapper: Section wrapper element
+ * @param  {object} prjData - Data from database
+ * @param  {number} index - Current section index
+ * @param  {object} section - Parent section's instance
  */
-function Gallery(sectionData) {
-  this.projectSlug = slugify(sectionData._projectName);
+function Gallery(prjData, index, section) {
+  this.projectSlug = prjData.slug;
   this.baseUrl =
-    '/projects/' + this.projectSlug + '/' + slugify(sectionData.name);
+    '/projects/' +
+    this.projectSlug +
+    '/' +
+    slugify(prjData.sections[index].name);
   this.isActive = false;
   this.isNavLocked = false;
   this.currentIndex = null;
   this.elasticEase = Elastic.easeOut.config(1, 0.75);
-  this.slides = sectionData.content;
+  this.slides = prjData.sections[index].content;
   this._createDom();
-  this.addAllListeners();
+  this._addEvents();
 }
 
 /**
@@ -44,7 +44,7 @@ function Gallery(sectionData) {
  * appends it to the Gallery instance's element property
  */
 Gallery.prototype._createDom = function() {
-  var _this = this;
+  var self = this;
 
   var $gallery = createEl('div', { class: 'gallery' });
   var $allSlides = createEl('div', { class: 'slides' });
@@ -53,8 +53,8 @@ Gallery.prototype._createDom = function() {
 
   // Create slides and bullets with their containers
   for (var i = 0; i < this.slides.length; i++) {
-    var $slide = _this._createSlide(i, this.slides[i]);
-    var $bullet = _this._createBullet(i, this.slides[i].alt);
+    var $slide = self._createSlide(i, this.slides[i]);
+    var $bullet = self._createBullet(i, this.slides[i].alt);
     $allSlides.appendChild($slide);
     $allBulletsInnerWrapper.appendChild($bullet);
     $allBullets.appendChild($allBulletsInnerWrapper);
@@ -74,32 +74,26 @@ Gallery.prototype._createDom = function() {
  * @return {element} Slide element
  */
 Gallery.prototype._createSlide = function(index, source) {
-  var _this = this;
-  var $slide, $img, $loader, $caption, slideSource, swipeDirection;
-
-  slideSource = require('../projects/' +
-    this.projectSlug +
-    '/' +
-    source.source);
-
-  // Does this image cast a shadow?
-  var isShadowed =
-    isUndefined(source.shadow) ||
-    (!isUndefined(source.shadow) && source.shadow == true)
-      ? true
-      : false;
+  var self = this;
+  var $slide,
+    $img,
+    $loader,
+    $caption,
+    $captionTitle,
+    $captionText,
+    swipeDirection;
 
   // Create the image instance and cache returning wrapper and image elements
   var imgInstance = new Image({
-    src: slideSource,
+    src: buildMediaUrl({ project: this.projectSlug, name: source.source }),
     alt: source.alt || source.caption || '',
-    isShadowed: isShadowed
+    shadow: source.shadow
   });
   var $wrapper = imgInstance.elements.wrapper;
   var $image = imgInstance.elements.image;
 
   // Save image instances to be able to load in the future
-  _this.slides[index].image = imgInstance;
+  self.slides[index].image = imgInstance;
 
   // Create the <figure> wrapper
   $slide = createEl('figure');
@@ -107,7 +101,12 @@ Gallery.prototype._createSlide = function(index, source) {
   // Append the caption if available
   if (source.caption) {
     $caption = createEl('figcaption');
-    $caption.innerHTML = source.caption;
+    $captionTitle = createEl('h4');
+    $captionText = createEl('p');
+    $captionTitle.innerHTML = source.alt;
+    $captionText.innerHTML = source.caption;
+    $caption.appendChild($captionTitle);
+    $caption.appendChild($captionText);
     $slide.appendChild($caption);
   }
 
@@ -134,17 +133,16 @@ Gallery.prototype._createSlide = function(index, source) {
       // Update the boundaries so that they cover the image
       var slideHeight = getHeight($slide);
       var imageHeight = getHeight($image);
-      var dynamicDragBoundaryMinY = -imageHeight + slideHeight;
 
       this.applyBounds({
         minX: -dragBoundaries,
         maxX: dragBoundaries,
-        minY: dynamicDragBoundaryMinY,
+        minY: -imageHeight + slideHeight,
         maxY: 0
       });
 
       // Let the user sense that the image is pressed
-      if (isShadowed) {
+      if (imgInstance.isShadowed) {
         TweenMax.to($image, 0.5, {
           boxShadow: imgInstance.settings.boxShadowMore
         });
@@ -156,7 +154,7 @@ Gallery.prototype._createSlide = function(index, source) {
     },
     onRelease: function() {
       // Release the image's hover
-      if (isShadowed) {
+      if (imgInstance.isShadowed) {
         TweenMax.to($image, 0.5, {
           boxShadow: imgInstance.settings.boxShadow
         });
@@ -171,7 +169,7 @@ Gallery.prototype._createSlide = function(index, source) {
       var resetDragToStartPos = TweenMax.to(this.target, 0.5, {
         paused: true,
         x: 0,
-        ease: _this.elasticEase
+        ease: self.elasticEase
       });
 
       // The axis along which movement is locked during that
@@ -187,16 +185,13 @@ Gallery.prototype._createSlide = function(index, source) {
           // Left/Right: Change the gallery slide
           // Down/Up: Scroll the gallery image
           if (dragSwipeDir == 'left') {
-            _this.next();
+            self.next();
           } else if (dragSwipeDir == 'right') {
-            _this.previous();
+            self.previous();
           }
         }
         resetDragToStartPos.play();
       }
-
-      // Log the interaction and finish with the interaction
-      log('[IX] Gallery swiped to the ' + dragSwipeDir);
     }
   });
 
@@ -258,33 +253,33 @@ Gallery.prototype.next = function() {
  * @param  {number} slideNo - Slide number to be changed
  */
 Gallery.prototype.goTo = function(slideNo, immediately) {
-  var _this = this;
+  var self = this;
 
   // Cache indexes
-  var currentIndex = _this.currentIndex;
+  var currentIndex = self.currentIndex;
   var nextIndex = slideNo - 1;
 
   // Save current index globally
-  _this.currentIndex = nextIndex;
+  self.currentIndex = nextIndex;
 
   // Exit if same slide is called
   if (currentIndex == nextIndex) return;
 
   // Lock the navigation to prevent further interaction
   // while changing the galery images
-  _this.isNavLocked = true;
+  self.isNavLocked = true;
 
   // First time opened?
   var firstTime = currentIndex == null;
 
   // Cache
-  var $slidesWrapper = _this.element.querySelector('.slides');
-  var $allSlides = _this.element.querySelectorAll('figure');
-  var $allBullets = _this.element.querySelectorAll('.bullets a');
+  var $slidesWrapper = self.element.querySelector('.slides');
+  var $allSlides = self.element.querySelectorAll('figure');
+  var $allBullets = self.element.querySelectorAll('.bullets a');
 
   if (!firstTime) {
     var $currSlide = $allSlides[currentIndex];
-    var currImgInstance = _this.slides[currentIndex].image;
+    var currImgInstance = self.slides[currentIndex].image;
     var $currBullet = $allBullets[currentIndex];
   }
 
@@ -293,11 +288,11 @@ Gallery.prototype.goTo = function(slideNo, immediately) {
 
   // Set xPercents
   var xPercentCurr, xPercentNext;
-  if (currentIndex == 0 && nextIndex == _this.slides.length - 1) {
+  if (currentIndex == 0 && nextIndex == self.slides.length - 1) {
     // Loop from beginning
     xPercentCurr = 200;
     xPercentNext = -200;
-  } else if (currentIndex == _this.slides.length - 1 && nextIndex == 0) {
+  } else if (currentIndex == self.slides.length - 1 && nextIndex == 0) {
     // Loop from end
     xPercentCurr = -200;
     xPercentNext = 200;
@@ -325,7 +320,7 @@ Gallery.prototype.goTo = function(slideNo, immediately) {
       onComplete: function() {
         removeClass($currSlide, 'active');
         // Reset the current image's position
-        _this.resetPosition(currImgInstance.elements.image);
+        self.resetPosition(currImgInstance.elements.image);
       }
     });
   }
@@ -346,16 +341,16 @@ Gallery.prototype.goTo = function(slideNo, immediately) {
       },
       onComplete: function() {
         // Open the nav lock
-        _this.isNavLocked = false;
+        self.isNavLocked = false;
         // Load the gallery image with adjacent images
-        var currIndex = _this.currentIndex;
-        var preIndex = _this._findAdjacentIndex('previous', currIndex);
-        var nextIndex = _this._findAdjacentIndex('next', currIndex);
+        var currIndex = self.currentIndex;
+        var preIndex = self._findAdjacentIndex('previous', currIndex);
+        var nextIndex = self._findAdjacentIndex('next', currIndex);
 
         // Start loading by first one
-        _this.slides[currIndex].image.load(function() {
-          _this.slides[preIndex].image.load(function() {
-            _this.slides[nextIndex].image.load();
+        self.slides[currIndex].image.load(function() {
+          self.slides[preIndex].image.load(function() {
+            self.slides[nextIndex].image.load();
           });
         });
       }
@@ -440,7 +435,7 @@ Gallery.prototype.resetPosition = function(el) {
 /**
  * Adds all event listeners of this Gallery instance
  */
-Gallery.prototype.addAllListeners = function() {
+Gallery.prototype._addEvents = function() {
   // !! A new function reference is created after .bind() is called!
   this._keyNavBound = this._keyNav.bind(this);
   this._mouseWheelNavBound = this._mouseWheelNav.bind(this);
@@ -452,7 +447,7 @@ Gallery.prototype.addAllListeners = function() {
 /**
  * Removes all event listeners of this Gallery instance
  */
-Gallery.prototype.removeAllListeners = function() {
+Gallery.prototype.removeEvents = function() {
   $doc.removeEventListener('keydown', this._keyNavBound);
   $doc.removeEventListener('mousewheel', this._mouseWheelNavBound);
 };

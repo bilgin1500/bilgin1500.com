@@ -1,0 +1,33 @@
+{
+  "title": "Tools",
+  "list": [
+    {
+      "name": "Code Editor",
+      "content": "<p>I am using Sublime Text 3 packed with <a href=\"https://prettier.io/\" rel=\"external\">Prettier</a> for formatting, <a href=\"http://www.sublimelinter.com\" rel=\"external\">SublimeLinter</a> for linting and <a href=\"https://eslint.org\" rel=\"external\">eslint</a> and <a href=\"https://wbond.net/sublime_packages/sftp\" rel=\"external\">SFTP</a> for file transfers.</p>"
+    },
+    {
+      "name": "Terminal",
+      "content": "<p>iTerm and Oh My Zsh</p>"
+    },
+    {
+      "name": "Design",
+      "content": "<p>As an old and professional Adobe Creative Suite user I used Photoshop, Illustrator, After Effects and even Dreamweaver and Flash a lot in the past. Today they are still helping me with my raster works (Photoshop), animations (After Effects) or vector illustrations (Illustrator). For conception and screen design, I'm using <a href=\"https://www.sketchapp.com/\" rel=\"external\">Sketch</a> (and its ecosystem) and loving the ideas behind <a href=\"https://origami.design/\" rel=\"external\">Origami</a>. But still, despite all the power these great tools provide, a better UX can be achieved by designing in the browser.</p>"
+    },
+    {
+      "name": "Dependency Management",
+      "content": "<p>For now I use primarily npm for browser and server JavaScript, tried <a href=\"https://bower.io/\" rel=\"external\">Bower</a> for front-end package management and loved it and I'm curious about <a href=\"https://yarnpkg.com/\" rel=\"external\">Yarn</a> and will test it soon.</p>"
+    },
+    {
+      "name": "Version control",
+      "content": "<p>Using <a href=\"https://www.gitkraken.com/\" rel=\"external\">GitKraken</a> and working on my command line skills..</p>"
+    },
+    {
+      "name": "Automation",
+      "content": "<p>My build automation journey began with <a href=\"https://gruntjs.com\" rel=\"external\">Grunt</a> which I used as a task runner for almost every project. When I was learning React I met with <a href=\"http://webpack.js.org\" rel=\"external\">Webpack</a> and its approach to asset management which suited better than a task manager to all of my JS-heavy web applications.</p>"
+    },
+    {
+      "name": "Content Management System",
+      "content": "<p><a href=\"https://wordpress.org/download/\" rel=\"external\">Wordpress</a></p>"
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "name": "Cappadox",
+  "desc": "Designing a digital festival experience ",
+  "meta": {
+    "category": "Commercial Project",
+    "tags": ["API Integration", "Responsive Design"],
+    "client": {
+      "name": "Rolakosta",
+      "url": "http://www.rolakosta.com"
+    },
+    "date": "2015",
+    "roles": ["UI Designer", "Front-end Developer"]
+  },
+  "theme": {
+    "colors": {
+      "light": "#f6ece3",
+      "spot1": "#20214e",
+      "spot2": "#fad936"
+    }
+  },
+  "sections": [
+    {
+      "name": "About",
+      "type": "info",
+      "content": [
+        {
+          "title": "About",
+          "text": "From 2013 to 2016 at Rolakosta we had the great opportunity to work with <a rel=\"external\" href=\"http://www.pozitif.com/\">Pozitif</a> – Turkey’s leading integrated entertainment company in a great variety of digital products from their smallest festival microsites to their biggest flagship websites. In all these projects, we helped them build entertaining and colorful digital products to engage with their young and energetic audience. My team and I at Rolakosta wireframed, prototyped, designed and developed websites, created motion graphics and gave consultancy services for more than 10 projects for 3 years we worked together."
+        },
+        {
+          "title": "Problem",
+          "text": "For their new music and arts festival, held in the lunar landscape of Cappadocia in South-East Turkey we collaborated with Pozitif to design and develop festival's online presence. Our goals were to engage with the festival audience in a different user experience reflecting the festival's mood and style, offer easy access to festival information and to make festival life easier for attendees by designing tools like program organizer."
+        },
+        {
+          "title": "Design",
+          "text": "Having received the design assets from <a href=\"http://foxallstudio.com/\" rel=\"external\">Foxall</a> first we built a microsite to help the marketing team gather some information from early bird customers, using questionnaires and email subscriptions which eventually helped them shape the festival's program. Due to the short amount of time, we worked closely with our client and as they progressed with the festival content we simultaneously injected it into the ongoing design process and iterated constantly. The final website is a responsive single page application backed by the festival's data and authentication APIs and showcasing an experimental UX approach by embracing the drag, scroll and mouse wheel."
+        },
+        {
+          "title": "Results",
+          "text": "The festival and its website with their unique styles attracted a lot of attention from the audience. In a short amount of time and little marketing effort, hundreds of people attended the questionnaires and helped the team shape the festival. Nearly 90% of the festival's participants registered on the website, booked the events and made their programs. The mobile-friendly website also helped the participants grab the latest news and announcements during the festival time."
+        }
+      ]
+    },
+    {
+      "name": "Gallery",
+      "type": "gallery",
+      "content": [
+        {
+          "source": "structure",
+          "alt": "Navigation and design elements"
+        },
+        {
+          "source": "welcome",
+          "shadow": true,
+          "alt": "Home page"
+        },
+        {
+          "source": "events-category",
+          "shadow": true,
+          "alt": "Events home page"
+        },
+        {
+          "source": "events",
+          "shadow": true,
+          "alt": "Events list"
+        },
+        {
+          "source": "event-detail",
+          "shadow": true,
+          "alt": "Event detail"
+        },
+        {
+          "source": "calendar",
+          "shadow": true,
+          "alt": "Calendar and filters"
+        },
+        {
+          "source": "calendar2",
+          "shadow": true,
+          "alt": "Calendar and filters - Scrolled"
+        },
+        {
+          "source": "my-calendar",
+          "shadow": true,
+          "alt": "My Calendar"
+        },
+        {
+          "source": "mobile",
+          "alt": "Responsive design"
+        }
+      ]
+    }
+  ]
+}

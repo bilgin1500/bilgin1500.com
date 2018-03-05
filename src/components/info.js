@@ -6,21 +6,19 @@ import 'css/info';
 
 /**
  * Info constructor
- * @param  {object} sectionData - content: Section content from the database
- *                                name: Section name from the database 
- *                                type: Section type (this Constructor)
- *                                _draggable: This sections's Draggable instance
- *                                _projectName: Parent project's data
- *                                _wrapper: Section wrapper element
+ * @param  {object} prjData - Data from database
+ * @param  {number} index - Current section index
+ * @param  {object} section - Parent section's instance
  */
-function Info(sectionData) {
+function Info(prjData, index, section) {
   this.isActive = false;
   this.elasticEase = Elastic.easeOut.config(1, 0.75);
-  this.content = sectionData.content;
-  this._parentDraggable = sectionData._draggable;
-  this._parentSectionWrapper = sectionData._wrapper;
-  this.createDOM();
-  this.addAllListeners();
+  this.content = prjData.sections[index].content;
+  this.meta = prjData.meta;
+  this._parentDraggable = section.draggable;
+  this._parentSectionWrapper = section.wrapper;
+  this._createDOM();
+  this._addEvents();
   this._attachDraggable();
 }
 
@@ -28,28 +26,91 @@ function Info(sectionData) {
  * Creates the .info div and its content and
  * appends it to the Info instance's element property
  */
-Info.prototype.createDOM = function() {
-  var $wrapper = createEl('div', { class: 'info' });
+Info.prototype._createDOM = function() {
+  var $info = createEl('div', { class: 'info' });
+  var $infoWrapper = createEl('div', { class: 'info-wrapper' });
+  var $metaWrapper = createEl('div', { class: 'meta-wrapper' });
+  var $metaContent = createEl('p');
+  var $metaTitle = createEl('h4', { innerText: 'Info' });
 
-  for (var i = 0; i < this.content.length; i++) {
-    var $title = createEl('h4');
-    var $text = createEl('p');
-    $title.innerText = this.content[i].title;
-    $text.innerText = this.content[i].text;
-    $wrapper.appendChild($title);
-    $wrapper.appendChild($text);
+  // Parse the meta section {prjData.meta}
+  var meta = this.meta;
+
+  var cat = meta.category;
+  var tags = meta.tags;
+
+  var date =
+    meta.date.indexOf('-') > -1
+      ? ' between ' + meta.date.replace('-', 'and')
+      : ' in ' + meta.date;
+
+  var client = !isUndefined(meta.client)
+    ? ` for <a href="${meta.client.url}" target="_blank">${meta.client
+        .name}</a>. `
+    : '';
+
+  var roles = !isUndefined(meta.roles)
+    ? `<br/>My roles in this project were ${meta.roles
+        .join(', ')
+        .replace(/,([^,]*)$/, ' and ' + '$1')}. `
+    : '';
+
+  var links = '';
+
+  function buildName(name) {
+    if (name == 'Website') {
+      return 'website';
+    } else {
+      return name + ' page';
+    }
   }
 
-  this.element = $wrapper;
+  if (!isUndefined(meta.links)) {
+    if (meta.links.length > 1) {
+      links = `You can visit project's `;
+      for (var i = 0; i < meta.links.length; i++) {
+        links += `${buildName(meta.links[i].name)} <a href="${meta.links[i]
+          .url}" rel="external">here</a>`;
+        if (i !== meta.links.length - 1) {
+          links += ` and `;
+        } else {
+          links += `.`;
+        }
+      }
+    } else {
+      links = `You can visit project's ${buildName(
+        meta.links[0].name
+      )} <a href="${meta.links[0].url}" rel="external">here.`;
+    }
+  }
+
+  var sentence = cat + date + client + roles + links;
+  $metaContent.insertAdjacentHTML('afterbegin', sentence);
+
+  // Parse the info section {prjData.sections[i].type == 'info'}
+  for (var i = 0; i < this.content.length; i++) {
+    var $title = createEl('h4', { innerText: this.content[i].title });
+    var $text = createEl('p', { innerHTML: this.content[i].text });
+
+    $infoWrapper.appendChild($title);
+    $infoWrapper.appendChild($text);
+  }
+
+  $metaWrapper.appendChild($metaTitle);
+  $metaWrapper.appendChild($metaContent);
+  $info.appendChild($metaWrapper);
+  $info.appendChild($infoWrapper);
+
+  this.element = $info;
 };
 
 /**
  * Make the info texts draggable and touch enabled via GSAP
  */
 Info.prototype._attachDraggable = function() {
-  var _this = this;
+  var self = this;
 
-  _this._draggable = Draggable.create(_this.element, {
+  self._draggable = Draggable.create(self.element, {
     type: 'y',
     throwProps: true,
     zIndexBoost: false,
@@ -59,9 +120,9 @@ Info.prototype._attachDraggable = function() {
     onPress: function(e) {
       // Update the boundaries so that they cover the image
       var slideHeight = getHeight(
-        _this._parentSectionWrapper.querySelector('.section-inner-wrapper')
+        self._parentSectionWrapper.querySelector('.section-content-wrapper')
       );
-      var infoHeight = getHeight(_this.element);
+      var infoHeight = getHeight(self.element);
       var dynamicDragBoundaryMinY = -infoHeight + slideHeight;
 
       this.applyBounds({
@@ -74,11 +135,11 @@ Info.prototype._attachDraggable = function() {
       e.stopPropagation();
       // In some cases (when the type is single direction like 'y') stopPropagation
       // won't work. In this case we'll do it manually
-      _this._parentDraggable.disable();
+      self._parentDraggable.disable();
     },
     onRelease: function() {
       // If the parent draggable is disabled manually we should enable it
-      _this._parentDraggable.enable();
+      self._parentDraggable.enable();
     }
   });
 };
@@ -88,26 +149,26 @@ Info.prototype._attachDraggable = function() {
  * @param  {object} e - event
  */
 Info.prototype._mouseWheelNav = function(e) {
-  var _this = this;
+  var self = this;
 
-  if (_this.isActive) {
+  if (self.isActive) {
     var normalized = normalizeWheel(e);
 
     // If the draggable isn't initiated yet
     // ThrowPropsPlugin and onUpdate methods don't work
-    if (isUndefined(_this._initiatedDragging) || !_this._initiatedDragging) {
-      _this._draggable[0].startDrag(e);
-      _this._draggable[0].endDrag(e);
-      _this._initiatedDragging = true;
+    if (isUndefined(self._initiatedDragging) || !self._initiatedDragging) {
+      self._draggable[0].startDrag(e);
+      self._draggable[0].endDrag(e);
+      self._initiatedDragging = true;
     }
 
     // Up and down scroll
     // It's synchronized with the draggable
-    ThrowPropsPlugin.to(_this.element, {
+    ThrowPropsPlugin.to(self.element, {
       throwProps: { y: Math.round(normalized.pixelY) * -25 },
       force3D: true,
       onUpdate: function() {
-        _this._draggable[0].update({
+        self._draggable[0].update({
           applyBounds: true
         });
       }
@@ -125,7 +186,7 @@ Info.prototype.resetPosition = function() {
 /**
  * Adds all event listeners of this Info instance
  */
-Info.prototype.addAllListeners = function() {
+Info.prototype._addEvents = function() {
   // !! A new function reference is created after .bind() is called!
   this._mouseWheelNavBound = this._mouseWheelNav.bind(this);
   $doc.addEventListener('mousewheel', this._mouseWheelNavBound);
@@ -134,7 +195,7 @@ Info.prototype.addAllListeners = function() {
 /**
  * Removes all event listeners of this Info instance
  */
-Info.prototype.removeAllListeners = function() {
+Info.prototype.removeEvents = function() {
   $doc.removeEventListener('mousewheel', this._mouseWheelNavBound);
 };
 

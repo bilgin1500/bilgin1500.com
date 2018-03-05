@@ -46,6 +46,7 @@ var slugify = function(text) {
     è: 'e',
     é: 'e',
     ê: 'e',
+    ı: 'i',
     î: 'i',
     ï: 'i',
     ì: 'i',
@@ -161,6 +162,8 @@ var docReady = function() {
  * document.createElement wrapper with element attributes
  * @param {string} type - Element's tag name in lowercase
  * @param {object} attributes - Element's attributes
+ *                              key: Attribute name
+ *                              value: A single or multi attribute value
  * @return {element} HTML element
  */
 var createEl = function(type, attributes) {
@@ -168,7 +171,17 @@ var createEl = function(type, attributes) {
   var $el = $doc.createElement(type);
   for (var key in attributes) {
     if (attributes.hasOwnProperty(key)) {
-      $el.setAttribute(key, attributes[key]);
+      var val = attributes[key];
+
+      if (key == 'innerText' || key == 'innerHTML') {
+        $el[key] = val;
+      } else {
+        if (typeof val == 'string') {
+          $el.setAttribute(key, val);
+        } else if (Array.isArray(val)) {
+          $el.setAttribute(key, val.join(' '));
+        }
+      }
     }
   }
   return $el;
@@ -307,25 +320,27 @@ var removeClass = function(el, className) {
 };
 
 /**
- * Adds or removes a class name
+ * Adds or removes class
  * @param {string/element}  el - HTMLElement or a ID
- * @param {string} className - Name of the class to be toggled
+ * @param {string/array} className - Name of the class or classes to be toggled
  */
 var toggleClass = function(el, className) {
   el = _getEl(el);
-  if (el.classList) {
-    el.classList.toggle(className);
-  } else {
-    var classes = el.className.split(' ');
-    var existingIndex = -1;
-    for (var i = classes.length; i--; ) {
-      if (classes[i] === className) existingIndex = i;
+
+  function toggle(c) {
+    if (!hasClass(el, c)) {
+      addClass(el, c);
+    } else {
+      removeClass(el, c);
     }
+  }
 
-    if (existingIndex >= 0) classes.splice(existingIndex, 1);
-    else classes.push(className);
-
-    el.className = classes.join(' ');
+  if (typeof className == 'string') {
+    toggle(className);
+  } else if (Array.isArray(className)) {
+    for (var i = 0; i < className.length; i++) {
+      toggle(className[i]);
+    }
   }
 };
 
@@ -350,6 +365,54 @@ function getDocScrollY() {
     : ($doc.documentElement || $doc.body.parentNode || $doc.body).scrollTop;
 }
 
+/**
+ * Build the cloudinary url to fetch the media files
+ * @param  {object} img - File settings
+ *                        project: Project's name
+ *                        name: File's name
+ *                        transformation: Transformation settings (w_300,h_200)
+ *                        extension: Desired file extension
+ * @return {string} The remote image url
+ */
+function buildMediaUrl(img) {
+  var setting = getSetting('cloudinary');
+  var protocol = setting.protocol;
+  var baseUrl = setting.baseUrl;
+  var baseProjectsFolder = setting.baseProjectsFolder;
+  var baseExtension = setting.baseExtension;
+  var imgName = img.name;
+  var prjFolder = img.project ? baseProjectsFolder + img.project + '/' : '';
+  var imgTrans = isUndefined(img.trans) ? '' : img.trans + '/';
+  var imgExt = isUndefined(img.estension) ? baseExtension : img.estension;
+  return protocol + baseUrl + imgTrans + prjFolder + imgName + '.' + imgExt;
+}
+
+/**
+ * Creates a page container
+ * @param  {object} page - Object containing page data
+ *                        name: Name of the page
+ *                        content: Content of the page
+ *                        slug: Slug of this page
+ * @return {object} The page wrapper and content element
+ */
+function createPageContainer(page) {
+  var $page = createEl('div', { id: page.slug, class: 'page' });
+  var $pageTitle = createEl('h2', { innerText: page.name });
+  var $pageContent = createEl('div', { class: 'page-content' });
+
+  $page.appendChild($pageTitle);
+  $page.appendChild($pageContent);
+
+  if (!isUndefined(page.content)) {
+    $pageContent.innerHTML = page.content;
+  }
+
+  return {
+    $page: $page,
+    $content: $pageContent
+  };
+}
+
 export {
   $win,
   $doc,
@@ -368,5 +431,7 @@ export {
   removeClass,
   toggleClass,
   clearInnerHTML,
-  getDocScrollY
+  getDocScrollY,
+  buildMediaUrl,
+  createPageContainer
 };

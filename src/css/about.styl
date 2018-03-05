@@ -1,2 +1,112 @@
-#about 
-  height 400px
+@import "assets/fonts"
+json('../database/settings.json')
+
+#about-me
+  position relative
+  .img-wrapper
+    position absolute
+    background-color #eee
+    z-index -1
+    width 300px
+    right -80px
+    top 70px
+    opacity 0.4
+    .loader
+      width 32px
+      height 32px
+      position absolute
+      top 50%
+      left 50%
+      margin-top -(@height / 2)
+      margin-left -(@width / 2)
+  .abouts
+    margin-top 50px
+    .about-container
+      display inline-block
+      width 50%
+      vertical-align top
+      box-sizing border-box
+      &:first-child,
+      &:nth-child(2)
+        margin-bottom 50px
+      .about-title
+        margin 0
+        padding 0 5px
+        font-weight normal
+        font-size fTiny
+        text-transform uppercase
+        line-height fBigger
+        letter-spacing 0.1em
+        margin-bottom 30px
+        box-sizing border-box
+      .about-content
+        .list
+          position relative
+          &:last-child
+           margin-bottom 0
+          .list-title
+            font-size fBig
+            line-height fBigger
+            font-weight normal
+            margin 0
+            padding 7px 5px 5px
+            cursor pointer
+            display inline-block
+            position relative
+            z-index 1
+            display list-item
+            list-style-type circle
+            list-style-position inside
+            &:hover
+              text-decoration underline
+          .list-content
+            position absolute
+            top 0
+            left 0
+            width 100%
+            height 100%
+            background-color #fff
+            max-width 600px
+            border-width 1px
+            border-style solid
+            border-color #fff
+            box-sizing border-box
+            .list-text
+              display none
+              position absolute
+              top 0
+              left 0
+              width 100%
+              height 100%
+              padding 20px
+              overflow scroll
+              box-sizing border-box
+              .list-title
+                padding 0
+                margin-bottom 15px
+                font-size fNormal
+                font-weight bold
+                cursor text
+                display block
+                &:hover
+                  text-decoration none
+              p
+                font-size fNormal
+                margin-bottom 15px
+                &:last-child
+                  margin-bottom 30px
+            .bottom-gradient
+              position absolute
+              bottom 0
+              left 0
+              width 100%
+              height 0
+              pointer-events none
+              background linear-gradient(0deg,#fff 5px,transparent)
+  .overlay
+    position fixed
+    top 0
+    left 0
+    background-color #000
+    z-index 3
+    cursor pointer

@@ -1,19 +1,16 @@
-import { createEl, slugify } from 'utilities/helpers';
+import { createEl, slugify, buildMediaUrl } from 'utilities/helpers';
 import 'css/video';
 
-/*
+/**
  * Video constructor
- * @param  {object} sectionData - content: Section content from the database
- *                                name: Section name from the database 
- *                                type: Section type (this Constructor)
- *                                _draggable: This sections's Draggable instance
- *                                _projectName: Parent project's data
- *                                _wrapper: Section wrapper element
+ * @param  {object} prjData - Data from database
+ * @param  {number} index - Current section index
+ * @param  {object} section - Parent section's instance
  */
-function Video(sectionData) {
+function Video(prjData, index, section) {
   this.isActive = false;
-  this.content = sectionData.content;
-  this.projectSlug = slugify(sectionData._projectName);
+  this.content = prjData.sections[index].content;
+  this.projectSlug = prjData.slug;
   this._createDom();
 }
 
@@ -21,21 +18,19 @@ function Video(sectionData) {
  * Creates the <video> element
  */
 Video.prototype._createDom = function() {
-  // Poster image for video
-  var videoPoster = require('../projects/' +
-    this.projectSlug +
-    '/' +
-    this.content.poster);
-
   // Create <video> tag
   var $video = createEl('video', {
-    poster: videoPoster,
+    poster: buildMediaUrl({
+      project: this.projectSlug,
+      name: this.content.poster
+    }),
     preload: 'none',
     width: this.content.width,
-    height: this.content.height,
-    muted: true,
-    loop: true
+    height: this.content.height
   });
+
+  $video.muted = true;
+  $video.loop = true;
 
   // Create a div wrapper
   var $wrapper = createEl('div', { class: 'video-wrapper' });
@@ -43,15 +38,14 @@ Video.prototype._createDom = function() {
 
   // Append the sources
   for (var i = 0; i < this.content.sources.length; i++) {
-    var videoSource = require('../projects/' +
-      this.projectSlug +
-      '/' +
-      this.content.sources[i].source);
-
     $video.appendChild(
       createEl('source', {
-        src: videoSource,
-        type: 'video/' + this.content.sources[i].type
+        src: buildMediaUrl({
+          project: this.projectSlug,
+          name: this.content.source,
+          extension: this.content.sources[i].source
+        }),
+        type: 'video/' + this.content.sources[i].source
       })
     );
   }

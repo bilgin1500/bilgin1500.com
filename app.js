@@ -5,18 +5,28 @@ import 'gsap';
 import 'gsap/Draggable';
 import 'ScrollToPlugin';
 import 'ThrowPropsPlugin';
+import 'SplitText';
 
 // Other injections
 import FontFaceObserver from 'fontfaceobserver';
-import { docReady, createEl, slugify } from 'utilities/helpers';
-import events from 'utilities/events';
-import { log } from 'utilities/helpers';
-import router from 'utilities/router';
 import { getInfo, getSetting, getPages } from 'utilities/orm';
-import $menu from 'components/menu';
+import events from 'utilities/events';
+import router from 'utilities/router';
+import loader from 'components/loader';
+import logo from 'components/logo';
+import $header from 'components/header';
+import $footer from 'components/footer';
 import 'normalize.css';
 import 'css/main';
 import 'css/helpers';
+import {
+  docReady,
+  createEl,
+  slugify,
+  removeClass,
+  log,
+  $doc
+} from 'utilities/helpers';
 
 // Preload time
 if (getSetting('isPerformanceActive')) {
@@ -32,23 +42,36 @@ docReady().then(function() {
     fontAvenirRegular.load(),
     fontAvenirHeavy.load()
   ]).then(function() {
-    var $logoWrapper = createEl('h1', { id: 'logo' });
-    var $logo = createEl('a', { href: '/' });
-    var $wrapper = createEl('div', { id: 'content-wrapper' });
     var $app = document.getElementById('app');
 
-    for (var i = 0; i < getPages().length; i++) {
-      var pageSlug = slugify(getPages()[i].name);
-      $wrapper.appendChild(require('components/' + pageSlug).default);
+    // Create elements
+    var $content = createEl('div', { id: 'content' });
+
+    // Get all the pages
+    var pages = getPages();
+
+    // And append them to the content
+    for (var i = 0; i < pages.length; i++) {
+      var pageName = pages[i].name;
+      var pageContent = pages[i].content;
+      var pageSlug = slugify(pageName);
+      var createDom = require('components/page-' + pageSlug).default;
+      $content.appendChild(
+        createDom({ name: pageName, content: pageContent, slug: pageSlug })
+      );
     }
 
-    $logo.innerHTML = getInfo('title');
-    $logoWrapper.appendChild($logo);
-    $app.appendChild($logoWrapper);
-    $app.appendChild($menu);
-    $app.appendChild($wrapper);
+    // Append content
+    $app.appendChild(loader.elements.wrapper);
+    $app.appendChild(logo.elements.wrapper);
+    $app.appendChild($header);
+    $app.appendChild($content);
+    $app.appendChild($footer);
 
-    router.init();
+    // Initializations
+    logo.type(['<b/>'], router.init);
+
+    // Tell the world that page is ready!
     events.publish('page.ready');
 
     // Log the perf

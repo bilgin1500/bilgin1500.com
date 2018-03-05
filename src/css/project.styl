@@ -1,30 +1,59 @@
 @import "assets/fonts"
-@import "assets/colors"
+json('../database/settings.json')
 @import "assets/layout"
 @import "assets/bulleted"
+
+.project-window-opened
+  #project-window
+    width 100%
 
 #project-window
   display block
   position fixed
-  z-index 99
-  width 100%
+  z-index 103
+  width 0
   height 100%
-  top 100%
+  top 0
   left 0
-  background-color #fff
-  border-width 10px
-  border-style solid
-  border-color #000
-  box-sizing border-box
+  background-color transparent
+    
+  .layer
+    display none
+    position absolute
+    height 100%
+    width 100%
+    top 0
+    left -100%
+    
+  #layer3
+    background-color transparent
+    left 0
+    border-width 0
+    border-style solid
+    border-color #fff
+    box-sizing border-box
+    pointer-events none
+    z-index 4
+
+  #layer2
+    background-color #fff
+    z-index 3
   
+  #layer1
+    background-color spotColor
+    z-index 1
+    
   .project-wrapper
     absoluteFull()
+    z-index 2
   
-    .project-desc
+    .project-head
       position absolute
       right 40px
       top 40px
       text-align right
+      z-index 2
+      user-select none
       
       h2
         font-family AvenirRegular
@@ -38,8 +67,30 @@
         font-size fSmall
         margin-top 5px
         margin-bottom 0
+        max-width 200px
+        line-height fBigger
+        @media screen and (min-width: tablet)
+          max-width none
+    
+    .project-guide
+      visibility hidden
+      position absolute
+      box-sizing border-box
+      width 100%
+      text-align center
+      z-index 1
+      
+      p
+        display inline-block
+        font-size fTiny
+        text-transform uppercase
+        letter-spacing 0.1em
+        background-color #000
+        color rgba(255,255,255,0.75)
+        padding 5px 10px
+        border-radius 6px
 
-    .project-showcase
+    .project-sections
       absoluteFull()
       z-index 1
         
@@ -50,18 +101,14 @@
         &.active
           display block
         
-        > .section-inner-wrapper
+        .section-content-wrapper
           position relative
-          width calc(100% - 160px)
           max-width 800px
-          height calc(100% - 240px)
           margin 0 auto
-          top 120px
           box-sizing border-box
-          /*@media screen and (min-width: tablet)
-            top 20%
-            height 70%
-            width calc(100% - 240px)*/
+          width calc(100% - 160px)
+          height calc(100% - 240px)
+          top 120px
             
     .project-nav
       position absolute
@@ -73,19 +120,14 @@
       transform translateY(-50%)
       bulleted('vertical')
         
-    .projects-adjacent-nav
-      display none
-      position fixed
-      top 33px
-      right 0
-      z-index 100
-      /*@media screen and (min-width: tablet)
-        display block*/
-      
+    .project-helper-nav
       a
         display inline-block
-        &.prev
-          margin-right 50px
-        
-        span
-          display none
+        color rgba(0,0,0,0.25);
+        font-size fTiny
+        text-transform uppercase
+        text-decoration none
+        letter-spacing 0.01em
+        margin-left 5px
+        &:hover
+          text-decoration underline

@@ -1,0 +1,101 @@
+{
+  "name": "Skytanking Ovenon Website",
+  "desc": "Website design and development for Skytanking Ovenon",
+  "meta": {
+    "category": "Commercial Project",
+    "client": {
+      "name": "Rolakosta",
+      "url": "http://www.rolakosta.com"
+    },
+    "tags": ["Wordpress Integration", "Responsive Design"],
+    "links": [
+      {
+        "name": "Website",
+        "url": "http://skytankingovenon.com"
+      }
+    ],
+    "date": "2017",
+    "roles": [
+      "Digital Design Lead",
+      "Wordpress Developer",
+      "Front-end Developer"
+    ]
+  },
+  "theme": {
+    "colors": {
+      "light": "#b9bcc5",
+      "spot1": "#010a61",
+      "spot2": "#f02c2e"
+    }
+  },
+  "sections": [
+    {
+      "name": "About",
+      "type": "info",
+      "content": [
+        {
+          "title": "Problem",
+          "text": "After being acquired by Hamburg based Skytanking Group, the Turkish Aviation Fueling Company Ovenon, with its new name Skytanking Ovenon hired Rolakosta to design and develop their new corporate website. Our main goal was to merge the needs of Ovenon brand with their new global partner's vision and brand identity while establishing Ovenon as the leading expert in the sector."
+        },
+        {
+          "title": "Design",
+          "text": "After detailed briefing process by Ovenon's Lead Team, the design process began with the initial wireframing. After completing the architecture and the overall layout, we iterated through the visual design with a modular approach, where we built a variety of design choices for every module available on the page. The design process was finished in the browser by implementing the interaction layer including the animations and responsive layout."
+        },
+        {
+          "title": "Results",
+          "text": "The light and modern design of the website gained very positive feedback from the users and the companies involved in the process. Thanks to the user-friendly Wordpress panel we have integrated, website content is being kept very fresh with the latest news, which strengthens its expert position in the sector."
+        }
+      ]
+    },
+    {
+      "name": "Gallery",
+      "type": "gallery",
+      "content": [
+        {
+          "source": "brief",
+          "alt": "Briefing"
+        },
+        {
+          "source": "wireframe1",
+          "alt": "Wireframe I",
+          "shadow": true
+        },
+        {
+          "source": "wireframe2",
+          "alt": "Wireframe II",
+          "shadow": true
+        },
+        {
+          "source": "design1",
+          "alt": "Design draft I",
+          "shadow": true
+        },
+        {
+          "source": "design2",
+          "alt": "Design draft II",
+          "shadow": true
+        },
+        {
+          "source": "home",
+          "alt": "Final design of the home page",
+          "shadow": true
+        },
+        {
+          "source": "list",
+          "alt": "Final design of listing pages",
+          "shadow": true
+        },
+        {
+          "source": "single",
+          "alt": "Final design of a single page",
+          "shadow": true
+        },
+        {
+          "source": "single2",
+          "alt": "Final design of a single extended page",
+          "shadow": true
+        }
+      ]
+    }
+  ]
+}

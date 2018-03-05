@@ -1,0 +1,19 @@
+{
+  "spotColor": "#d3e2e6",
+  "isLoggerActive": false,
+  "isPerformanceActive": false,
+  "idCounter": 0,
+  "separatorMain": "—",
+  "separatorProject": "‹",
+  "projectWindowId": "project-window",
+  "projectThumbnailRatio": 1.5,
+  "cloudinary": {
+    "protocol": "http://",
+    "baseUrl": "res.cloudinary.com/bilginozkan/image/upload/v1/",
+    "baseProjectsFolder": "projects/",
+    "baseExtension": "png"
+  },
+  "imageCacheForHome": [],
+  "momentumCache": [],
+  "thumbnailImageFileName": "thumbnail"
+}

@@ -1,0 +1,45 @@
+@import "assets/layout"
+@import "assets/fonts"
+@import "assets/bulleted"
+json('../database/settings.json')
+
+/*#logo
+  position relative
+  text-align center
+  font-size fNormal
+  box-sizing border-box
+  padding-top 50px
+  margin 0
+  z-index 2
+  @media screen and (min-width: tablet)
+    padding-top 100px
+  a
+    text-align center
+    text-decoration none
+    display inline-block
+    @media screen and (min-width: tablet)
+      line-height 1em
+    span
+      display block
+      text-align center
+      &:first-child
+        font-family AvenirHeavy
+        font-size 3em
+        color #000
+      &:last-child
+        font-family AvenirRegular
+        font-style italic
+        font-size fSmall
+        color rgba(0,0,0,0.15)
+        margin-top 13px
+        margin-left 20px*/
+
+#menu
+  position fixed
+  text-align center
+  z-index 3
+  user-select none
+  top 50%
+  right 30px
+  transform translateY(-50%)
+  bulleted('vertical')

@@ -1,4 +1,5 @@
 node_modules/
 dist/
+src/vendors/
 *.sublime-project
 *.sublime-workspace

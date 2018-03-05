@@ -1,0 +1,73 @@
+{
+  "name": "Rolio",
+  "desc": "A minimal Wordpress theme for the creative individual",
+  "meta": {
+    "category": "Personal Project",
+    "tags": ["Wordpress Theme Development"],
+    "links": [
+      {
+        "name": "GitHub",
+        "url": "https://github.com/bilgin1500/rolio"
+      }
+    ],
+    "date": "2016 - 2017",
+    "roles": ["Wordpress Developer", "Front-end Developer"]
+  },
+  "theme": {
+    "colors": {
+      "light": "#fff",
+      "spot1": "#bfe0d5",
+      "spot2": "#000"
+    }
+  },
+  "sections": [
+    {
+      "name": "About",
+      "type": "info",
+      "content": [
+        {
+          "title": "Problem",
+          "text": "At <a href=\"http://www.rolakosta.com\" rel=\"external\">Rolakosta</a> a sizable segment of our customers were individual artists, makers, writers and designers with a common need for a simple, easy to maintain and yet an elegant website. After working with many of them we found ourselves repeating the same design process in every project and decided to find a better and easy way to serve their common problem."
+        },
+        {
+          "title": "Design",
+          "text": "Although these customers were not familiar with any of the content management tools available in the market, they had explicit opinions about how to structure and showcase their data. Thus, the content management tool we provide them with should be easy to learn and flexible to fit their different needs. Hence, we decided to build a basic Wordpress theme using the Customize API, where we gave them the opportunity to manage their own data and change the look of their site in an easy and less time-consuming way. After sketching and designing the guide screens on Sketch, the process mostly went in the browser. I was responsible for both the front-end design and development and Wordpress theme development."
+        },
+        {
+          "title": "Results",
+          "text": "Rolio is used for many of our customers (<a href=\"http://www.burakozkan.info\" rel=\"external\">burakozkan.info</a>, <a href=\"http://www.artwalkistanbul.com\" rel=\"external\">artwalkistanbul.com</a>, <a href=\"http://www.utkudervent.com\" rel=\"external\">utkudervent.com</a>) at <a href=\"http://www.rolakosta.com\" rel=\"external\">Rolakosta</a>. Rolio&rsquo;s vision in the near future is to make its way to Wordpress Theme Directory and gain some recognition and feedback on <a href=\"https://github.com/bilgin1500/rolio\" rel=\"external\">GitHub</a>"
+        }
+      ]
+    },
+    {
+      "name": "Gallery",
+      "type": "gallery",
+      "content": [
+        {
+          "source": "after-installation",
+          "alt": "Minimalism after installation"
+        },
+        {
+          "source": "layouts",
+          "alt": "Various layout samples"
+        },
+        {
+          "source": "mobile",
+          "alt": "Rolio on mobile"
+        },
+        {
+          "source": "artwalk",
+          "alt": "Artwalk.com"
+        },
+        {
+          "source": "utkudervent",
+          "alt": "Utkudervent.com"
+        },
+        {
+          "source": "burakozkan",
+          "alt": "Burakozkan.info"
+        }
+      ]
+    }
+  ]
+}
