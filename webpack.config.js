@@ -79,7 +79,7 @@ module.exports = {
       favRetina: '/src/images/favicon-32x32.png'
     }),
     new ExtractTextPlugin('app.css'),
-    new webpack.NamedModulesPlugin()
-    //new UglifyJsPlugin()
+    new webpack.NamedModulesPlugin(),
+    new UglifyJsPlugin()
   ]
 };

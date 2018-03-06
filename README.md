@@ -1,53 +1,29 @@
 # bilgin1500.com
 
-Hi there 👋 My name is Bilgin Özkan, I am a visual designer & front-end developer from Istanbul. This is my personal website and  where I freely have a chance 
-* to experiment with the latest (web) technologies, 
+Hi there 👋 My name is Bilgin Özkan, I am a designer & developer from Istanbul. This is my personal website where I freely have the chance 
+* to experiment with the latest web technologies, 
 * to learn new libraries and
 * to expand my Javascript skills.
 
-## My goals
+## About
 
-* [x] **Learn** GSAP - Core 
-* [x] **Learn** GSAP - Draggable
-* [x] **Experiment** SVG
-* [x] **Experiment**  Dom API
-* [ ] **Learn** Basic Git
-* [ ] **Learn** Unit Testing
-* [ ] **Learn** CSS Grid
+The structure of the website consists of components, utilities, styles and data files. The components (src/components) are building blocks of the webpage. While the most basic components (like page components) only do the DOM manipulation to be appended to the page, the advanced ones (like project component) export a powerful API. Utilities include [a super basic event pus/sub library](https://davidwalsh.name/pubsub-javascript) to support event based communication, an image constructor to handle the lazy loading, a basic orm to parse the json files, a router (using [page.js](https://visionmedia.github.io/page.js/)) and other helpers. Data files are JSONs stored in the src/database and are injected directly into the build .js file. Media files are stored in [Cloudinary](https://cloudinary.com). CSS is written in [Stylus](http://stylus-lang.com/). Finally the website is heavily using [GSAP](https://greensock.com/gsap).
 
 ## To run the website
 
-The project is using NPM for dependency management and can be built using Webpack. The shortest way to start the website on your local machine is to build it with Webpack `npm run build` and run the website on webpack-dev-server with `npm start`
+I used NPM for dependency management and the website can be built using Webpack. The shortest way to start the website on your local machine is to build it with Webpack `npm run build` and run the website on webpack-dev-server with `npm start`
 
-:point_up: ** Extra Membership plugins of GSAP are not included in the repo. To be able to compile the project '_ThrowPropsPlugin_' and '_DrawSVGPlugin_' should be included in the src/vendors folder. 
+:point_up: ** Extra Membership plugins of [GSAP](https://greensock.com/gsap) are not included in the repo. To be able to compile the project '_ThrowPropsPlugin_' and '_DrawSVGPlugin_' should be included in the src/vendors folder. 
 
-## Notes
+## Browser support
 
-This section is my notebook and it's constantly changing.
+* Chrome / desktop and iOS (Designed and developed on)  
+* Firefox
+* Safari / desktop & iOS
 
-### Bugs, to-do list etc.
-* [ ] **Main page** momentum.js ve scrollmagic.io yerine GSAP Draggable
-* [ ] **Core** undefined ve null checkler için tasarlanan helper'ları kullanalım
-* [ ] **Menu** Menu hover için https://greensock.com/get-started-js: "Overwriting other tweens" başlığı önemli
-* [ ] **Core** Fontobserver site yüklerken scroll ettiğimizde bozuluyor sanırım
-* [ ] **Gallery** Gallery'deki alt buttonların arasına bir çizgi ve ok ile projenin gidişat yönünün anlatabilirim
-* [ ] **Gallery** Gallery'de touch draglar başladığında yönlerin isimleri çıkabilir guide
-* [ ] **Video** /projects/skytankingovenon/gallery:1 Uncaught (in promise) DOMException: The play() request was interrupted by a call to pause(). https://goo.gl/LdLk22
-* [ ] **Project** Background shapes on project.js#557
-* [ ] **Core** TweenMax.ticker for resize and scroll events?
+## Goals
 
-### Post processes
-* [ ] CSS prefixes
-* [ ] Documentation
-* [ ] Polyfills: Promise, ...
-* [ ] Cache-Control for images etc.
-
-### Licencing issues
-* [ ] Server & domain
-* [ ] Vimeo Pro for background videos (! with `&amp;background=1` attr.)
-* [ ] GSAP membership for throwsplugin (! don't forget to list others to be able to keep an eye on them)
-
-### Extras and further (UX) improvements
-* [ ] I think Mousewheel support is a must for everything from first page to the project slider. (! normalize-wheel)
-* [ ] A jQuery like wrapper could be useful to wrap all the DOM related helpers. 
-* [ ] Unit tests
+* [x] Learn GSAP core and its ecosystem 
+* [x] Learn SVG core API and experiment with SVG.js
+* [x] Learn basic Git (and GitKraken)
+* [ ] Dive into the realm of TDD and unit tests
