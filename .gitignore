@@ -1,5 +1,3 @@
 node_modules/
 dist/
-src/vendors/GSAP_Plugins/
-*.sublime-project
-*.sublime-workspace
+src/vendors/GSAP_Plugins/*
