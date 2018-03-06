@@ -8,7 +8,7 @@
   "projectWindowId": "project-window",
   "projectThumbnailRatio": 1.5,
   "cloudinary": {
-    "protocol": "http://",
+    "protocol": "https://",
     "baseUrl": "res.cloudinary.com/bilginozkan/image/upload/v1/",
     "baseProjectsFolder": "projects/",
     "baseExtension": "png"

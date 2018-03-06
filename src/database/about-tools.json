@@ -11,19 +11,19 @@
     },
     {
       "name": "Design",
-      "content": "<p>As an old and professional Adobe Creative Suite user I used Photoshop, Illustrator, After Effects and even Dreamweaver and Flash a lot in the past. Today they are still helping me with my raster works (Photoshop), animations (After Effects) or vector illustrations (Illustrator). For conception and screen design, I'm using <a href=\"https://www.sketchapp.com/\" rel=\"external\">Sketch</a> (and its ecosystem) and loving the ideas behind <a href=\"https://origami.design/\" rel=\"external\">Origami</a>. But still, despite all the power these great tools provide, a better UX can be achieved by designing in the browser.</p>"
+      "content": "<p>As an old and professional Adobe Creative Suite user I used Photoshop, Illustrator, After Effects and even Dreamweaver and Flash a lot in the past. Today they are still helping me with my raster works (Photoshop), animations (After Effects) or vector illustrations (Illustrator). For conception and screen design, I'm using <a href=\"https://www.sketchapp.com/\" rel=\"external\">Sketch</a> (and its ecosystem) and love the ideas behind <a href=\"https://origami.design/\" rel=\"external\">Origami</a>. Despite the obvious power of these tools, I believe sometimes a better UX can be achieved by designing in the browser.</p>"
     },
     {
       "name": "Dependency Management",
-      "content": "<p>For now I use primarily npm for browser and server JavaScript, tried <a href=\"https://bower.io/\" rel=\"external\">Bower</a> for front-end package management and loved it and I'm curious about <a href=\"https://yarnpkg.com/\" rel=\"external\">Yarn</a> and will test it soon.</p>"
+      "content": "<p>I use primarily <a href=\"https://www.npmjs.com\" rel=\"external\">npm</a> for browser and server JavaScript. Sometimes I also get help from <a href=\"https://bower.io/\" rel=\"external\">Bower</a> for front-end package management. I'm also curious about <a href=\"https://yarnpkg.com/\" rel=\"external\">Yarn</a> and will test it soon.</p>"
     },
     {
       "name": "Version control",
-      "content": "<p>Using <a href=\"https://www.gitkraken.com/\" rel=\"external\">GitKraken</a> and working on my command line skills..</p>"
+      "content": "<p>Using <a href=\"https://www.gitkraken.com/\" rel=\"external\">GitKraken</a> and working on my command line skills.</p>"
     },
     {
       "name": "Automation",
-      "content": "<p>My build automation journey began with <a href=\"https://gruntjs.com\" rel=\"external\">Grunt</a> which I used as a task runner for almost every project. When I was learning React I met with <a href=\"http://webpack.js.org\" rel=\"external\">Webpack</a> and its approach to asset management which suited better than a task manager to all of my JS-heavy web applications.</p>"
+      "content": "<p>My build automation journey began with <a href=\"https://gruntjs.com\" rel=\"external\">Grunt</a> which I used as a task runner for almost every project. While discovering React I met with <a href=\"http://webpack.js.org\" rel=\"external\">Webpack</a> and its approach to asset management. It suited better than a task manager to all of my JS-heavy web applications.</p>"
     },
     {
       "name": "Content Management System",
