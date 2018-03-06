@@ -1,18 +1,20 @@
 {
-  "name": "bilgin1500.com",
+  "name": "bilginozkan.com",
   "version": "1.0.0",
-  "description": "bilgin1500 is Bilgin Özkan, a visual designer & front-end developer from Istanbul and this is his website.",
+  "description": "bilginozkan.com is my personal portfolio website of Bilgin Özkan, a designer & developer from Istanbul.",
   "main": "app.js",
-  "directories": {
-    "doc": "doc"
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "./node_modules/.bin/webpack --progress --colors",
     "start": "./node_modules/.bin/webpack-dev-server --hot --inline --open --watch --history-api-fallback"
   },
-  "author": "bilgin1500@gmail.com",
-  "license": "ISC",
+  "author": {
+    "name": "Bilgin Özkan",
+    "email": "bilgin1500@gmail.com",
+    "url": "https://bilginozkan.com/"
+  },
+  "homepage": "https://bilginozkan.com/",
+  "license": "MIT",
   "dependencies": {
     "fontfaceobserver": "^2.0.13",
     "gsap": "^1.20.3",

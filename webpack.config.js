@@ -26,9 +26,12 @@ module.exports = {
       ScrollToPlugin: 'gsap/src/uncompressed/plugins/ScrollToPlugin.js',
       ThrowPropsPlugin: path.resolve(
         __dirname,
-        'src/vendors/ThrowPropsPlugin.js'
+        'src/vendors/GSAP_Plugins/ThrowPropsPlugin.js'
       ),
-      SplitText: path.resolve(__dirname, 'src/vendors/SplitText.js')
+      SplitText: path.resolve(
+        __dirname,
+        'src/vendors/GSAP_Plugins/SplitText.js'
+      )
     }
   },
   module: {
