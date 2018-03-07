@@ -7,7 +7,7 @@
     },
     {
       "name": "Terminal",
-      "content": "<p>iTerm and Oh My Zsh</p>"
+      "content": "<p>Currently I'm using a customized <a href=\"https://www.iterm2.com/\" rel=\"external\">iTerm2</a> with <a href=\"https://brew.sh/\" rel=\"external\">Homebrew</a> and <a href=\"http://ohmyz.sh/\" rel=\"external\">Oh My Zsh</a>. I recently downloaded <a href=\"https://hyper.is\" rel=\"external\">Hyper</a> and I'm still investigating it.</p>"
     },
     {
       "name": "Design",
@@ -19,7 +19,7 @@
     },
     {
       "name": "Version control",
-      "content": "<p>Using <a href=\"https://www.gitkraken.com/\" rel=\"external\">GitKraken</a> and working on my command line skills.</p>"
+      "content": "<p>Using <a href=\"https://www.gitkraken.com/\" rel=\"external\">GitKraken</a> and working on my <a href=\"https://git-scm.com/\" rel=\"external\">command line</a> skills.</p>"
     },
     {
       "name": "Automation",
@@ -27,7 +27,7 @@
     },
     {
       "name": "Content Management System",
-      "content": "<p><a href=\"https://wordpress.org/download/\" rel=\"external\">Wordpress</a></p>"
+      "content": "<p>I'm using powerful <a href=\"https://wordpress.org/download/\" rel=\"external\">Wordpress</a> with the support of <a href=\"https://www.advancedcustomfields.com/\" rel=\"external\">ACF</a>, <a href=\"https://wpml.org/\" rel=\"external\">WPML</a>, <a href=\"https://contactform7.com/\" rel=\"external\">Contact 7</a>, <a href=\"https://wordpress.org/plugins/w3-total-cache/\" rel=\"external\">W3 Total Cache</a>, <a href=\"https://wordpress.org/plugins/w3-total-cache/\" rel=\"external\">W3 Total Cache</a>, <a href=\"https://www.wordfence.com/\" rel=\"external\">Wordfence</a> and <a href=\"https://wordpress.org/plugins/mailchimp-for-wp/\" rel=\"external\">the great Mailchimp</a>. As a theme developer I have great experience with <a href=\"https://developer.wordpress.org/themes/\" rel=\"external\">Wordpress theme ecosystem</a> and its <a href=\"https://developer.wordpress.org/themes/customize-api/\" rel=\"external\">Customize API</a>. In the near future I'm planning to dig more into <a href=\"https://developer.wordpress.org/rest-api/reference/\" rel=\"external\">REST API</a> to back my SPAs with Worpdress power.</p>"
     }
   ]
 }

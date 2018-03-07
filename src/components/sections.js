@@ -138,6 +138,9 @@ function Sections(prjData) {
     // Store adjacent indexes
     adjIndexes = getAdjSectionIndexes(prjData.name, nextIndex);
 
+    // Default slide no is 1
+    slideNo = isUndefined(slideNo) ? 1 : slideNo;
+
     // Cache the necessary elements
     var $allNavItems = projectNavLinks;
     var $currentNavItem = $allNavItems[currentIndex];

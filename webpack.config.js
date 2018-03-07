@@ -2,6 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var CleanWebpackPlugin = require('clean-webpack-plugin');
 var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 var info = require('./src/database/info');
 var outputFolder = 'dist';
@@ -10,7 +11,7 @@ var publicPath = '/';
 module.exports = {
   entry: './app.js',
   output: {
-    filename: 'app.js',
+    filename: 'app.[hash].js',
     path: path.resolve(__dirname, outputFolder),
     publicPath: publicPath
   },
@@ -46,7 +47,8 @@ module.exports = {
           {
             loader: 'file-loader',
             options: {
-              outputPath: 'assets/'
+              outputPath: 'assets/',
+              name: '[name].[ext]'
             }
           }
         ]
@@ -55,7 +57,14 @@ module.exports = {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
-          use: [{ loader: 'css-loader', options: { minimize: true } }]
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                minimize: true
+              }
+            }
+          ]
         })
       },
       {
@@ -63,7 +72,12 @@ module.exports = {
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [
-            { loader: 'css-loader', options: { minimize: true } },
+            {
+              loader: 'css-loader',
+              options: {
+                minimize: true
+              }
+            },
             'stylus-loader'
           ]
         })
@@ -71,18 +85,41 @@ module.exports = {
     ]
   },
   devServer: {
-    historyApiFallback: { index: publicPath }
+    contentBase: path.join(__dirname, outputFolder),
+    port: 9000,
+    historyApiFallback: { index: publicPath },
+    open: true,
+    hot: true,
+    stats: 'minimal'
+  },
+  // https://webpack.js.org/configuration/stats/
+  stats: {
+    hash: false,
+    version: false,
+    timings: true,
+    assets: false,
+    chunks: false,
+    modules: false,
+    reasons: false,
+    children: false,
+    source: false,
+    errors: true,
+    errorDetails: true,
+    warnings: true,
+    publicPath: false
   },
   plugins: [
+    new CleanWebpackPlugin(['dist'], { verbose: true }),
     new HtmlWebpackPlugin({
       title: info.title,
       description: info.description,
       template: 'src/templates/index.html',
-      favNormal: '/src/images/favicon-16x16.png',
-      favRetina: '/src/images/favicon-32x32.png'
+      favNormal: '/assets/favicon-16x16.png',
+      favRetina: '/assets/favicon-32x32.png'
     }),
-    new ExtractTextPlugin('app.css'),
+    new ExtractTextPlugin('app.[hash].css'),
     new webpack.NamedModulesPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
     new UglifyJsPlugin()
   ]
 };

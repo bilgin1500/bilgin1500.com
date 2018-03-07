@@ -1,7 +1,6 @@
 import normalizeWheel from 'normalize-wheel';
-import { createEl, getHeight, isUndefined } from 'utilities/helpers';
+import { $doc, createEl, getHeight, isUndefined } from 'utilities/helpers';
 import Project from 'components/project';
-import { $doc, getHeight } from 'utilities/helpers';
 import 'css/info';
 
 /**

@@ -12,10 +12,13 @@ import FontFaceObserver from 'fontfaceobserver';
 import { getInfo, getSetting, getPages } from 'utilities/orm';
 import events from 'utilities/events';
 import router from 'utilities/router';
+import analytics from 'utilities/analytics';
 import loader from 'components/loader';
 import logo from 'components/logo';
 import $header from 'components/header';
 import $footer from 'components/footer';
+import 'images/favicon-16x16.png';
+import 'images/favicon-32x32.png';
 import 'normalize.css';
 import 'css/main';
 import 'css/helpers';
@@ -69,6 +72,7 @@ docReady().then(function() {
     $app.appendChild($footer);
 
     // Initializations
+    analytics.init();
     logo.type(['<b/>'], router.init);
 
     // Tell the world that page is ready!

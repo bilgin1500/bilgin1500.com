@@ -7,8 +7,12 @@
     "tags": ["Crawler", "Node.js", "GraphQL", "React"],
     "links": [
       {
-        "name": "GitHub",
-        "url": "https://github.com/bilgin1500/rmp"
+        "name": "API (GitHub)",
+        "url": "https://github.com/bilgin1500/rmp-api"
+      },
+      {
+        "name": "Admin (GitHub)",
+        "url": "https://github.com/bilgin1500/rmp-admin"
       }
     ],
     "date": "2017",
@@ -16,9 +20,9 @@
   },
   "theme": {
     "colors": {
-      "light": "#fdf6e4",
-      "spot1": "#657b82",
-      "spot2": "#022b36"
+      "light": "#cdd0d7",
+      "spot1": "#435378",
+      "spot2": "#ff0049"
     }
   },
   "sections": [
@@ -45,9 +49,12 @@
       "type": "gallery",
       "content": [
         { "source": "graphiql", "alt": "GraphiQL: RMP API interface" },
-        { "source": "panel1", "alt": "Prototype of the administration panel" },
-        { "source": "panel2", "alt": "Editing an artist's info" },
-        { "source": "panel3", "alt": "Searching social media accounts" }
+        { "source": "rmp1", "alt": "Editing an artist's info", "shadow": true },
+        {
+          "source": "rmp2",
+          "alt": "Searching social media accounts",
+          "shadow": true
+        }
       ]
     }
   ]

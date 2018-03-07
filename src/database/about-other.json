@@ -3,19 +3,11 @@
   "list": [
     {
       "name": "Following",
-      "content": "<p><a href=\"https://smashingmagazine.com\" rel=\"external\">Smashing Magazine</a>, <a href=\"https://developer.mozilla.org/\" rel=\"external\">MDN</a> and <a href=\"https://developers.google.com/web/\" rel=\"external\">Web Fundamentals</a></p>"
+      "content": "<p><a href=\"https://smashingmagazine.com\" rel=\"external\">Smashing Magazine</a>, <a href=\"https://developer.mozilla.org/\" rel=\"external\">MDN</a>, <a href=\"https://css-tricks.com/\" rel=\"external\">CSS-TRICKS</a>, <a href=\"https://medium.freecodecamp.org/\" rel=\"external\">freeCodeCamp</a>, <a href=\"https://egghead.io/\" rel=\"external\">egghead</a>, <a href=\"https://github.com/ossu/computer-science\" rel=\"external\">OSSU</a>, <a href=\"https://uimovement.com/\" rel=\"external\">UI Movement</a>, <a href=\"https://www.frontendhandbook.com/\" rel=\"external\">Front-End Developer Handbook</a></p>"
     },
     {
       "name": "Inspired by",
-      "content": "<p>Great <a href=\"https://www.dwell.com/\" rel=\"external\">architecture</a> and <a href=\"https://www.instagram.com/cabinlove\" rel=\"external\">cozy places</a></p>"
-    },
-    {
-      "name": "Interested in",
-      "content": "<p>Graphic novels, fantasy literature</p>"
-    },
-    {
-      "name": "Playing",
-      "content": "<p><a href=\"http://paizo.com/\" rel=\"external\">Pathfinder</a></p>"
+      "content": "<p><a href=\"https://medium.com/building-storyworlds-the-art-craft-biz-of/digital-storytelling-a-look-at-the-last-12-months-b3f01e7213a0\" rel=\"external\">Digital storytelling</a>, great <a href=\"https://www.dwell.com/\" rel=\"external\">architecture</a>, <a href=\"https://www.instagram.com/cabinlove\" rel=\"external\">cozy places</a>, <a href=\"http://paizo.com/\" rel=\"external\">RPG with Pathfinder</a>, <a href=\"http://www.fantagraphics.com/\" rel=\"external\">graphic novels</a>, literature and cinema.</p>"
     }
   ]
 }
