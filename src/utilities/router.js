@@ -4,10 +4,10 @@ import loader from 'components/loader';
 import analytics from 'utilities/analytics';
 import {
   getInfo,
-  getSetting,
   getPage,
   getProject,
   getSection,
+  getSetting,
   setSetting
 } from 'utilities/orm';
 import {
@@ -36,7 +36,9 @@ function scrollTo(args) {
 
   // Turn back where we are
   if (!isUndefined(prjInstance)) {
-    to = getDocScrollY();
+    if (!isUndefined(args.to)) {
+      to = getDocScrollY();
+    }
     prjInstance.close();
   }
 
@@ -46,6 +48,22 @@ function scrollTo(args) {
       if (!isUndefined(args) && !isUndefined(args.onEnd)) args.onEnd();
     }
   });
+}
+
+/**
+ * Closes the active about me section
+ * @param {function} onEnd - Callback will fire after closing animation
+ */
+function closeActiveAboutMeSection(onEnd) {
+  var activeArr = getSetting('aboutMeCache').filter(function(section) {
+    return section.isActive == true;
+  });
+
+  if (activeArr.length) {
+    activeArr[0].close(onEnd);
+  } else {
+    onEnd();
+  }
 }
 
 /**
@@ -184,8 +202,10 @@ function routeProject(ctx, next) {
       prjInstance.close(openProject);
     }
   } else {
-    // Project window is closed, open it
-    openProject();
+    // Project window's state is 'closed';
+    // If there is an active about me section close it
+    // and open the project window
+    closeActiveAboutMeSection(openProject);
   }
 
   isLoaderBorderOpen = true;

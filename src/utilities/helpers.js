@@ -19,6 +19,14 @@ var isNull = function(obj) {
   return obj === null;
 };
 
+/*
+  Is this a function?
+  @see https://stackoverflow.com/a/7356528/4707530
+ */
+var isFunction = function(func) {
+  return func && {}.toString.call(func) === '[object Function]';
+};
+
 /**
  * Make a string's firs letter uppercase
  * @param {string} string - The string to be uppercased
@@ -456,6 +464,7 @@ export {
   $doc,
   isUndefined,
   isNull,
+  isFunction,
   slugify,
   log,
   docReady,

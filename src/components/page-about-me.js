@@ -9,7 +9,9 @@ import {
   removeClass,
   addClass,
   buildMediaUrl,
-  setBodyScroll
+  setBodyScroll,
+  isUndefined,
+  isFunction
 } from 'utilities/helpers';
 import throttle from 'throttle-debounce/throttle';
 import objectAssign from 'object-assign';
@@ -31,28 +33,27 @@ function createDom(page) {
   var $page = page.$page;
   var $pageContent = page.$content;
 
-  // Photo
+  // Create a personal photo
   var photoInstance = new Image({
     src: buildMediaUrl({ name: 'family' }),
     alt: 'Photo'
   });
   var $photo = photoInstance.elements.wrapper;
+
+  // Cache the photo
   var imageCache = getSetting('imageCacheForHome');
   imageCache.push(photoInstance);
   setSetting('imageCacheForHome', imageCache);
   //new Momentum($photo, { speed: 0.05 }).start();
-  $pageContent.appendChild($photo);
 
   // Cache all the skill lists
   var abouts = getAbouts();
 
-  // The section of skill lists with the background gradient
+  // Elements
   var $sectionContainer = createEl('div', { class: 'abouts' });
-
-  // Page overlay
   var $overlay = createEl('div', { class: 'overlay' });
 
-  // Loop for the sections (jsons)
+  // Loop the skill list sections
   for (var i = 0; i < abouts.length; i++) {
     var $section = createEl('div', {
       id: slugify(abouts[i].title),
@@ -85,175 +86,229 @@ function createDom(page) {
         class: 'list-text',
         innerHTML: listItem.content
       });
+      var $bottomGradient = createEl('div', { class: 'bottom-gradient' });
+
       $listText.insertBefore($listTitle2, $listText.firstChild);
       $listContent.appendChild($listText);
-
-      // Bottom gradient
-      var $bottomGradient = createEl('div', { class: 'bottom-gradient' });
       $listContent.appendChild($bottomGradient);
-
-      // To save the createOpeningMotion()
-      var tl = null;
-
-      /**
-       * Dynamic measurements 
-       * @return {object} All the needed measurements
-       */
-      function calc() {
-        var windowW = getWidth('window');
-        var windowH = getHeight('window');
-        var contentW =
-          windowW < getSetting('breakpoints').tablet
-            ? windowW / 1.2
-            : windowW / 2;
-        var contentH = windowH / 2;
-        var startingW = getWidth($listTitle);
-        var startingH = getHeight($listTitle);
-        var containerBox = $listContainer.getBoundingClientRect();
-        var centerX = windowW / 2 - contentW / 2 - containerBox.left;
-        var centerY = windowH / 2 - contentH / 2 - containerBox.top;
-
-        return {
-          windowW: windowW,
-          windowH: windowH,
-          contentW: contentW,
-          contentH: contentH,
-          startingW: startingW,
-          startingH: startingH,
-          centerX: centerX,
-          centerY: centerY
-        };
-      }
-
-      /**
-       * The box revealing animation is responsive to window resize
-       * so we have to calculate new properties for both starting animation
-       * and onResize event's animation 
-       * @return {[type]} [description]
-       */
-      function createBoxRevealCSSProperties() {
-        return {
-          scaleX: 1,
-          x: calc().centerX,
-          y: calc().centerY,
-          width: calc().contentW,
-          height: calc().contentH,
-          backgroundColor: '#fff',
-          zIndex: 120
-        };
-      }
-
-      /**
-       * These functioms create the tweens with dynamic variables
-       * like window width and height
-       */
-      function createBoxReveal() {
-        return TweenMax.to(
-          $listContent,
-          0.25,
-          objectAssign({}, createBoxRevealCSSProperties(), {
-            ease: Circ.easeOut
-          })
-        );
-      }
-
-      /**
-       * Creates the timeline for the revealing animation
-       * @return {object} TimelineMax object
-       */
-      function createOpeningMotion() {
-        var tl = new TimelineMax({ paused: true });
-
-        var t1 = TweenMax.to($listContent, 0.25, {
-          width: '100%',
-          backgroundColor: getSetting('spotColor')
-        });
-        var t2 = TweenMax.to($listContent, 0.25, {
-          borderWidth: 10,
-          borderColor: getSetting('spotColor'),
-          backgroundColor: '#fff',
-          boxShadow: '1px 1px 25px 1px rgba(0,0,0,0.25)'
-        });
-        var t3 = TweenMax.set($listText, {
-          display: 'block',
-          autoAlpha: 0,
-          immediateRender: false
-        });
-        var t4 = TweenMax.to($listText, 0.25, { autoAlpha: 1 });
-        var t5 = TweenMax.to($bottomGradient, 0.25, { height: 50 });
-        var t6 = TweenMax.set($overlay, {
-          width: '100%',
-          height: '100%',
-          autoAlpha: 0,
-          immediateRender: false
-        });
-        var t7 = TweenMax.to($overlay, 0.25, { autoAlpha: 0.5 });
-
-        tl
-          .add(t1)
-          .add('boxReveal')
-          .add(t2, 'boxReveal+=0.25')
-          .add(t3)
-          .add(t4)
-          .add(t5, '-=0.25')
-          .add(t6, '-=0.5')
-          .add(t7, '-=0.45');
-
-        return tl;
-      }
-
-      // Save the anim so that we can alter it later
-      var boxRevealAnim;
-
-      // On window resize update the box reveal
-      function onResize() {
-        if (tl.isActive()) {
-          boxRevealAnim.updateTo({
-            css: createBoxRevealCSSProperties()
-          });
-        } else if (tl.progress() == 1) {
-          createBoxReveal();
-        }
-      }
-      var thOnResize = throttle(300, onResize);
-
-      // Play the content revealing animation
-      function tlPlay() {
-        tl = tl == null ? createOpeningMotion() : tl;
-        // This specific tween should be dynamic
-        boxRevealAnim = createBoxReveal();
-        if (!tl.isActive()) {
-          tl.add(boxRevealAnim, 'boxReveal').play();
-          setBodyScroll(true);
-          $overlay.addEventListener('click', tlReverse);
-          $win.addEventListener('resize', thOnResize);
-        }
-      }
-
-      // Reverse the content revealing animation
-      function tlReverse() {
-        tl.reverse();
-        setBodyScroll(false);
-        $overlay.removeEventListener('click', tlReverse);
-        $win.removeEventListener('resize', thOnResize);
-      }
-
-      // On container click let's open the boxes
-      $listTitle.addEventListener('click', tlPlay);
-
       $listContainer.appendChild($listTitle);
       $listContainer.appendChild($listContent);
       $sectionContent.appendChild($listContainer);
       $section.appendChild($sectionContent);
+
+      // Initialize a section instance and cache it
+      getSetting('aboutMeCache').push(
+        new AboutMeSection(abouts[i].title + ' / ' + listItem.name, {
+          container: $listContainer,
+          title: $listTitle,
+          content: $listContent,
+          text: $listText,
+          gradient: $bottomGradient,
+          overlay: $overlay
+        })
+      );
     });
 
     $sectionContainer.appendChild($section);
   }
 
+  $pageContent.appendChild($photo);
   $pageContent.appendChild($sectionContainer);
   $pageContent.appendChild($overlay);
 
   return $page;
 }
+
+/**
+ * About me section constructor
+ * @param {string} name - The identifier name of the section
+ * @param {object} elements - Related elements created by createDom function
+ */
+function AboutMeSection(name, elements) {
+  this.name = name;
+  this.isNavLocked = false;
+  this.isActive = false;
+  this.container = elements.container;
+  this.title = elements.title;
+  this.content = elements.content;
+  this.text = elements.text;
+  this.gradient = elements.gradient;
+  this.overlay = elements.overlay;
+  this.title.addEventListener('click', this.open.bind(this));
+}
+
+/**
+ * Creates the opening animation, plays it and adds events
+ */
+AboutMeSection.prototype.open = function() {
+  this.isActive = true;
+  this.contentRevealAnim = this._createContentRevealTween();
+  this.timeline = new TimelineMax();
+  // Bound events
+  this._closeB = this.close.bind(this);
+  this._resizeEventsB = this.resizeEvents.bind(this);
+  this._keyEventsB = this.keyEvents.bind(this);
+
+  // Opening timeline animations
+  var t1 = TweenMax.to(this.content, 0.25, {
+    width: '100%',
+    backgroundColor: getSetting('spotColor')
+  });
+  var t2 = TweenMax.to(this.content, 0.25, {
+    borderWidth: 10,
+    borderColor: getSetting('spotColor'),
+    backgroundColor: '#fff',
+    boxShadow: '1px 1px 25px 1px rgba(0,0,0,0.25)'
+  });
+  var t3 = TweenMax.set(this.text, {
+    display: 'block',
+    autoAlpha: 0,
+    immediateRender: false
+  });
+  var t4 = TweenMax.to(this.text, 0.25, { autoAlpha: 1 });
+  var t5 = TweenMax.to(this.gradient, 0.25, { height: 50 });
+  var t6 = TweenMax.set(this.overlay, {
+    width: '100%',
+    height: '100%',
+    autoAlpha: 0,
+    immediateRender: false
+  });
+  var t7 = TweenMax.to(this.overlay, 0.25, { autoAlpha: 0.5 });
+
+  this.timeline
+    .add(t1)
+    .add(this.contentRevealAnim)
+    .add(t2)
+    .add(t3)
+    .add(t4)
+    .add(t5, '-=0.25')
+    .add(t6, '-=0.5')
+    .add(t7, '-=0.45');
+
+  setBodyScroll(true);
+
+  // Add events
+  this.overlay.addEventListener('click', this._closeB);
+  $win.addEventListener('resize', this._resizeEventsB);
+  $doc.addEventListener('keydown', this._keyEventsB);
+};
+
+/**
+ * Reverse the content revealing animation
+ * @return {[type]} [description]
+ */
+AboutMeSection.prototype.close = function(onEnd) {
+  var self = this;
+
+  self.timeline.reverse().eventCallback('onReverseComplete', function() {
+    if (isFunction(onEnd)) onEnd();
+
+    self.isActive = false;
+    setBodyScroll(false);
+    self.overlay.removeEventListener('click', self._closeB);
+    $win.removeEventListener('resize', self._resizeEventsB);
+    $doc.removeEventListener('keydown', self._keyEventsB);
+  });
+};
+
+/**
+ * The box revealing animation is responsive to window resize
+ * so we have to calculate new properties for both starting animation
+ * and onresize event's animation 
+ * @return {object} An object with all the related properties
+ */
+AboutMeSection.prototype._createContentRevealCSSProperties = function() {
+  var windowW = getWidth('window');
+  var windowH = getHeight('window');
+  var contentW =
+    windowW < getSetting('breakpoints').tablet ? windowW / 1.2 : windowW / 2;
+  var contentH = windowH / 2;
+  var containerBox = this.container.getBoundingClientRect();
+  var centerX = windowW / 2 - contentW / 2 - containerBox.left;
+  var centerY = windowH / 2 - contentH / 2 - containerBox.top;
+
+  return {
+    scaleX: 1,
+    x: centerX,
+    y: centerY,
+    width: contentW,
+    height: contentH,
+    backgroundColor: '#fff',
+    zIndex: 120
+  };
+};
+
+/**
+ * These function creates the dynamic tween for
+ * the content box revealing (Its properties changes according to 
+ * window width and height)
+ */
+AboutMeSection.prototype._createContentRevealTween = function() {
+  return TweenMax.to(
+    this.content,
+    0.25,
+    objectAssign({}, this._createContentRevealCSSProperties(), {
+      ease: Circ.easeOut
+    })
+  );
+};
+
+/**
+ * Throttled onresize events
+ */
+AboutMeSection.prototype.resizeEvents = throttle(300, function() {
+  if (this.timeline.isActive()) {
+    this.contentRevealAnim.updateTo({
+      css: this._createContentRevealCSSProperties()
+    });
+  } else if (this.timeline.progress() == 1) {
+    this._createContentRevealTween();
+  }
+});
+
+/**
+ * Get neighbour instances
+ * @param  {string} direction - Previous or next
+ * @return {object} The adjacent instance
+ */
+AboutMeSection.prototype._getAdjacentInstance = function(direction) {
+  var adjIndex;
+  var instances = getSetting('aboutMeCache');
+  var currIndex = instances.findIndex(function(instance) {
+    return instance.isActive == true;
+  });
+
+  if (direction == 'previous') {
+    adjIndex = currIndex == 0 ? instances.length - 1 : currIndex - 1;
+  } else if (direction == 'next') {
+    adjIndex = currIndex == instances.length - 1 ? 0 : currIndex + 1;
+  }
+
+  return instances[adjIndex];
+};
+
+/**
+ * Throttled keydown events
+ * @param  {object} e - event
+ */
+AboutMeSection.prototype.keyEvents = throttle(300, function(e) {
+  var self = this;
+
+  if (!self.timeline.isActive()) {
+    if (e.key == 'ArrowDown' || e.key == 'ArrowRight') {
+      self.close(function() {
+        self._getAdjacentInstance('next').open();
+      });
+    } else if (e.key == 'ArrowUp' || e.key == 'ArrowLeft') {
+      self.close(function() {
+        self._getAdjacentInstance('previous').open();
+      });
+    } else if (e.key == 'Escape') {
+      self.close();
+    }
+  }
+
+  e.preventDefault();
+});
 
 export default createDom;

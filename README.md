@@ -15,12 +15,15 @@ The structure of the website consists of components, utilities, styles and data 
 
 I used NPM for dependency management and the website can be built using Webpack. The shortest way to start the website on your local machine is to build it with Webpack `npm run build` and run the website on webpack-dev-server with `npm start`
 
-:point_up: Extra Club Membership plugins of [GSAP](https://greensock.com/gsap) are not included in the repo. To compile the project `ThrowPropsPlugin` and `DrawSVGPlugin` should be included in the `src/vendors/GSAP_Plugins` folder. 
+:point_up: [Club Greensock bonus plugins](https://greensock.com/club) are not included in the repo. To compile the project `ThrowPropsPlugin` and `DrawSVGPlugin` should be included in the `src/vendors/GSAP_Plugins` folder. 
 
 ## Browser support
 
 *Still in progress*
-* Chrome / desktop
+* Chrome (v64 on macOS)
+* Chrome (v64 on iOS 10.3.3/iPhone 5)
+* Safari (v11.0.3 on macOS)
+* Safari (on iOS 10.3.3/iPhone 5)
 
 ## Z depth legend
 
