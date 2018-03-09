@@ -1,4 +1,5 @@
 import {
+  $win,
   $doc,
   createEl,
   createPageContainer,
@@ -7,8 +8,11 @@ import {
   getHeight,
   removeClass,
   addClass,
-  buildMediaUrl
+  buildMediaUrl,
+  setBodyScroll
 } from 'utilities/helpers';
+import throttle from 'throttle-debounce/throttle';
+import objectAssign from 'object-assign';
 import Momentum from 'utilities/momentum';
 import Image from 'utilities/image';
 import events from 'utilities/events';
@@ -98,7 +102,10 @@ function createDom(page) {
       function calc() {
         var windowW = getWidth('window');
         var windowH = getHeight('window');
-        var contentW = windowW / 2;
+        var contentW =
+          windowW < getSetting('breakpoints').tablet
+            ? windowW / 1.2
+            : windowW / 2;
         var contentH = windowH / 2;
         var startingW = getWidth($listTitle);
         var startingH = getHeight($listTitle);
@@ -119,28 +126,35 @@ function createDom(page) {
       }
 
       /**
-       * These functioms create the tweens with dynamic variables
-       * like window width and height
+       * The box revealing animation is responsive to window resize
+       * so we have to calculate new properties for both starting animation
+       * and onResize event's animation 
+       * @return {[type]} [description]
        */
-      function createBoxReveal() {
-        return TweenMax.to($listContent, 0.25, {
+      function createBoxRevealCSSProperties() {
+        return {
           scaleX: 1,
           x: calc().centerX,
           y: calc().centerY,
           width: calc().contentW,
           height: calc().contentH,
           backgroundColor: '#fff',
-          zIndex: 5,
-          ease: Circ.easeOut
-        });
+          zIndex: 120
+        };
       }
-      function setOverlayReveal() {
-        return TweenMax.set($overlay, {
-          width: calc().windowW,
-          height: calc().windowH,
-          autoAlpha: 0,
-          immediateRender: false
-        });
+
+      /**
+       * These functioms create the tweens with dynamic variables
+       * like window width and height
+       */
+      function createBoxReveal() {
+        return TweenMax.to(
+          $listContent,
+          0.25,
+          objectAssign({}, createBoxRevealCSSProperties(), {
+            ease: Circ.easeOut
+          })
+        );
       }
 
       /**
@@ -151,6 +165,7 @@ function createDom(page) {
         var tl = new TimelineMax({ paused: true });
 
         var t1 = TweenMax.to($listContent, 0.25, {
+          width: '100%',
           backgroundColor: getSetting('spotColor')
         });
         var t2 = TweenMax.to($listContent, 0.25, {
@@ -166,38 +181,61 @@ function createDom(page) {
         });
         var t4 = TweenMax.to($listText, 0.25, { autoAlpha: 1 });
         var t5 = TweenMax.to($bottomGradient, 0.25, { height: 50 });
-        var t6 = TweenMax.to($overlay, 0.25, { autoAlpha: 0.5 });
+        var t6 = TweenMax.set($overlay, {
+          width: '100%',
+          height: '100%',
+          autoAlpha: 0,
+          immediateRender: false
+        });
+        var t7 = TweenMax.to($overlay, 0.25, { autoAlpha: 0.5 });
 
         tl
+          .add(t1)
           .add('boxReveal')
           .add(t2, 'boxReveal+=0.25')
           .add(t3)
           .add(t4)
           .add(t5, '-=0.25')
-          .add('overlayReveal', '-=0.5')
-          .add(t6, '-=0.45');
+          .add(t6, '-=0.5')
+          .add(t7, '-=0.45');
 
         return tl;
       }
+
+      // Save the anim so that we can alter it later
+      var boxRevealAnim;
+
+      // On window resize update the box reveal
+      function onResize() {
+        if (tl.isActive()) {
+          boxRevealAnim.updateTo({
+            css: createBoxRevealCSSProperties()
+          });
+        } else if (tl.progress() == 1) {
+          createBoxReveal();
+        }
+      }
+      var thOnResize = throttle(300, onResize);
 
       // Play the content revealing animation
       function tlPlay() {
         tl = tl == null ? createOpeningMotion() : tl;
         // This specific tween should be dynamic
+        boxRevealAnim = createBoxReveal();
         if (!tl.isActive()) {
-          tl
-            .add(createBoxReveal(), 'boxReveal')
-            .add(setOverlayReveal(), 'overlayReveal')
-            .play();
-          addClass($doc.body, 'no-scroll');
+          tl.add(boxRevealAnim, 'boxReveal').play();
+          setBodyScroll(true);
           $overlay.addEventListener('click', tlReverse);
+          $win.addEventListener('resize', thOnResize);
         }
       }
 
       // Reverse the content revealing animation
       function tlReverse() {
         tl.reverse();
-        removeClass($doc.body, 'no-scroll');
+        setBodyScroll(false);
+        $overlay.removeEventListener('click', tlReverse);
+        $win.removeEventListener('resize', thOnResize);
       }
 
       // On container click let's open the boxes

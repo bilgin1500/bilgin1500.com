@@ -1,4 +1,6 @@
-# bilgin1500.com
+# bilginozkan.com
+
+![bilginozkan.com](https://github.com/bilgin1500/bilginozkan.com/raw/master/src/images/favicon.png)
 
 Hi there 👋 My name is Bilgin Özkan, I am a designer & developer from Istanbul. This is my personal website where I freely have the chance 
 * to experiment with the latest web technologies, 
@@ -19,6 +21,19 @@ I used NPM for dependency management and the website can be built using Webpack.
 
 *Still in progress*
 * Chrome / desktop
+
+## Z depth legend
+
+| z-index | Description |
+| --- | --- |
+| 150 | [Loader (and its borders)](https://github.com/bilgin1500/bilginozkan.com/blob/master/src/components/loader.js#L24) |
+| 120 | [About me content](https://github.com/bilgin1500/bilginozkan.com/blob/master/src/components/page-about-me.js#L142) |
+| 115 | [Overlays of About Me](https://github.com/bilgin1500/bilginozkan.com/blob/master/src/css/about.styl#L130) |
+| 110 | [Logo](https://github.com/bilgin1500/bilginozkan.com/blob/master/src/css/logo.styl#L12) |
+| 105 | [Loader](https://github.com/bilgin1500/bilginozkan.com/blob/master/src/css/main.styl#L50) |
+| 101 | [Copyright](https://github.com/bilgin1500/bilginozkan.com/blob/master/src/css/footer.styl#L39) |
+| 100 | [Project window](https://github.com/bilgin1500/bilginozkan.com/blob/master/src/css/project.styl#L22) |
+| 50  | [Nav social](https://github.com/bilgin1500/bilginozkan.com/blob/master/src/css/footer.styl#L11) |
 
 ## Goals
 

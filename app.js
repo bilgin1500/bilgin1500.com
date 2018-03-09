@@ -73,7 +73,7 @@ docReady().then(function() {
 
     // Initializations
     analytics.init();
-    logo.type(['<b/>'], router.init);
+    logo.type(['<b1500/>'], router.init);
 
     // Tell the world that page is ready!
     events.publish('page.ready');

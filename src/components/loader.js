@@ -18,7 +18,12 @@ function addBorders() {
 
 // Fades out only the bg
 function fadeOut() {
-  TweenMax.to($loader, 0.5, { backgroundColor: 'transparent' });
+  TweenMax.to($loader, 0.5, {
+    backgroundColor: 'transparent',
+    onComplete: function() {
+      TweenMax.set($loader, { zIndex: 150 });
+    }
+  });
 }
 
 // Fades out and removing the is-loading state

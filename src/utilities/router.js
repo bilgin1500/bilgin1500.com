@@ -10,7 +10,14 @@ import {
   getSection,
   setSetting
 } from 'utilities/orm';
-import { $win, $doc, uppercase, isUndefined, slugify } from 'utilities/helpers';
+import {
+  $win,
+  $doc,
+  uppercase,
+  isUndefined,
+  slugify,
+  getDocScrollY
+} from 'utilities/helpers';
 
 // We'll keep track of the loader's border.
 // For a successful animation timing
@@ -27,7 +34,9 @@ function scrollTo(args) {
   var to = !isUndefined(args) && !isUndefined(args.to) ? '#' + args.to : 0;
   var prjInstance = getSetting('projectInstance');
 
+  // Turn back where we are
   if (!isUndefined(prjInstance)) {
+    to = getDocScrollY();
     prjInstance.close();
   }
 
@@ -131,7 +140,7 @@ function routeProject(ctx, next) {
 
   var prjSlideNoText =
     prjSectionData.name == 'Gallery'
-      ? isUndefined(prjSlideNo) ? ' (1) ' : ' (' + prjSlideNo + ') '
+      ? isUndefined(prjSlideNo) ? '  / 1 ' : ' / ' + prjSlideNo + ' '
       : ' ';
 
   // Title: Gallery ‹ Project Name

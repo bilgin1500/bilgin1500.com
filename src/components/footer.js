@@ -13,7 +13,7 @@ for (var i = 0; i < getInfo('socialAccounts').length; i++) {
 
   var $socialItem = createEl('a', {
     href: account[1],
-    target: '_blank'
+    rel: 'external'
   });
 
   var socialItemIcon = require('!svg-inline-loader!images/' +
@@ -34,7 +34,7 @@ var $copyrighText = createEl('p', { innerHTML: copyText });
 $copyright.appendChild($copyrighText);
 
 // Append everything
-$footer.appendChild($navSocial);
 $footer.appendChild($copyright);
+$footer.appendChild($navSocial);
 
 export default $footer;

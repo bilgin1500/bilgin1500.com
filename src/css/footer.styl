@@ -2,19 +2,32 @@
 json('../database/settings.json')
 
 #nav-social 
-  position fixed
-  z-index 99
-  left 40px
-  top 50%
-  transform translateY(-50%)
+  position relative
+  text-align center
+  margin 50px auto
+  @media screen and (min-width: unit(breakpoints-tablet, 'px'))
+    position fixed
+    margin 0
+    z-index 50
+    left 40px
+    top 50%
+    transform translateY(-50%)
   a
-    display block
-    margin-top 15px
+    display inline-block
+    margin-left 15px
+    @media screen and (min-width: unit(breakpoints-tablet, 'px'))
+      display block
+      margin-top 15px
+      margin-left 0
     &:first-child
       margin-top 0
+      margin-left 0
     svg
-      width 16px
-      height 16px
+      width 32px
+      height 32px
+      @media screen and (min-width: unit(breakpoints-tablet, 'px'))
+        width 16px
+        height 16px
       path
         fill #000
     span
@@ -23,11 +36,9 @@ json('../database/settings.json')
 #copyright
   transform rotate(-90deg)
   position fixed
-  z-index 105
+  z-index 101
   right 5px
   bottom 70px
   color rgba(0,0,0,0.25)
   p
     font-size fTiny
-    /*text-transform uppercase
-    letter-spacing 0.1em*/

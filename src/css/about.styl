@@ -4,13 +4,20 @@ json('../database/settings.json')
 #about-me
   position relative
   .img-wrapper
-    position absolute
+    position relative
     background-color #eee
-    z-index -1
-    width 300px
-    right -80px
-    top 70px
-    opacity 0.4
+    width 100%
+    height auto
+    opacity 0.75
+    margin-top 20px
+    @media screen and (min-width: unit(breakpoints-tablet, 'px'))
+      position absolute
+      z-index -1
+      width 300px
+      right -80px
+      top 70px
+      opacity 0.4
+      margin 0
     .loader
       width 32px
       height 32px
@@ -20,15 +27,18 @@ json('../database/settings.json')
       margin-top -(@height / 2)
       margin-left -(@width / 2)
   .abouts
-    margin-top 50px
+    @media screen and (min-width: unit(breakpoints-tablet, 'px'))
+      margin-top 50px
     .about-container
       display inline-block
-      width 50%
       vertical-align top
       box-sizing border-box
-      &:first-child,
-      &:nth-child(2)
-        margin-bottom 50px
+      width 100%
+      @media screen and (min-width: unit(breakpoints-tablet, 'px'))
+        width 50%
+        &:first-child,
+        &:nth-child(2)
+          margin-bottom 50px
       .about-title
         margin 0
         padding 0 5px
@@ -37,26 +47,34 @@ json('../database/settings.json')
         text-transform uppercase
         line-height fBigger
         letter-spacing 0.1em
-        margin-bottom 30px
+        margin 30px 0
         box-sizing border-box
+        text-align center
+        @media screen and (min-width: unit(breakpoints-tablet, 'px'))
+          margin 0 0 30px 0
+          text-align left
       .about-content
         .list
           position relative
           &:last-child
            margin-bottom 0
           .list-title
+            display block
             font-size fBig
             line-height fBigger
             font-weight normal
             margin 0
             padding 7px 5px 5px
             cursor pointer
-            display inline-block
             position relative
             z-index 1
-            display list-item
-            list-style-type circle
-            list-style-position inside
+            text-align center
+            @media screen and (min-width: unit(breakpoints-tablet, 'px'))
+              display list-item
+              list-style-type circle
+              list-style-position outside
+              margin-left 1.5em
+              text-align left
             &:hover
               text-decoration underline
           .list-content
@@ -84,6 +102,7 @@ json('../database/settings.json')
               .list-title
                 padding 0
                 margin-bottom 15px
+                margin-left 0
                 font-size fNormal
                 font-weight bold
                 cursor text
@@ -102,11 +121,11 @@ json('../database/settings.json')
               width 100%
               height 0
               pointer-events none
-              background linear-gradient(0deg,#fff 5px,transparent)
+              background linear-gradient(0deg,#fff 5px,rgba(255,255,255,0))
   .overlay
     position fixed
     top 0
     left 0
     background-color #000
-    z-index 3
+    z-index 115
     cursor pointer

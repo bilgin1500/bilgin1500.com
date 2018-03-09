@@ -1,6 +1,5 @@
 @import "assets/fonts"
 json('../database/settings.json')
-@import "assets/layout"
 
 body 
   background-color #fff
@@ -24,7 +23,7 @@ p
   font-size fNormal
   line-height 1.5em
   margin 0
-  @media screen and (min-width: tablet)
+  @media screen and (min-width: unit(breakpoints-tablet, 'px'))
     font-size fBigger
   a
     position relative
@@ -48,7 +47,7 @@ p
   height 100%
   width 100%
   left 0
-  z-index 110
+  z-index 105
   box-sizing border-box
   pointer-events none
   background-color #fff
@@ -60,15 +59,22 @@ p
   position relative
   box-sizing border-box
   padding 0 30px
-  @media screen and (min-width: tablet)
+  @media screen and (min-width: unit(breakpoints-tablet, 'px'))
     padding 0 100px
-  @media screen and (min-width: desktop)
+  @media screen and (min-width: unit(breakpoints-desktop, 'px'))
     padding 0
     width 50%
     max-width 750px
     margin 0 auto
   .page
     text-align center
+    &:first-child
+      margin-top 70px
+    @media screen and (min-width: unit(breakpoints-tablet, 'px'))
+      &:first-child
+        margin-top 0
+      &:last-child
+        margin-bottom 100px
     > h2
       font-size fTiny
       text-transform uppercase
@@ -79,8 +85,8 @@ p
       display inline-block
       line-height 0
       padding-bottom 10px
-      margin 50px auto
-      @media screen and (min-width: tablet)
+      margin 70px auto
+      @media screen and (min-width: unit(breakpoints-tablet, 'px'))
         margin 100px auto
     .page-content
       text-align left

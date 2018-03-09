@@ -4,7 +4,8 @@ import {
   createEl,
   toggleClass,
   slugify,
-  clearInnerHTML
+  clearInnerHTML,
+  setBodyScroll
 } from 'utilities/helpers';
 import {
   getProjects,
@@ -143,7 +144,8 @@ function ProjectWindow(prjData) {
   var prjOpenCloseAnim = new TimelineMax({ paused: true })
     // Disable body scrolling and note to myself: delete project-window-opened
     .add(function() {
-      toggleClass($doc.body, ['no-scroll', 'project-window-opened']);
+      toggleClass($doc.body, 'project-window-opened');
+      setBodyScroll('toggle');
     })
     // At first we'll set the defaults for the layers
     .set([l1, l2, l3], {

@@ -1,4 +1,3 @@
-@import "assets/layout"
 @import "assets/fonts"
 json('../database/settings.json')
 
@@ -14,7 +13,7 @@ json('../database/settings.json')
       text-decoration none
       &:last-child
         margin-bottom 0
-      @media screen and (min-width: tablet)
+      @media screen and (min-width: unit(breakpoints-tablet, 'px'))
         margin-bottom 100px
             
       .project-visual
@@ -48,9 +47,9 @@ json('../database/settings.json')
           font-weight normal
           line-height fSmall
           letter-spacing -0.03em
-          @media screen and (min-width: tablet)
+          @media screen and (min-width: unit(breakpoints-tablet, 'px'))
             font-size fGargantuan
-          @media screen and (min-width: desktop)
+          @media screen and (min-width: unit(breakpoints-desktop, 'px'))
             font-size fColossal
           
         p

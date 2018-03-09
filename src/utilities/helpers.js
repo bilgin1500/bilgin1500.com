@@ -413,6 +413,44 @@ function createPageContainer(page) {
   };
 }
 
+// Helps us to freeze on touchmove
+var freeze = function(e) {
+  e.preventDefault();
+};
+
+/**
+ * Enables and disables body scrolling
+ * Optimized for mobile touch screens
+ * @param {boolean/string} bool - Gets true/false and toggle
+ */
+function setBodyScroll(bool) {
+  var noClass = 'no-scroll';
+
+  function enableScroll() {
+    addClass($doc.body, noClass);
+    $doc.body.addEventListener('touchmove', freeze, false);
+  }
+
+  function disableScroll() {
+    removeClass($doc.body, noClass);
+    $doc.body.removeEventListener('touchmove', freeze, false);
+  }
+
+  if (bool == 'toggle') {
+    if (hasClass($doc.body, noClass)) {
+      disableScroll();
+    } else {
+      enableScroll();
+    }
+  } else {
+    if (bool == true) {
+      enableScroll();
+    } else {
+      disableScroll();
+    }
+  }
+}
+
 export {
   $win,
   $doc,
@@ -433,5 +471,6 @@ export {
   clearInnerHTML,
   getDocScrollY,
   buildMediaUrl,
-  createPageContainer
+  createPageContainer,
+  setBodyScroll
 };

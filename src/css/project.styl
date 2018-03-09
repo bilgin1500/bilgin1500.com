@@ -1,7 +1,16 @@
 @import "assets/fonts"
 json('../database/settings.json')
-@import "assets/layout"
 @import "assets/bulleted"
+
+absoluteFullWidth()
+  position absolute
+  left 0
+  width 100%
+
+absoluteFull()
+  absoluteFullWidth()
+  top 0
+  height 100%
 
 .project-window-opened
   #project-window
@@ -10,7 +19,7 @@ json('../database/settings.json')
 #project-window
   display block
   position fixed
-  z-index 103
+  z-index 100
   width 0
   height 100%
   top 0
@@ -49,11 +58,17 @@ json('../database/settings.json')
   
     .project-head
       position absolute
-      right 40px
-      top 40px
-      text-align right
+      top 100px
+      right 10px
+      left 10px
       z-index 2
       user-select none
+      text-align center
+      @media screen and (min-width: unit(breakpoints-tablet, 'px'))
+        top 40px
+        right 40px
+        left auto
+        text-align right
       
       h2
         font-family AvenirRegular
@@ -67,10 +82,7 @@ json('../database/settings.json')
         font-size fSmall
         margin-top 5px
         margin-bottom 0
-        max-width 200px
         line-height fBigger
-        @media screen and (min-width: tablet)
-          max-width none
     
     .project-guide
       visibility hidden
@@ -106,9 +118,13 @@ json('../database/settings.json')
           max-width 800px
           margin 0 auto
           box-sizing border-box
-          width calc(100% - 160px)
+          width 80%
           height calc(100% - 240px)
-          top 120px
+          top 150px
+          @media screen and (min-width: unit(breakpoints-tablet, 'px'))
+            width calc(100% - 160px)
+            height calc(100% - 240px)
+            top 120px
             
     .project-nav
       position absolute

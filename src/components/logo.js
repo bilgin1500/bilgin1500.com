@@ -36,13 +36,26 @@ var currentString = 0;
 var revealInterval = 0.075;
 
 /**
+ * Get position of the element (getBoundingClientRect) relative to its parent
+ * @param  {element} el - Target element
+ * @param  {element} parent - Parent element
+ * @return {object} {top,left}
+ */
+function getPosRelToParent(el, parent) {
+  var parentBox = parent.getBoundingClientRect();
+  var elBox = el.getBoundingClientRect();
+  return {
+    top: elBox.top - parentBox.top,
+    left: elBox.left - parentBox.left
+  };
+}
+
+/**
  * Types the logo texts and at the last string it stops
  * @param  {array} strings - An array of strings
  * @param  {function} onEnd - It'll fire after all animation is completed
  */
 function type(strings, onEnd) {
-  blink();
-
   // This animation's settings
   var currString = strings[currentString];
   var isLastOne = currentString == strings.length - 1;
@@ -52,6 +65,14 @@ function type(strings, onEnd) {
 
   // Don't interfere with the timeline, there might be delays etc.
   TweenMax.set($logo, { autoAlpha: 1 });
+
+  // The starting pos of the cursor
+  var relPosCursor = getPosRelToParent($text, $logo);
+  TweenMax.set($cursor, {
+    left: relPosCursor.left,
+    top: relPosCursor.top,
+    onComplete: blink
+  });
 
   // Logo characters
   var $chars = new SplitText($text, {
@@ -69,7 +90,7 @@ function type(strings, onEnd) {
       // If it's the last string fire the callback
       if (!isUndefined(onEnd)) onEnd();
       // And add the logo link
-      $logo.style.cursor = 'pointer';
+      TweenMax.set($logo, { cursor: 'pointer' });
       $logo.addEventListener('click', function() {
         router.engine('/');
       });
@@ -93,18 +114,20 @@ function type(strings, onEnd) {
 
   // Add character animations to the timeline
   $chars.forEach(function($char, i) {
-    var parentBox = $logo.getBoundingClientRect();
-    var charBox = $char.getBoundingClientRect();
     var charWidth = getWidth($char);
-    var relativePos = {
-      top: charBox.top - parentBox.top,
-      left: charBox.left - parentBox.left
-    };
+    var textRelPos = getPosRelToParent($text, $logo);
+    var charRelPos = getPosRelToParent($char, $text);
+
+    // leftGap: Tha left gap between text wrapper and its parent logo wrapper (on mobile the logo is centered and this makes a huge gap on left and right sides)
+    // charRelPos.left: The left position of any character relative to its parent, in this case text wrapper span.
+    // charWidth: Any character's width
+    // -10: The 10px of the page border
+    var cursorLeft = textRelPos.left + charRelPos.left + charWidth - 10;
 
     // Make the cursor follow the characters
     logoAnimationTl.set(
       $cursor,
-      { left: relativePos.left + charWidth, top: relativePos.top },
+      { left: cursorLeft, top: charRelPos.top },
       (i + 1) * revealInterval
     );
 
